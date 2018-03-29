@@ -98,7 +98,7 @@
                     <div class="container-fluid">
                         <div id="monCommentaire${idPub}">
                             <div class="media">
-                                <img class="rounded-circle" src="files/${Cmpt.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
+                                <img class="rounded-circle" src="files/${compte.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
                                 <div class="media-body row ml-1">
                                     <div class="col-md-10"><textarea class="form-control" name="text" id="text${idPub}" placeholder="Ajouter un commentaire..."></textarea></div>
                                     <div class="col-md-2"><button onclick="commenter(${idPub})">Publier</button></div>
