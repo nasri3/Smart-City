@@ -1,0 +1,60 @@
+html { overflow-x: hidden; }
+
+body{ font-size: small; }
+
+p{ word-wrap:break-word; }      
+#menug {
+    padding-top: 100px;
+    background-color: #f1f1f0;
+    height: 100vh;
+    position: fixed;
+}
+
+#menud {
+    padding-top: 100px;
+    background-color: #f1f1f0;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+}
+
+#corps
+{
+    padding-top : 140px;
+    padding-right: 10%;
+    padding-left: 10%;
+}
+
+
+@media screen and (max-width: 767px) {
+    
+    #menug {
+        position: initial;
+        width: 100%;
+        height: auto;
+    }
+    #menud {
+        position: initial;
+        width: 100%;
+        height: auto;
+    }
+    #corps
+    {
+        padding-right: 0%;
+        padding-left: 6%;
+    }
+    
+}
+.commentaires{}  
+
+.card { margin-top: 20px; }
+
+.btn { font-size: small;}
+
+.media-body.commentaire {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 2px 0;
+}
