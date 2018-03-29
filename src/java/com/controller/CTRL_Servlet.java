@@ -80,6 +80,8 @@ public class CTRL_Servlet extends HttpServlet {
                             }
                         }
                         bin.close();
+                        if (!compte.getPhotoDeProfil().equals("avatar.png"))
+                            Files.delete(Paths.get(uploadPath + compte.getPhotoDeProfil()));
                         compte.setPhotoDeProfil(filename);
                         compteFacade.edit(compte);
                         request.getSession().setAttribute("compte", compte);
