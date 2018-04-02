@@ -3,7 +3,7 @@
 <%@page import="com.beans.Publication"%>
 <%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,7 +16,7 @@
         <script src="js/jquery-latest.min.js" type="text/javascript"></script>
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="js/ajaxx.js" type="text/javascript"></script>
+        <script src="js/myapp-functions.js" type="text/javascript"></script>
         <title>Page d'accueil</title>
 
         <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -38,10 +38,8 @@
                 <div class="media">
                     <img class="mr-1 mt-2 rounded-circle" src="files/${cc.getPhotoDeProfil()}" width="35" height="35" alt="avatar">
                     <div class="media-body commentaire">
-                        <div class="mt-0">
-                            <a href="#">${cc.getPrenom()} ${cc.getNom()}</a>
-                            <p class="mb-0" style="white-space: pre-line;">${commentaire.getText()}</p>
-                        </div>
+                        <a href="#">${cc.getPrenom()} ${cc.getNom()}</a>
+                        <p class="mb-0" style="white-space: pre-line;">${commentaire.getTexte()}</p>
                     </div>
                 </div>
             </c:forEach>
@@ -61,9 +59,9 @@
                             <div class="media">
                                 <div class="col">
                                     <a href="#">${Cmpt.getPrenom()} ${Cmpt.getNom()}</a><br>
-                                    <time datetime="${publication.getDate_Temps()}">${publication.getDate_Temps()}</time>
+                                    <time datetime="${publication.getDate_de_création()}">${publication.getDate_de_création()}</time>
                                     <br>
-                                    <i class="fa fa-map-marker"> ${publication.getLieu()} </i>
+                                    <i class="fa fa-map-marker"> ${publication.getLieu()} ${publication.getCategorie()} </i>
                                 </div>
                                 <div class="media-body text-right">
                                     <button class="btn btn-light fa fa-caret-square-down" data-toggle="dropdown"></button>
@@ -98,10 +96,10 @@
                     <div class="container-fluid">
                         <div id="monCommentaire${idPub}">
                             <div class="media">
-                                <img class="rounded-circle" src="files/${compte.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
+                                <img class="rounded-circle mt-2" src="files/${compte.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
                                 <div class="media-body row ml-1">
-                                    <div class="col-md-10"><textarea class="form-control" name="text" id="text${idPub}" placeholder="Ajouter un commentaire..."></textarea></div>
-                                    <div class="col-md-2"><button onclick="commenter(${idPub})">Publier</button></div>
+                                    <div class="col-sm-10"><textarea class="form-control" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..."></textarea></div>
+                                    <div class="col-sm-2 mt-3"><button onclick="commenter(${idPub})">Publier</button></div>
                                 </div>
                             </div>
                         </div>
@@ -116,9 +114,11 @@
                     </div>
                 </div>
             </c:forEach>
+            <c:if test="${idPub != null}">
             <div class="row justify-content-center py-2" id="afficherPlus">
                 <button onclick="afficherPlus(${idPub})">afficher plus..</button>
             </div>
+            </c:if>
         </div>
 
     </body>

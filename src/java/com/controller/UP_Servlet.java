@@ -59,6 +59,7 @@ public class UP_Servlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
         List imageVideoAllowedTypes = Arrays.asList("image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml",
                 "video/webm", "video/ogg", "video/mp4");
         Publication publication = new Publication();
@@ -78,17 +79,18 @@ public class UP_Servlet extends HttpServlet {
                 // Process a regular form field
                 if (!itemFile.isFormField()) {
                     long FileSize = itemFile.getSize();
-                    if (FileSize != 0 && imageVideoAllowedTypes.contains(itemFile.getContentType())) {
+                    String FileType = itemFile.getContentType();
+                    if (FileSize != 0 && imageVideoAllowedTypes.contains(FileType)) {
                         System.out.println("Fichier valide");
-
-                        publication.setType(itemFile.getContentType());
+                        
+                        publication.setType(FileType);
                         publication.setIdCompte((Compte) request.getSession().getAttribute("compte"));
                         publicationFacade.create(publication);
 
                         //upload the file
-                        String extension = itemFile.getName().substring(itemFile.getName().lastIndexOf(".")).toLowerCase();
+                        String extension = (FileType.equals("image/svg+xml"))? "svg" : FileType.substring(FileType.lastIndexOf("/")+1);
                         String uploadPath = getServletContext().getInitParameter("uploadPath");
-                        String filename = publication.getIdPublication() + RandomStringUtils.randomAlphanumeric(15) + extension;
+                        String filename = publication.getIdPublication() + RandomStringUtils.randomAlphanumeric(15) + "." + extension;
 
                         InputStream stream = itemFile.getInputStream();
                         FileOutputStream fout = new FileOutputStream(uploadPath + filename);
@@ -110,23 +112,24 @@ public class UP_Servlet extends HttpServlet {
                         if (FileSize == 0) {
                             request.setAttribute("erreurUpload", "Fichier vide");
                         } else {
-                            request.setAttribute("erreurUpload", "Le type du fichier " + itemFile.getContentType() + " est non valide");
+                            request.setAttribute("erreurUpload", "Le type du fichier " + FileType + " est non valide");
                         }
                         request.getRequestDispatcher("/").include(request, response);
                         return;
                     }
 
                 } else {
-                    System.out.println("::::::::" + itemFile.getFieldName() + "::::" + itemFile.getString());
+                    String s = itemFile.getString("UTF-8");
+                    System.out.println("::::::::" + itemFile.getFieldName() + "::::" + s);
                     switch (itemFile.getFieldName()) {
                         case "Exprimer":
-                            publication.setExprimer(itemFile.getString());
+                            publication.setExprimer(s);
                             break;
                         case "Catégorie":
-                            publication.setCategorie(itemFile.getString());
+                            publication.setCategorie(s);
                             break;
                         case "Ville":
-                            publication.setLieu(itemFile.getString());
+                            publication.setLieu(s);
                             break;
                         case "Anonyme":
                             publication.setAnonyme(true);

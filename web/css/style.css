@@ -2,7 +2,7 @@ html { overflow-x: hidden; }
 
 body{ font-size: small; }
 
-p{ word-wrap:break-word; }      
+p{ word-break: break-all; }      
 #menug {
     padding-top: 100px;
     background-color: #f1f1f0;

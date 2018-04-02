@@ -21,10 +21,6 @@
         <servlet-class>com.controller.CTRL_Servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>FileServlet</servlet-name>
-        <servlet-class>com.controller.FileServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>Register</servlet-name>
         <jsp-file>/Register.jsp</jsp-file>
     </servlet>
@@ -39,14 +35,6 @@
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>fileServlet</servlet-name>
-        <servlet-class>com.controller.FileServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>fileServlet</servlet-name>
-        <url-pattern>/files/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>signin</servlet-name>
@@ -74,27 +62,21 @@
         <welcome-file>home.jsp</welcome-file>
     </welcome-file-list>
     <security-constraint>
-        <display-name>Administrateur</display-name>
-        <web-resource-collection>
-            <web-resource-name>Administrateur</web-resource-name>
-            <description/>
-            <url-pattern>/Register.jsp</url-pattern>
-            <url-pattern>/Profil.jsp</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <description/>
-            <role-name>Administrateur</role-name>
-        </auth-constraint>
-    </security-constraint>
-    <security-constraint>
         <display-name>Tous les utilisateurs</display-name>
         <web-resource-collection>
             <web-resource-name>Tous les utilisateurs</web-resource-name>
             <description/>
-            <url-pattern>/Register.jsp</url-pattern>
             <url-pattern>/Uplodate.jsp</url-pattern>
             <url-pattern>/home.jsp</url-pattern>
-            <url-pattern>/Profil.jsp</url-pattern>
+            <url-pattern>/profil</url-pattern>
+            <url-pattern>/home_1.jsp</url-pattern>
+        </web-resource-collection>
+        <web-resource-collection>
+            <web-resource-name>Tous les utilisateurs (servlet)</web-resource-name>
+            <description/>
+            <url-pattern>/ctrl</url-pattern>
+            <url-pattern>/files/*</url-pattern>
+            <url-pattern>/upload</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -107,12 +89,11 @@
         <display-name>Bloqué</display-name>
         <web-resource-collection>
             <web-resource-name>signin page</web-resource-name>
-            <description>bloqué aprés connexion</description>
-            <url-pattern>/Signin.jsp</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
             <description/>
-        </auth-constraint>
+            <url-pattern>/Signin.jsp</url-pattern>
+            <url-pattern>/Register.jsp</url-pattern>
+            <url-pattern>/Profil.jsp</url-pattern>
+        </web-resource-collection>
     </security-constraint>
     <login-config>
         <auth-method>FORM</auth-method>

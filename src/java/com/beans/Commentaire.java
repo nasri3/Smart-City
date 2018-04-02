@@ -40,9 +40,9 @@ public class Commentaire implements Serializable {
     private Integer idCommentaire;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
-    @Column(name = "Text")
-    private String text;
+    @Size(min = 1, max = 5000)
+    @Column(name = "Texte")
+    private String texte;
     @JoinColumn(name = "IdCompte", referencedColumnName = "IdCompte")
     @ManyToOne(optional = false)
     private Compte idCompte;
@@ -57,9 +57,9 @@ public class Commentaire implements Serializable {
         this.idCommentaire = idCommentaire;
     }
 
-    public Commentaire(Integer idCommentaire, String text) {
+    public Commentaire(Integer idCommentaire, String texte) {
         this.idCommentaire = idCommentaire;
-        this.text = text;
+        this.texte = texte;
     }
 
     public Integer getIdCommentaire() {
@@ -70,12 +70,12 @@ public class Commentaire implements Serializable {
         this.idCommentaire = idCommentaire;
     }
 
-    public String getText() {
-        return text;
+    public String getTexte() {
+        return texte;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTexte(String texte) {
+        this.texte = texte;
     }
 
     public Compte getIdCompte() {

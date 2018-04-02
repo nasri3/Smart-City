@@ -66,9 +66,9 @@ public class Publication implements Serializable {
     private String lieu = "L";
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Date_Temps")
+    @Column(name = "Date de création")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp date_Temps = Timestamp.from(Instant.now());
+    private Timestamp date_de_création = Timestamp.from(Instant.now());
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -104,11 +104,11 @@ public class Publication implements Serializable {
         this.idPublication = idPublication;
     }
 
-    public Publication(Integer idPublication, String titre, String type, Timestamp date_Temps, String categorie, String etat, int nbSignal) {
+    public Publication(Integer idPublication, String titre, String type, Timestamp date_de_création, String categorie, String etat, int nbSignal) {
         this.idPublication = idPublication;
         this.titre = titre;
         this.type = type;
-        this.date_Temps = date_Temps;
+        this.date_de_création = date_de_création;
         this.categorie = categorie;
         this.etat = etat;
         this.nbSignal = nbSignal;
@@ -146,13 +146,13 @@ public class Publication implements Serializable {
         this.lieu = lieu;
     }
 
-    public String getDate_Temps() {
-        String dt = date_Temps.toString().substring(0, date_Temps.toString().lastIndexOf('.'));
+    public String getDate_de_création() {
+        String dt = date_de_création.toString().substring(0, date_de_création.toString().lastIndexOf('.'));
         return dt;
     }
 
-    public void setDate_Temps(Timestamp date_Temps) {
-        this.date_Temps = date_Temps;
+    public void setDate_de_création(Timestamp date_de_création) {
+        this.date_de_création = date_de_création;
     }
 
     public String getCategorie() {
@@ -185,6 +185,14 @@ public class Publication implements Serializable {
 
     public void setExprimer(String exprimer) {
         this.exprimer = exprimer;
+    }
+
+    public boolean getAnonyme() {
+        return anonyme;
+    }
+
+    public void setAnonyme(boolean anonyme) {
+        this.anonyme = anonyme;
     }
 
     public Compte getIdCompte() {
@@ -228,13 +236,4 @@ public class Publication implements Serializable {
     public String toString() {
         return "com.beans.Publication[ idPublication=" + idPublication + " ]";
     }
-
-    public boolean getAnonyme() {
-        return anonyme;
-    }
-
-    public void setAnonyme(boolean anonyme) {
-        this.anonyme = anonyme;
-    }
-    
 }
