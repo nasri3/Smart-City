@@ -3,6 +3,7 @@ package com.controller;
 import com.DAO.CompteFacade;
 import com.DAO.PublicationFacade;
 import com.beans.Compte;
+import static com.controller.Reg_Servlet.cryptWithMD5;
 import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -30,7 +31,7 @@ public class SI_Servlet extends HttpServlet {
 
         System.out.println("hh:::::::hh");
         String idCompte = request.getParameter("CIN");
-        String MotDePasse = request.getParameter("Mot de passe");
+        String MotDePasse = cryptWithMD5(request.getParameter("Mot de passe"));
         Compte compte = compteFacade.find(idCompte);
         if (compte != null && compte.getMotDePasse().equals(MotDePasse)) {
 

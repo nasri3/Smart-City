@@ -4,7 +4,7 @@ import com.DAO.CompteFacade;
 import com.DAO.PublicationFacade;
 import com.beans.Compte;
 import com.beans.Publication;
-import java.io.BufferedInputStream;
+import java.io.BufferedInputStream ;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -84,13 +84,12 @@ public class UP_Servlet extends HttpServlet {
                         System.out.println("Fichier valide");
                         
                         publication.setType(FileType);
-                        publication.setIdCompte((Compte) request.getSession().getAttribute("compte"));
-                        publicationFacade.create(publication);
+                        publication.setCompte((Compte) request.getSession().getAttribute("compte"));
 
                         //upload the file
                         String extension = (FileType.equals("image/svg+xml"))? "svg" : FileType.substring(FileType.lastIndexOf("/")+1);
                         String uploadPath = getServletContext().getInitParameter("uploadPath");
-                        String filename = publication.getIdPublication() + RandomStringUtils.randomAlphanumeric(15) + "." + extension;
+                        String filename = publication.getDate_de_création().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
 
                         InputStream stream = itemFile.getInputStream();
                         FileOutputStream fout = new FileOutputStream(uploadPath + filename);
@@ -141,7 +140,7 @@ public class UP_Servlet extends HttpServlet {
             Logger.getLogger(UP_Servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        publicationFacade.edit(publication);
+        publicationFacade.create(publication);
 
         response.sendRedirect("/");
     }

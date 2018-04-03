@@ -3,6 +3,8 @@ package com.controller;
 import com.DAO.*;
 import com.beans.*;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -44,20 +46,16 @@ public class Reg_Servlet extends HttpServlet {
         String Nom = request.getParameter("Nom");
         String Prenom = request.getParameter("Prenom");
         String DateDeNaissance = request.getParameter("DateDeNaissance");
-
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        if(request.getParameter("g-recaptcha-response")==null || request.getParameter("g-recaptcha-response").isEmpty())
+            return;
+        
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date DateNaissance = null;
         try {
             DateNaissance = new Date(formatter.parse(DateDeNaissance).getTime());
-        } catch (ParseException ex) {
-            formatter = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                DateNaissance = new Date(formatter.parse(DateDeNaissance).getTime());
-            } catch (ParseException ex1) {
-                Logger.getLogger(Reg_Servlet.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+        } catch (ParseException ex1) {
+            Logger.getLogger(Reg_Servlet.class.getName()).log(Level.SEVERE, null, ex1);
         }
-
         String Ville = request.getParameter("Ville");
         String MotDePasse1 = request.getParameter("MotDePasse1");
         String MotDePasse2 = request.getParameter("MotDePasse2");
@@ -78,13 +76,13 @@ public class Reg_Servlet extends HttpServlet {
         compte.setNom(Nom);
         compte.setPrenom(Prenom);
         compte.setDateDeNaissance(DateNaissance);
-        compte.setMotDePasse(MotDePasse1);
+        compte.setMotDePasse(cryptWithMD5(MotDePasse1));
         compte.setVille(Ville);
-        System.out.println(IdCompte + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + MotDePasse1 + " " + Ville);
+        System.out.println(IdCompte + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + cryptWithMD5(MotDePasse1) + " " + Ville);
         //3.Inserer la compte dans la BD
         compteFacade.create(compte);
         System.out.println("role : " + compte.getRole());
-        request.login(IdCompte, MotDePasse1);
+        request.login(IdCompte, cryptWithMD5(MotDePasse1));
 
         request.getSession().setAttribute("compte", compte);
         Compte compteAnonyme = new Compte();
@@ -99,4 +97,23 @@ public class Reg_Servlet extends HttpServlet {
         //request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 
+    //MD5 Cryptage
+    private static MessageDigest md;
+
+    public static String cryptWithMD5(String pass) {
+        try {
+            md = MessageDigest.getInstance("MD5");
+            byte[] passBytes = pass.getBytes();
+            md.reset();
+            byte[] digested = md.digest(passBytes);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < digested.length; i++) {
+                sb.append(Integer.toHexString(0xff & digested[i]));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Reg_Servlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

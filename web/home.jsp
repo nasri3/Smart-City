@@ -104,7 +104,7 @@
 
             <!-- debut corps (milieu) de la page ***************************** -->
             <div class="offset-md-2 col-md-8" id="corps"> 
-                <button class="btn btn-block" data-toggle="modal" data-target="#uploadForm">Nouvelle Publication</button>
+                <label class="btn btn-block btn-outline-primary" data-toggle="modal" data-target="#uploadForm">Nouvelle Publication</label>
                 <form class="modal fade align-content-center" id="uploadForm" action="upload" method="post" enctype="multipart/form-data">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -197,7 +197,7 @@
 
             <div class="col-md-2" id="menud">
                 <div class="">
-                    <h4>&Eacute;venements</h4><hr>
+                    <h4>&Eacute;vènements</h4><hr>
                 </div>
             </div>
         </div>

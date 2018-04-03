@@ -43,12 +43,12 @@ public class Commentaire implements Serializable {
     @Size(min = 1, max = 5000)
     @Column(name = "Texte")
     private String texte;
-    @JoinColumn(name = "IdCompte", referencedColumnName = "IdCompte")
+    @JoinColumn(name = "Compte", referencedColumnName = "IdCompte")
     @ManyToOne(optional = false)
-    private Compte idCompte;
-    @JoinColumn(name = "IdPublication", referencedColumnName = "IdPublication")
+    private Compte compte;
+    @JoinColumn(name = "Publication", referencedColumnName = "IdPublication")
     @ManyToOne(optional = false)
-    private Publication idPublication;
+    private Publication publication;
 
     public Commentaire() {
     }
@@ -78,20 +78,20 @@ public class Commentaire implements Serializable {
         this.texte = texte;
     }
 
-    public Compte getIdCompte() {
-        return idCompte;
+    public Compte getCompte() {
+        return compte;
     }
 
-    public void setIdCompte(Compte idCompte) {
-        this.idCompte = idCompte;
+    public void setCompte(Compte compte) {
+        this.compte = compte;
     }
 
-    public Publication getIdPublication() {
-        return idPublication;
+    public Publication getPublication() {
+        return publication;
     }
 
-    public void setIdPublication(Publication idPublication) {
-        this.idPublication = idPublication;
+    public void setPublication(Publication publication) {
+        this.publication = publication;
     }
 
     @Override

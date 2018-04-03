@@ -40,9 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Publication.findAll", query = "SELECT p FROM Publication p order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.idCompte=:compte order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findAllAfterId", query = "SELECT p FROM Publication p where p.idPublication<:idDerniere order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.idCompte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
+    @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,10 +90,10 @@ public class Publication implements Serializable {
     @NotNull
     @Column(name = "Anonyme")
     private boolean anonyme = false;
-    @JoinColumn(name = "IdCompte", referencedColumnName = "IdCompte")
+    @JoinColumn(name = "Compte", referencedColumnName = "IdCompte")
     @ManyToOne(optional = false)
-    private Compte idCompte;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPublication", fetch = FetchType.EAGER)
+    private Compte compte;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.EAGER)
     @OrderBy("idCommentaire desc")
     private List<Commentaire> commentaireList;
 
@@ -195,12 +195,12 @@ public class Publication implements Serializable {
         this.anonyme = anonyme;
     }
 
-    public Compte getIdCompte() {
-        return idCompte;
+    public Compte getCompte() {
+        return compte;
     }
 
-    public void setIdCompte(Compte idCompte) {
-        this.idCompte = idCompte;
+    public void setCompte(Compte compte) {
+        this.compte = compte;
     }
 
     @XmlTransient
@@ -211,7 +211,7 @@ public class Publication implements Serializable {
     public void setCommentaireList(List<Commentaire> commentaireList) {
         this.commentaireList = commentaireList;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

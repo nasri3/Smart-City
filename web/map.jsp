@@ -79,11 +79,12 @@
                             var c, lc, component;
                             for (var r = 0, rl = results.length; r < rl; r += 1) {
                                 var result = results[r];
-
+                                for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
+                                        component = result.address_components[c];
+                                    }
                                 if (!city && result.types[0] === 'locality') {
                                     for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
                                         component = result.address_components[c];
-
                                         if (component.types[0] === 'locality') {
                                             city = component.long_name;
                                             break;
@@ -107,8 +108,7 @@
                                     break;
                                 }
                             }
-
-                            alert("City: " + city + ", Country: " + country + ", lat: " + lat + ", lng: " + lng);
+                            alert("City: " + city + "City2: " + cityAlt + ", Country: " + country + ", lat: " + lat + ", lng: " + lng);
                         }
                     }
                 });

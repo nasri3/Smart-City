@@ -217,7 +217,7 @@ public class CTRL_Servlet extends HttpServlet {
                         if (publication == null) {
                             System.out.println("pub" + idPub + " Not Found");
                             response.getWriter().write("pub" + idPub);
-                        } else if (compte.getIdCompte().equals(publication.getIdCompte().getIdCompte())) {
+                        } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
                             String uploadPath = getServletContext().getInitParameter("uploadPath");
                             Files.delete(Paths.get(uploadPath + publication.getTitre()));
                             publicationFacade.remove(publication);
@@ -246,8 +246,8 @@ public class CTRL_Servlet extends HttpServlet {
                             return;
                         }
                         Commentaire commentaire = new Commentaire();
-                        commentaire.setIdCompte(compte);
-                        commentaire.setIdPublication(publication);
+                        commentaire.setCompte(compte);
+                        commentaire.setPublication(publication);
                         commentaire.setTexte(text);
                         commentaireFacade.create(commentaire);
                         System.out.println(operation + " : " + idPub);

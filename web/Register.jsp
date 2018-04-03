@@ -11,6 +11,7 @@
         <script src="js/jquery.min.js" type="text/javascript"></script>
         <script src="js/jquery-latest.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        <script src='https://www.google.com/recaptcha/api.js'></script>
         <title>Créer un compte</title>
     </head>
     <body>
@@ -37,7 +38,7 @@
         <div class="row justify-content-center py-5 my-5 px-1 mx-1">
             <div class="col-md-4 bg-primary text-white">
                 <h1>Créer un compte</h1>
-                <form action="register" method="post">
+                <form id="registerForm" action="register" method="post">
                     <!-- CIN -->
                     <div class="form-group">
                         <label for="CIN">CIN</label>  
@@ -105,7 +106,11 @@
                         <input id="MotDePasse2" name="MotDePasse2" type="password" placeholder="Mot de passe" class="form-control" required>
                         <label class="badge badge-danger">${erreurMP}</label>
                     </div>
-
+                    <!-- recaptcha -->
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="6Ldkw1AUAAAAANr0q_Bkm3KyBLh0o0ZvHWLi-83I"></div>
+                        <label class="badge badge-danger" id="recaptcha-error">Veuillez renseigner le captcha</label>
+                    </div>
                     <!-- Soumettre -->
                     <div class="pb-5">
                         <button type="submit" class="btn col-12">Soumettre</button>
@@ -113,7 +118,28 @@
                 </form>
             </div>
         </div>
-                    
-        <script src="js/verification.js" type="text/javascript"></script>
+
+        <script>
+            var CIN = document.getElementById("CIN");
+            CIN.oninput = function () {
+                if (CIN.value.length === 8 && !CIN.value.toString().match(/[^0-9]/g))
+                    CIN.style = "color:green";
+                else
+                    CIN.style = "color:red";
+            };
+            $('#recaptcha-error').hide();
+            $('#registerForm').submit(function (e) {
+                var response = grecaptcha.getResponse();
+                //recaptcha failed validation
+                if (response.length === 0) {
+                    e.preventDefault();
+                    $('#recaptcha-error').show();
+                }
+                //recaptcha passed validation
+                else {
+                    $('#recaptcha-error').hide();
+                }
+            });
+        </script>
     </body>
 </html>

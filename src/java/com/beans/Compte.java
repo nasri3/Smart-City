@@ -64,23 +64,25 @@ public class Compte implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "Ville")
     private String ville;
-    @Size(max = 45)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
     @Column(name = "PhotoDeProfil")
     private String photoDeProfil = "avatar.png";
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 25)
+    @Size(min = 1, max = 100)
     @Column(name = "MotDePasse")
     private String motDePasse;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 25)
     @Column(name = "Role")
     private String role = "Utilisateur";
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "idCompte")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "compte")
     @OrderBy("idPublication desc")
     private List<Publication> publicationList;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "idCompte")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "compte")
     private List<Commentaire> commentaireList;
 
     public Compte() {
@@ -90,12 +92,13 @@ public class Compte implements Serializable {
         this.idCompte = idCompte;
     }
 
-    public Compte(String idCompte, String nom, String prenom, Date dateDeNaissance, String ville, String motDePasse, String role) {
+    public Compte(String idCompte, String nom, String prenom, Date dateDeNaissance, String ville, String photoDeProfil, String motDePasse, String role) {
         this.idCompte = idCompte;
         this.nom = nom;
         this.prenom = prenom;
         this.dateDeNaissance = dateDeNaissance;
         this.ville = ville;
+        this.photoDeProfil = photoDeProfil;
         this.motDePasse = motDePasse;
         this.role = role;
     }

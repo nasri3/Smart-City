@@ -34,7 +34,7 @@
 
         <div id="com" style="max-height: 500px;  overflow-y: auto;">
             <c:forEach items="${pub.getCommentaireList()}" var="commentaire">
-                <c:set var="cc" value="${commentaire.getIdCompte()}"/>
+                <c:set var="cc" value="${commentaire.getCompte()}"/>
                 <div class="media">
                     <img class="mr-1 mt-2 rounded-circle" src="files/${cc.getPhotoDeProfil()}" width="35" height="35" alt="avatar">
                     <div class="media-body commentaire">
@@ -51,7 +51,7 @@
                 <div id="pub${idPub}" class="card card-body">
                     <c:set var="Cmpt" value="${compteAnonyme}"/>
                     <c:if test="${!publication.getAnonyme()}">
-                        <c:set var="Cmpt" value="${publication.getIdCompte()}"/>
+                        <c:set var="Cmpt" value="${publication.getCompte()}"/>
                     </c:if>
                     <div class="media">
                         <img src="files/${Cmpt.getPhotoDeProfil()}" class="rounded-circle" height="45" width="45" alt="Avatar">
@@ -67,7 +67,7 @@
                                     <button class="btn btn-light fa fa-caret-square-down" data-toggle="dropdown"></button>
                                     <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right">
                                         <button onclick="signaler(${idPub})" class="dropdown-item">signaler</button>
-                                        <c:if test='${(compte==publication.getIdCompte()) || compte.getRole()== "Administrateur"}'>
+                                        <c:if test='${(compte==publication.getCompte()) || compte.getRole()== "Administrateur"}'>
                                             <button onclick="supprimer(${idPub})" class="dropdown-item">supprimer</button>
                                         </c:if>
                                     </div>
