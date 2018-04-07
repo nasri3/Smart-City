@@ -125,10 +125,10 @@ public class UP_Servlet extends HttpServlet {
                             publication.setExprimer(s);
                             break;
                         case "Catégorie":
-                            publication.setCategorie(s);
+                            publication.setCatégorie(s);
                             break;
                         case "Ville":
-                            publication.setLieu(s);
+                            publication.setVille(s);
                             break;
                         case "Anonyme":
                             publication.setAnonyme(true);

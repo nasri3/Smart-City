@@ -30,7 +30,7 @@
                             <a class="nav-link" href="/">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Guide</a>
+                            <a class="nav-link" href="#">Notifications</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">À propos</a>
@@ -115,6 +115,7 @@
             $.get("ctrl?operation=initialiserVosPublications", function () {
                 var d1 = document.createElement('div'), d2 = document.createElement('div');
                 $(d1).load("home_1.jsp #publications", function () {
+                    setCommentaireTextAreaFct(d1);
                     $("#corps").append($(d1).children());
                 });
                 $(d2).load("home.jsp #menud", function () {

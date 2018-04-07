@@ -40,8 +40,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Publication.findAll", query = "SELECT p FROM Publication p order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findAllAfterId", query = "SELECT p FROM Publication p where p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCatégorieVille", query = "SELECT p FROM Publication p where p.catégorie in :catégorie and p.ville in :ville order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCatégorieVilleAfterId", query = "SELECT p FROM Publication p where p.catégorie in :catégorie and p.ville in :ville and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 
@@ -62,8 +64,8 @@ public class Publication implements Serializable {
     @Column(name = "Type")
     private String type = "T";
     @Size(max = 45)
-    @Column(name = "Lieu")
-    private String lieu = "L";
+    @Column(name = "Ville")
+    private String ville = "L";
     @Basic(optional = false)
     @NotNull
     @Column(name = "Date de création")
@@ -72,8 +74,8 @@ public class Publication implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "Categorie")
-    private String categorie = "C";
+    @Column(name = "Catégorie")
+    private String catégorie = "C";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -104,12 +106,12 @@ public class Publication implements Serializable {
         this.idPublication = idPublication;
     }
 
-    public Publication(Integer idPublication, String titre, String type, Timestamp date_de_création, String categorie, String etat, int nbSignal) {
+    public Publication(Integer idPublication, String titre, String type, Timestamp date_de_création, String catégorie, String etat, int nbSignal) {
         this.idPublication = idPublication;
         this.titre = titre;
         this.type = type;
         this.date_de_création = date_de_création;
-        this.categorie = categorie;
+        this.catégorie = catégorie;
         this.etat = etat;
         this.nbSignal = nbSignal;
     }
@@ -138,12 +140,12 @@ public class Publication implements Serializable {
         this.type = type;
     }
 
-    public String getLieu() {
-        return lieu;
+    public String getVille() {
+        return ville;
     }
 
-    public void setLieu(String lieu) {
-        this.lieu = lieu;
+    public void setVille(String ville) {
+        this.ville = ville;
     }
 
     public String getDate_de_création() {
@@ -155,12 +157,12 @@ public class Publication implements Serializable {
         this.date_de_création = date_de_création;
     }
 
-    public String getCategorie() {
-        return categorie;
+    public String getCatégorie() {
+        return catégorie;
     }
 
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+    public void setCatégorie(String catégorie) {
+        this.catégorie = catégorie;
     }
 
     public String getEtat() {
@@ -211,7 +213,7 @@ public class Publication implements Serializable {
     public void setCommentaireList(List<Commentaire> commentaireList) {
         this.commentaireList = commentaireList;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

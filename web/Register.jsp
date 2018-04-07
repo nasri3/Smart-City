@@ -22,7 +22,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Guide</a>
+                            <a class="nav-link" href="#">Notifications</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">À propos</a>
@@ -31,7 +31,7 @@
                             <a class="nav-link" href="#">Contactez-nous</a>
                         </li>
                     </ul>
-                    <a class="btn btn-primary" href="/"><span class="fa fa-sign-out-alt"></span>Connexion</a>
+                    <a class="btn btn-outline-success" href="/"><span class="fa fa-sign-out-alt"></span>Connexion</a>
                 </div>
             </div>
         </nav>
@@ -113,7 +113,7 @@
                     </div>
                     <!-- Soumettre -->
                     <div class="pb-5">
-                        <button type="submit" class="btn col-12">Soumettre</button>
+                        <button type="submit" class="btn btn-outline-primary col-12">Soumettre</button>
                     </div>
                 </form>
             </div>

@@ -61,13 +61,20 @@
                                     <a href="#">${Cmpt.getPrenom()} ${Cmpt.getNom()}</a><br>
                                     <time datetime="${publication.getDate_de_création()}">${publication.getDate_de_création()}</time>
                                     <br>
-                                    <i class="fa fa-map-marker"> ${publication.getLieu()} ${publication.getCategorie()} </i>
+                                    <i class="fa fa-map-marker"> ${publication.getVille()} ${publication.getCatégorie()} </i>
                                 </div>
                                 <div class="media-body text-right">
                                     <button class="btn btn-light fa fa-caret-square-down" data-toggle="dropdown"></button>
                                     <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right">
-                                        <button onclick="signaler(${idPub})" class="dropdown-item">signaler</button>
-                                        <c:if test='${(compte==publication.getCompte()) || compte.getRole()== "Administrateur"}'>
+                                        <c:choose>
+                                            <c:when test="${!compte.DejaSignaler(publication)}">
+                                                <button onclick="signaler(${idPub})" class="dropdown-item">signaler</button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="dropdown-item">Publication Signalé</div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <c:if test='${(compte==publication.getCompte())}'>
                                             <button onclick="supprimer(${idPub})" class="dropdown-item">supprimer</button>
                                         </c:if>
                                     </div>
@@ -98,8 +105,7 @@
                             <div class="media">
                                 <img class="rounded-circle mt-2" src="files/${compte.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
                                 <div class="media-body row ml-1">
-                                    <div class="col-sm-10"><textarea class="form-control" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..."></textarea></div>
-                                    <div class="col-sm-2 mt-3"><button onclick="commenter(${idPub})">Publier</button></div>
+                                    <textarea class="form-control" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -115,11 +121,11 @@
                 </div>
             </c:forEach>
             <c:if test="${idPub != null}">
-            <div class="row justify-content-center py-2" id="afficherPlus">
-                <button onclick="afficherPlus(${idPub})">afficher plus..</button>
-            </div>
+                <div class="text-center" id="afficherPlus">
+                    <label class="btn btn-link" onclick="afficherPlus(${idPub})">afficher plus..</label>
+                </div>
             </c:if>
         </div>
-
+        
     </body>
 </html>

@@ -26,7 +26,8 @@ function publier() {
         $("#uploadForm").submit();
     } else
         alert("Le fichier doit etre de type image ou video et la taille de fichier doit etre inferieur a 500MO");
-};
+}
+;
 
 function supprimer(idPub) {
     $.get("ctrl?operation=supprimerPub&idPub=" + idPub, function (responseText) {
@@ -37,14 +38,18 @@ function supprimer(idPub) {
 }
 
 function signaler(idPub) {
-    $.get("ctrl?operation=signalerPub&idPub=" + idPub);
+    $.get("ctrl?operation=signalerPub&idPub=" + idPub, function () {
+        $("#dropdown" + idPub).children().first().html('<div class="dropdown-item">Publication Signalé</div>');
+    });
 }
 
 function commenter(idPub) {
-    $("#com" + idPub).collapse("show");
-    if ($("#texte" + idPub).val() !== "")
+    if ($("#texte" + idPub).val() !== "") {
         $.get("ctrl?operation=commenter&idPub=" + idPub + "&" + $("#texte" + idPub).serialize());
-    $("#texte" + idPub).val("");
+        $("#com" + idPub).collapse("show");
+        $("#texte" + idPub).val("");
+        $("#texte" + idPub).blur();
+    }
 }
 
 function ChangerPhotoDeProfil() {
@@ -66,8 +71,48 @@ function afficherPlus(idPub) {
                 document.getElementById("afficherPlus").outerHTML = "";
                 if ($(d.firstChild).children().length === 1)
                     $(d).find("#afficherPlus").empty();
+                setCommentaireTextAreaFct(d);
                 $("#publications").append($(d.firstChild).children());
             });
         });
+    });
+}
+
+function setCommentaireTextAreaFct(d) {
+    $(d).find("textarea").keypress(function (e) {
+        if (e.keyCode === 13 && !e.shiftKey) {
+            e.preventDefault();
+            commenter($(this).attr("id").toString().replace("texte", ""));
+        }
+    });
+}
+
+function initialiser() {
+    $("#publications").html('<div class=text-center><i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i></div>');
+    $.get("ctrl?operation=initialiserPublications", function () {
+        var d = document.createElement('div');
+        $(d).load("home_1.jsp #publications", function () {
+            setCommentaireTextAreaFct(d);
+            $("#publications").html($(d).children());
+        });
+    });
+}
+function toggleCatégorie(arg) {
+    $.get("ctrl?operation=toggleCatégorie&catégorie=" + $(arg).html(), function () {
+        if ($(arg).attr("class") === "col btn btn-outline-success")
+            $(arg).attr("class", "col btn btn-success");
+        else
+            $(arg).attr("class", "col btn btn-outline-success");
+        initialiser();
+    });
+}
+
+function toggleVille(arg) {
+    $.get("ctrl?operation=toggleVille&ville=" + $(arg).html(), function () {
+        if ($(arg).attr("class") === "col btn btn-outline-danger")
+            $(arg).attr("class", "col btn btn-danger");
+        else
+            $(arg).attr("class", "col btn btn-outline-danger");
+        initialiser();
     });
 }

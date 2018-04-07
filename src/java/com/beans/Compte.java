@@ -6,6 +6,7 @@
 package com.beans;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -14,6 +15,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -36,6 +40,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Compte.findAll", query = "SELECT c FROM Compte c order by c.idCompte desc")})
 public class Compte implements Serializable {
+
+    @JoinTable(name = "signalisation", joinColumns = {
+        @JoinColumn(name = "compte", referencedColumnName = "IdCompte")}, inverseJoinColumns = {
+        @JoinColumn(name = "publication", referencedColumnName = "IdPublication")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Publication> publicationsSignalés;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -79,10 +89,20 @@ public class Compte implements Serializable {
     @Size(min = 1, max = 25)
     @Column(name = "Role")
     private String role = "Utilisateur";
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "compte")
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1000)
+    @Column(name = "Ville-interet")
+    private String villeinteret = "";
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1000)
+    @Column(name = "Catégorie-interet")
+    private String catégorieinteret = "";
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "compte")
     @OrderBy("idPublication desc")
     private List<Publication> publicationList;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "compte")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "compte")
     private List<Commentaire> commentaireList;
 
     public Compte() {
@@ -185,6 +205,30 @@ public class Compte implements Serializable {
         this.commentaireList = commentaireList;
     }
 
+    public String getVilleinteret() {
+        return villeinteret;
+    }
+    
+    public List<String> getVilleinteretList() {
+        return Arrays.asList(villeinteret.split(","));
+    }
+    
+    public void setVilleinteret(String villeinteret) {
+        this.villeinteret = villeinteret;
+    }
+
+    public String getCatégorieinteret() {
+        return catégorieinteret;
+    }
+    
+    public List<String> getCatégorieinteretList() {
+        return Arrays.asList(catégorieinteret.split(","));
+    }
+
+    public void setCatégorieinteret(String catégorieinteret) {
+        this.catégorieinteret = catégorieinteret;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -209,5 +253,21 @@ public class Compte implements Serializable {
     public String toString() {
         return "com.beans.Compte[ idCompte=" + idCompte + " ]";
     }
+
+    @XmlTransient
+    public List<Publication> getPublicationsSignalés() {
+        return publicationsSignalés;
+    }
+
+    public void setPublicationsSignalés(List<Publication> publicationsSignalés) {
+        this.publicationsSignalés = publicationsSignalés;
+    }
     
+    public void SignalerPublication(Publication publication) {
+        this.publicationsSignalés.add(publication);
+    }
+    
+    public boolean DejaSignaler(Publication publication) {
+        return publicationsSignalés.contains(publication);
+    }
 }

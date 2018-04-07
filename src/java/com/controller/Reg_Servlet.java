@@ -2,6 +2,7 @@ package com.controller;
 
 import com.DAO.*;
 import com.beans.*;
+import static com.controller.SI_Servlet.SeConnecter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,9 +47,10 @@ public class Reg_Servlet extends HttpServlet {
         String Nom = request.getParameter("Nom");
         String Prenom = request.getParameter("Prenom");
         String DateDeNaissance = request.getParameter("DateDeNaissance");
-        if(request.getParameter("g-recaptcha-response")==null || request.getParameter("g-recaptcha-response").isEmpty())
+        if (request.getParameter("g-recaptcha-response") == null || request.getParameter("g-recaptcha-response").isEmpty()) {
             return;
-        
+        }
+
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date DateNaissance = null;
         try {
@@ -76,25 +78,16 @@ public class Reg_Servlet extends HttpServlet {
         compte.setNom(Nom);
         compte.setPrenom(Prenom);
         compte.setDateDeNaissance(DateNaissance);
-        compte.setMotDePasse(cryptWithMD5(MotDePasse1));
+        String MotDePasse = cryptWithMD5(MotDePasse1);
+        compte.setMotDePasse(MotDePasse);
         compte.setVille(Ville);
         System.out.println(IdCompte + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + cryptWithMD5(MotDePasse1) + " " + Ville);
         //3.Inserer la compte dans la BD
         compteFacade.create(compte);
         System.out.println("role : " + compte.getRole());
-        request.login(IdCompte, cryptWithMD5(MotDePasse1));
-
+        SeConnecter(request, response, IdCompte, MotDePasse);
         request.getSession().setAttribute("compte", compte);
-        Compte compteAnonyme = new Compte();
-        compteAnonyme.setNom("");
-        compteAnonyme.setPrenom("Anonyme");
-        request.getSession().setAttribute("compteAnonyme", compteAnonyme);
-        // Positionner le content type
         response.sendRedirect("/");
-        //response.setContentType("image/jpg");
-
-        // DaoMVC.affiche();
-        //request.getRequestDispatcher("/home.jsp").forward(request, response);
     }
 
     //MD5 Cryptage

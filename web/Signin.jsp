@@ -22,7 +22,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Guide</a>
+                            <a class="nav-link" href="#">Notifications</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">À propos</a>

@@ -32,7 +32,7 @@
                             <a class="nav-link" href="profil">${compte.getPrenom()} ${compte.getNom()}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Guide</a>
+                            <a class="nav-link" href="#">Notifications</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">À propos</a>
@@ -56,46 +56,38 @@
                         <a href="profil">${compte.getPrenom()} ${compte.getNom()}</a>
                     </div>
 
+                    <div class="row card-footer">
+                        <label class="col-12">Catégorie</label>
+                        <c:forEach items="${Catégories}" var="catégorie">
+                            <c:choose>
+                                <c:when test='${compte.getCatégorieinteret().contains(catégorie)}'>
+                                    <button class="col btn btn-success" onclick="toggleCatégorie(this)">${catégorie}</button>
+                                </c:when>
+                                <c:otherwise><button class="col btn btn-outline-success" onclick="toggleCatégorie(this)">${catégorie}</button></c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                        <label class="col-12">Ville</label>
+                        <c:forEach items="${Villes}" var="ville">
+                            <c:choose>
+                                <c:when test='${compte.getVilleinteret().contains(ville)}'>
+                                    <button class="col btn btn-danger" onclick="toggleVille(this)">${ville}</button>
+                                </c:when>
+                                <c:otherwise><button class="col btn btn-outline-danger" onclick="toggleVille(this)">${ville}</button></c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </div>
                     <div class="card-footer">
                         <label for="setCatégorie">Catégorie</label>
                         <select id="setCatégorie" name="Catégorie" class="form-control">
-                            <option>Agriculture</option>
-                            <option>Education</option>
-                            <option>Environnement</option>
-                            <option>Financière</option>
-                            <option>Infrastructure</option>
-                            <option>Santé</option>
-                            <option>Sécurité</option>
-                            <option>Sport</option>
-                            <option>Tourisme</option>
-                            <option>Transport</option>
+                            <c:forEach items="${Catégories}" var="catégorie">
+                                <option>${catégorie}</option>
+                            </c:forEach>
                         </select>
                         <label for="setVille">Ville</label>
                         <select id="setVille" name="Ville" class="form-control">
-                            <option>Ariana</option>
-                            <option>Bèja</option>
-                            <option>Ben Arous</option>
-                            <option>Bizerte</option>
-                            <option>Gabès</option>
-                            <option>Gafsa</option>
-                            <option>Jendouba</option>
-                            <option>Kairouan</option>
-                            <option>Kasserine</option>
-                            <option>Kébili</option>
-                            <option>Kef</option>
-                            <option>Mahdia</option>
-                            <option>Manouba</option>
-                            <option>Médenine</option>
-                            <option>Monastir</option>
-                            <option>Nabeul</option>
-                            <option>Sfax</option>
-                            <option>Sidi Bouzid</option>
-                            <option>Siliana</option>
-                            <option>Sousse</option>
-                            <option>Tataouine</option>
-                            <option>Tozeur</option>
-                            <option>Tunis</option>
-                            <option>Zaghouan</option>
+                            <c:forEach items="${Villes}" var="ville">
+                                <option>${ville}</option>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>
@@ -129,16 +121,9 @@
                                 <div class="form-group">
                                     <label for="Catégorie">Catégorie</label>
                                     <select id="Catégorie" name="Catégorie" class="form-control">
-                                        <option>Agriculture</option>
-                                        <option>Education</option>
-                                        <option>Environnement</option>
-                                        <option>Financière</option>
-                                        <option>Infrastructure</option>
-                                        <option>Santé</option>
-                                        <option>Sécurité</option>
-                                        <option>Sport</option>
-                                        <option>Tourisme</option>
-                                        <option>Transport</option>
+                                        <c:forEach items="${Catégories}" var="catégorie">
+                                            <option>${catégorie}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
 
@@ -146,30 +131,9 @@
                                 <div class="form-group">
                                     <label for="Ville">Ville</label>
                                     <select id="Ville" name="Ville" class="form-control">
-                                        <option>Ariana</option>
-                                        <option>Bèja</option>
-                                        <option>Ben Arous</option>
-                                        <option>Bizerte</option>
-                                        <option>Gabès</option>
-                                        <option>Gafsa</option>
-                                        <option>Jendouba</option>
-                                        <option>Kairouan</option>
-                                        <option>Kasserine</option>
-                                        <option>Kébili</option>
-                                        <option>Kef</option>
-                                        <option>Mahdia</option>
-                                        <option>Manouba</option>
-                                        <option>Médenine</option>
-                                        <option>Monastir</option>
-                                        <option>Nabeul</option>
-                                        <option>Sfax</option>
-                                        <option>Sidi Bouzid</option>
-                                        <option>Siliana</option>
-                                        <option>Sousse</option>
-                                        <option>Tataouine</option>
-                                        <option>Tozeur</option>
-                                        <option>Tunis</option>
-                                        <option>Zaghouan</option>
+                                        <c:forEach items="${Villes}" var="ville">
+                                            <option>${ville}</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
 
@@ -187,6 +151,7 @@
                         </div>
                     </div>
                 </form>
+                <div id="publications"></div>
             </div>
 
 
@@ -206,12 +171,7 @@
             {
                 window.location.reload();
             }
-            $.get("ctrl?operation=initialiserPublications", function () {
-                var d1 = document.createElement('div');
-                $(d1).load("home_1.jsp #publications", function () {
-                    $("#corps").append($(d1).children());
-                });
-            });
+            initialiser();
         </script>
 
     </body>

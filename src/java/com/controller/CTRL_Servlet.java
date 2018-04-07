@@ -175,9 +175,9 @@ public class CTRL_Servlet extends HttpServlet {
                         idPub = request.getParameter("idPub");
                         System.out.println(titre + " " + idPub);
                         if (titre.equals("Page d'accueil")) {
-                            publications.addAll(publicationFacade.get3After(Integer.valueOf(idPub)));
+                            publications.addAll(publicationFacade.ajouterPublications(Integer.valueOf(idPub), compte));
                         } else {
-                            publications.addAll(publicationFacade.get3After(Integer.valueOf(idPub), compte));
+                            publications.addAll(publicationFacade.ajouterVosPublications(Integer.valueOf(idPub), compte));
                         }
                         request.getSession().setAttribute("publications", publications);
 
@@ -185,12 +185,12 @@ public class CTRL_Servlet extends HttpServlet {
                         request.getSession().setAttribute("pubs", pubs);
                         break;
                     case "initialiserPublications":
-                        publications.addAll(publicationFacade.getFirst5());
+                        publications.addAll(publicationFacade.initialiserPublications(compte));
                         request.getSession().setAttribute("publications", publications);
                         request.getSession().setAttribute("pubs", publications);
                         break;
                     case "initialiserVosPublications":
-                        publications.addAll(publicationFacade.getFirst5(compte));
+                        publications.addAll(publicationFacade.initialiserVosPublications(compte));
                         request.getSession().setAttribute("publications", publications);
                         request.getSession().setAttribute("pubs", publications);
                         break;
@@ -230,12 +230,12 @@ public class CTRL_Servlet extends HttpServlet {
                     case "signalerPub":
                         idPub = request.getParameter("idPub");
                         publication = publicationFacade.find(idPub);
-                        if (publication == null) {
-                            System.out.println("pub" + idPub + " Not Found");
+                        if (publication == null || compte.DejaSignaler(publication)) {
                             return;
                         }
-                        publication.setNbSignal(publication.getNbSignal() + 1);
-                        publicationFacade.edit(publication);
+                        compte.SignalerPublication(publication);
+                        compteFacade.edit(compte);
+                        request.getSession().setAttribute("compte", compte);
                         System.out.println(operation + " : " + idPub);
                         break;
                     case "commenter":
@@ -251,6 +251,24 @@ public class CTRL_Servlet extends HttpServlet {
                         commentaire.setTexte(text);
                         commentaireFacade.create(commentaire);
                         System.out.println(operation + " : " + idPub);
+                        break;
+                    case "toggleCatégorie":
+                        String catégorie = request.getParameter("catégorie");
+                        String catégorieinteret = compte.getCatégorieinteret();
+                        if(!catégorieinteret.contains(catégorie))
+                            compte.setCatégorieinteret(catégorieinteret + "," + catégorie);
+                        else compte.setCatégorieinteret(catégorieinteret.replace("," + catégorie, ""));
+                        compteFacade.edit(compte);
+                        request.getSession().setAttribute("compte", compte);
+                        break;
+                    case "toggleVille":
+                        String ville = request.getParameter("ville");
+                        String villeinteret = compte.getVilleinteret();
+                        if(!villeinteret.contains(ville))
+                            compte.setVilleinteret(villeinteret + "," + ville);
+                        else compte.setVilleinteret(villeinteret.replace("," + ville, ""));
+                        compteFacade.edit(compte);
+                        request.getSession().setAttribute("compte", compte);
                         break;
                     case "deconnecter":
                         request.logout();

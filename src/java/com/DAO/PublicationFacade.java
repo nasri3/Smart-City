@@ -26,25 +26,40 @@ public class PublicationFacade extends AbstractFacade<Publication> {
     public PublicationFacade() {
         super(Publication.class);
     }
-
+    
     public List<Publication> findAll() {
         return getEntityManager().createNamedQuery("Publication.findAll").getResultList();
-    }
+}
 
     public List<Publication> getFirst5() {
         return getEntityManager().createNamedQuery("Publication.findAll").setMaxResults(5).getResultList();
     }
+
+    public List<Publication> initialiserPublications(Compte compte) {
+        return getEntityManager().createNamedQuery("Publication.findbyCatégorieVille")
+                .setParameter("catégorie", compte.getCatégorieinteretList())
+                .setParameter("ville", compte.getVilleinteretList())
+                .setMaxResults(5).getResultList();
+    }
     
-    public List<Publication> getFirst5(Compte compte) {
-        return getEntityManager().createNamedQuery("Publication.findbyCompte").setParameter("compte", compte).setMaxResults(5).getResultList();
+    public List<Publication> initialiserVosPublications(Compte compte) {
+        return getEntityManager().createNamedQuery("Publication.findbyCompte")
+                .setParameter("compte", compte)
+                .setMaxResults(5).getResultList();
     }
 
-    public List<Publication> get3After(int idDerniere) {
-        return getEntityManager().createNamedQuery("Publication.findAllAfterId").setParameter("idDerniere", idDerniere).setMaxResults(3).getResultList();
+    public List<Publication> ajouterPublications(int idDerniere, Compte compte) {
+        return getEntityManager().createNamedQuery("Publication.findbyCatégorieVilleAfterId")
+                .setParameter("catégorie", compte.getCatégorieinteretList())
+                .setParameter("ville", compte.getVilleinteretList())
+                .setParameter("idDerniere", idDerniere)
+                .setMaxResults(3).getResultList();
     }
 
-    public List<Publication> get3After(int idDerniere, Compte compte) {
-        return getEntityManager().createNamedQuery("Publication.findbyCompteAfterId").setParameter("compte", compte).setParameter("idDerniere", idDerniere).setMaxResults(3).getResultList();
+    public List<Publication> ajouterVosPublications(int idDerniere, Compte compte) {
+        return getEntityManager().createNamedQuery("Publication.findbyCompteAfterId")
+                .setParameter("compte", compte)
+                .setParameter("idDerniere", idDerniere).setMaxResults(3).getResultList();
     }
 
 }

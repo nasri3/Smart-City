@@ -30,24 +30,13 @@ public class SI_Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         System.out.println("hh:::::::hh");
-        String idCompte = request.getParameter("CIN");
+        String IdCompte = request.getParameter("CIN");
         String MotDePasse = cryptWithMD5(request.getParameter("Mot de passe"));
-        Compte compte = compteFacade.find(idCompte);
+        Compte compte = compteFacade.find(IdCompte);
         if (compte != null && compte.getMotDePasse().equals(MotDePasse)) {
-
-            request.login(idCompte, MotDePasse);
-            request.getServletContext().log("Successfully logged in " + idCompte);
-
-            System.out.println(request.isUserInRole("Utilisateur"));
-            System.out.println(request.isUserInRole("Administrateur"));
-
+            SeConnecter(request, response, IdCompte, MotDePasse);
             request.getSession().setAttribute("compte", compte);
-            Compte compteAnonyme = new Compte();
-            compteAnonyme.setNom("");
-            compteAnonyme.setPrenom("Anonyme");
-            request.getSession().setAttribute("compteAnonyme", compteAnonyme);
             response.sendRedirect("/");
-            //request.getRequestDispatcher("/home.jsp").forward(request, response);
         } else {
             if (compte == null) {
                 request.setAttribute("erreurCmpt", "Compte inexistant");
@@ -56,5 +45,22 @@ public class SI_Servlet extends HttpServlet {
             }
             request.getRequestDispatcher("/Signin.jsp").forward(request, response);
         }
+    }
+
+    public static void SeConnecter(HttpServletRequest request, HttpServletResponse response, String IdCompte, String MotDePasse) throws ServletException {
+        request.login(IdCompte, MotDePasse);
+        request.getServletContext().log("Successfully logged in " + IdCompte);
+
+        Compte compteAnonyme = new Compte();
+        compteAnonyme.setNom("");
+        compteAnonyme.setPrenom("Anonyme");
+        request.getSession().setAttribute("compteAnonyme", compteAnonyme);
+        String[] Villes = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine", 
+            "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", 
+            "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
+        String[] Catégories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé", 
+            "Sécurité", "Sport", "Tourisme", "Transport"};
+        request.getSession().setAttribute("Villes", Villes);
+        request.getSession().setAttribute("Catégories", Catégories);
     }
 }

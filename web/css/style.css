@@ -47,9 +47,11 @@ p{ word-break: break-all; }
 }
 .commentaires{}  
 
-.card { margin-top: 20px; }
+.card { margin-bottom: 20px; }
 
 .btn { font-size: small;}
+
+.col.btn { font-size: xx-small;}
 
 .media-body.commentaire {
     border: 2px solid #dedede;
