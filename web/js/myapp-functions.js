@@ -88,7 +88,7 @@ function setCommentaireTextAreaFct(d) {
 }
 
 function initialiser() {
-    $("#publications").html('<div class=text-center><i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i></div>');
+    $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i></div>');
     $.get("ctrl?operation=initialiserPublications", function () {
         var d = document.createElement('div');
         $(d).load("home_1.jsp #publications", function () {

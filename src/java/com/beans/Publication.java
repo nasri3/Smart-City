@@ -41,9 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Publication.findAll", query = "SELECT p FROM Publication p order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findAllAfterId", query = "SELECT p FROM Publication p where p.idPublication<:idDerniere order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCatégorieVille", query = "SELECT p FROM Publication p where p.catégorie in :catégorie and p.ville in :ville order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCatégoriesVilles", query = "SELECT p FROM Publication p where p.catégorie in :catégories and p.ville in :villes order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCatégorieVilleAfterId", query = "SELECT p FROM Publication p where p.catégorie in :catégorie and p.ville in :ville and p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCatégoriesVillesAfterId", query = "SELECT p FROM Publication p where p.catégorie in :catégories and p.ville in :villes and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 

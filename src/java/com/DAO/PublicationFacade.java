@@ -35,10 +35,10 @@ public class PublicationFacade extends AbstractFacade<Publication> {
         return getEntityManager().createNamedQuery("Publication.findAll").setMaxResults(5).getResultList();
     }
 
-    public List<Publication> initialiserPublications(Compte compte) {
-        return getEntityManager().createNamedQuery("Publication.findbyCatégorieVille")
-                .setParameter("catégorie", compte.getCatégorieinteretList())
-                .setParameter("ville", compte.getVilleinteretList())
+    public List<Publication> initialiserPublications(List<String> catégories, List<String> villes) {
+        return getEntityManager().createNamedQuery("Publication.findbyCatégoriesVilles")
+                .setParameter("catégories", catégories)
+                .setParameter("villes", villes)
                 .setMaxResults(5).getResultList();
     }
     
@@ -48,10 +48,10 @@ public class PublicationFacade extends AbstractFacade<Publication> {
                 .setMaxResults(5).getResultList();
     }
 
-    public List<Publication> ajouterPublications(int idDerniere, Compte compte) {
-        return getEntityManager().createNamedQuery("Publication.findbyCatégorieVilleAfterId")
-                .setParameter("catégorie", compte.getCatégorieinteretList())
-                .setParameter("ville", compte.getVilleinteretList())
+    public List<Publication> ajouterPublications(List<String> catégories, List<String> villes,int idDerniere) {
+        return getEntityManager().createNamedQuery("Publication.findbyCatégoriesVillesAfterId")
+                .setParameter("catégories", catégories)
+                .setParameter("villes", villes)
                 .setParameter("idDerniere", idDerniere)
                 .setMaxResults(3).getResultList();
     }

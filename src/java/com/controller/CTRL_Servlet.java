@@ -2,11 +2,7 @@ package com.controller;
 
 import com.DAO.*;
 import com.beans.*;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -42,7 +38,6 @@ public class CTRL_Servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        List imageAllowedTypes = Arrays.asList("image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml");
         Compte compte = (Compte) request.getSession().getAttribute("compte");
         String uploadPath = getServletContext().getInitParameter("uploadPath");
 
@@ -70,41 +65,25 @@ public class CTRL_Servlet extends HttpServlet {
 
             while (iter.hasNext()) {
                 FileItem itemFile = (FileItem) iter.next();
+                String FileType = itemFile.getContentType();
                 // Process a regular form field
                 if (!itemFile.isFormField()) {
                     long FileSize = itemFile.getSize();
-                    if (FileSize != 0 && FileSize < 10000000 && imageAllowedTypes.contains(itemFile.getContentType())) {
-                        System.out.println("Fichier valide");
-
-                        //upload the file
-                        String extension = itemFile.getName().substring(itemFile.getName().lastIndexOf(".")).toLowerCase();
-                        String filename = "PP/" + compte.getPrenom() + compte.getNom() + RandomStringUtils.randomAlphanumeric(10) + extension;
-
-                        InputStream stream = itemFile.getInputStream();
-                        FileOutputStream fout = new FileOutputStream(uploadPath + filename);
-                        BufferedInputStream bin;
-                        try (BufferedOutputStream bout = new BufferedOutputStream(fout)) {
-                            bin = new BufferedInputStream(stream);
-                            byte buf[] = new byte[4096];
-                            while ((bin.read(buf)) != -1) {
-                                bout.write(buf);
-                            }
-                        }
-                        bin.close();
+                    String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
+                    String filename = compte.getPrenom() + compte.getNom() + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
+                    List imageAllowedTypes = Arrays.asList("image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml");
+                    //upload le fichier
+                    String res = UP_Servlet.saveFile(itemFile, imageAllowedTypes, 10485760, uploadPath + filename);
+                    if (res.equals("succes")) {
                         if (!compte.getPhotoDeProfil().equals("avatar.png")) {
                             Files.delete(Paths.get(uploadPath + compte.getPhotoDeProfil()));
                         }
                         compte.setPhotoDeProfil(filename);
                         compteFacade.edit(compte);
                         request.getSession().setAttribute("compte", compte);
-                        response.sendRedirect("/profil");
-                        return;
-
-                    } else {
-                        System.out.println("Fichier non valide");
-                        response.sendRedirect("/profil");
-                        return;
                     }
+                    response.sendRedirect("/profil");
+                    return;
                 }
             }
         } catch (FileUploadException ex) {
@@ -173,9 +152,8 @@ public class CTRL_Servlet extends HttpServlet {
                     case "ajouterPublications":
                         String titre = request.getParameter("titre");
                         idPub = request.getParameter("idPub");
-                        System.out.println(titre + " " + idPub);
                         if (titre.equals("Page d'accueil")) {
-                            publications.addAll(publicationFacade.ajouterPublications(Integer.valueOf(idPub), compte));
+                            publications.addAll(publicationFacade.ajouterPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList(), Integer.valueOf(idPub)));
                         } else {
                             publications.addAll(publicationFacade.ajouterVosPublications(Integer.valueOf(idPub), compte));
                         }
@@ -185,7 +163,7 @@ public class CTRL_Servlet extends HttpServlet {
                         request.getSession().setAttribute("pubs", pubs);
                         break;
                     case "initialiserPublications":
-                        publications.addAll(publicationFacade.initialiserPublications(compte));
+                        publications.addAll(publicationFacade.initialiserPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList()));
                         request.getSession().setAttribute("publications", publications);
                         request.getSession().setAttribute("pubs", publications);
                         break;
@@ -255,18 +233,22 @@ public class CTRL_Servlet extends HttpServlet {
                     case "toggleCatégorie":
                         String catégorie = request.getParameter("catégorie");
                         String catégorieinteret = compte.getCatégorieinteret();
-                        if(!catégorieinteret.contains(catégorie))
+                        if (!catégorieinteret.contains(catégorie)) {
                             compte.setCatégorieinteret(catégorieinteret + "," + catégorie);
-                        else compte.setCatégorieinteret(catégorieinteret.replace("," + catégorie, ""));
+                        } else {
+                            compte.setCatégorieinteret(catégorieinteret.replace("," + catégorie, ""));
+                        }
                         compteFacade.edit(compte);
                         request.getSession().setAttribute("compte", compte);
                         break;
                     case "toggleVille":
                         String ville = request.getParameter("ville");
                         String villeinteret = compte.getVilleinteret();
-                        if(!villeinteret.contains(ville))
+                        if (!villeinteret.contains(ville)) {
                             compte.setVilleinteret(villeinteret + "," + ville);
-                        else compte.setVilleinteret(villeinteret.replace("," + ville, ""));
+                        } else {
+                            compte.setVilleinteret(villeinteret.replace("," + ville, ""));
+                        }
                         compteFacade.edit(compte);
                         request.getSession().setAttribute("compte", compte);
                         break;

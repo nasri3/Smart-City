@@ -4,7 +4,7 @@ import com.DAO.CompteFacade;
 import com.DAO.PublicationFacade;
 import com.beans.Compte;
 import com.beans.Publication;
-import java.io.BufferedInputStream ;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,45 +78,23 @@ public class UP_Servlet extends HttpServlet {
                 FileItem itemFile = (FileItem) iter.next();
                 // Process a regular form field
                 if (!itemFile.isFormField()) {
-                    long FileSize = itemFile.getSize();
                     String FileType = itemFile.getContentType();
-                    if (FileSize != 0 && imageVideoAllowedTypes.contains(FileType)) {
-                        System.out.println("Fichier valide");
-                        
+                    String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
+                    String uploadPath = getServletContext().getInitParameter("uploadPath");
+                    String name = publication.getDate_de_création().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
+                    
+                    //upload le fichier
+                    String res = saveFile(itemFile, imageVideoAllowedTypes, 524288000, uploadPath + name);
+                    if (res.equals("succes")) {
                         publication.setType(FileType);
                         publication.setCompte((Compte) request.getSession().getAttribute("compte"));
-
-                        //upload the file
-                        String extension = (FileType.equals("image/svg+xml"))? "svg" : FileType.substring(FileType.lastIndexOf("/")+1);
-                        String uploadPath = getServletContext().getInitParameter("uploadPath");
-                        String filename = publication.getDate_de_création().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
-
-                        InputStream stream = itemFile.getInputStream();
-                        FileOutputStream fout = new FileOutputStream(uploadPath + filename);
-                        BufferedInputStream bin;
-                        try (BufferedOutputStream bout = new BufferedOutputStream(fout)) {
-                            bin = new BufferedInputStream(stream);
-                            byte buf[] = new byte[4096];
-                            while ((bin.read(buf)) != -1) {
-                                bout.write(buf);
-                            }
-                        }
-                        bin.close();
-
-                        publication.setTitre(filename);
-
+                        publication.setTitre(name);
                     } else {
-                        System.out.println("Fichier non valide");
                         response.setContentType("text/html;charset=UTF-8");
-                        if (FileSize == 0) {
-                            request.setAttribute("erreurUpload", "Fichier vide");
-                        } else {
-                            request.setAttribute("erreurUpload", "Le type du fichier " + FileType + " est non valide");
-                        }
+                        request.setAttribute("erreurUpload", res);
                         request.getRequestDispatcher("/").include(request, response);
                         return;
                     }
-
                 } else {
                     String s = itemFile.getString("UTF-8");
                     System.out.println("::::::::" + itemFile.getFieldName() + "::::" + s);
@@ -145,4 +123,32 @@ public class UP_Servlet extends HttpServlet {
         response.sendRedirect("/");
     }
 
+    public static String saveFile(FileItem itemFile, List<String> AllowedTypes, long MaxFileSize, String filename) 
+            throws IOException {
+
+        long FileSize = itemFile.getSize();
+        String FileType = itemFile.getContentType();
+        if (FileSize != 0 && FileSize < MaxFileSize && AllowedTypes.contains(FileType)) {
+            System.out.println("Fichier valide");
+
+            InputStream stream = itemFile.getInputStream();
+            FileOutputStream fout = new FileOutputStream(filename);
+            BufferedInputStream bin;
+            try (BufferedOutputStream bout = new BufferedOutputStream(fout)) {
+                bin = new BufferedInputStream(stream);
+                byte buf[] = new byte[4096];
+                while ((bin.read(buf)) != -1) {
+                    bout.write(buf);
+                }
+            }
+            bin.close();
+        } else {
+            System.out.println("Fichier non valide");
+            if(FileSize == 0){
+                return "Fichier vide";
+            }
+            return "Le type du fichier " + FileType + " est non valide";
+        }
+        return "succes";
+    }
 }
