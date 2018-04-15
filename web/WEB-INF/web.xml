@@ -28,6 +28,10 @@
         <servlet-name>profil</servlet-name>
         <jsp-file>/Profil.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Administration</servlet-name>
+        <jsp-file>/Administration.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -52,6 +56,10 @@
         <servlet-name>profil</servlet-name>
         <url-pattern>/profil</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Administration</servlet-name>
+        <url-pattern>/Administration</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>-1</session-timeout>
         <cookie-config>
@@ -66,9 +74,8 @@
         <web-resource-collection>
             <web-resource-name>Tous les utilisateurs</web-resource-name>
             <description/>
-            <url-pattern>/Uplodate.jsp</url-pattern>
-            <url-pattern>/home.jsp</url-pattern>
             <url-pattern>/profil</url-pattern>
+            <url-pattern>/home.jsp</url-pattern>
             <url-pattern>/home_1.jsp</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
@@ -88,12 +95,28 @@
     <security-constraint>
         <display-name>Bloqué</display-name>
         <web-resource-collection>
-            <web-resource-name>signin page</web-resource-name>
+            <web-resource-name>jsp pages</web-resource-name>
             <description/>
             <url-pattern>/Signin.jsp</url-pattern>
             <url-pattern>/Register.jsp</url-pattern>
             <url-pattern>/Profil.jsp</url-pattern>
+            <url-pattern>/Administration.jsp</url-pattern>
         </web-resource-collection>
+        <auth-constraint>
+            <description/>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Administrateur</display-name>
+        <web-resource-collection>
+            <web-resource-name>Administration</web-resource-name>
+            <description/>
+            <url-pattern>/Administration</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Administrateur</role-name>
+        </auth-constraint>
     </security-constraint>
     <login-config>
         <auth-method>FORM</auth-method>

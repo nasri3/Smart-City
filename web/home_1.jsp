@@ -59,7 +59,7 @@
                             <div class="media">
                                 <div class="col">
                                     <a href="#">${Cmpt.getPrenom()} ${Cmpt.getNom()}</a><br>
-                                    <time datetime="${publication.getDate_de_création()}">${publication.getDate_de_création()}</time>
+                                    <time datetime="${publication.getDatedecréation()}">${publication.getDatedecréation()}</time>
                                     <br>
                                     <i class="fa fa-map-marker"> ${publication.getVille()} ${publication.getCatégorie()} </i>
                                 </div>

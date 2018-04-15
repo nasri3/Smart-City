@@ -81,7 +81,7 @@ public class UP_Servlet extends HttpServlet {
                     String FileType = itemFile.getContentType();
                     String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
                     String uploadPath = getServletContext().getInitParameter("uploadPath");
-                    String name = publication.getDate_de_création().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
+                    String name = publication.getDatedecréation().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
                     
                     //upload le fichier
                     String res = saveFile(itemFile, imageVideoAllowedTypes, 524288000, uploadPath + name);

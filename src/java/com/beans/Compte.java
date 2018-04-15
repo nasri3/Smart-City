@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,8 +19,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -93,17 +90,12 @@ public class Compte implements Serializable {
     @NotNull
     @Size(min = 1, max = 1000)
     @Column(name = "Ville-interet")
-    private String villeinteret = "";
+    private String villeinteret = " ";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1000)
     @Column(name = "Catégorie-interet")
-    private String catégorieinteret = "";
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "compte")
-    @OrderBy("idPublication desc")
-    private List<Publication> publicationList;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "compte")
-    private List<Commentaire> commentaireList;
+    private String catégorieinteret = " ";
 
     public Compte() {
     }
@@ -112,7 +104,7 @@ public class Compte implements Serializable {
         this.idCompte = idCompte;
     }
 
-    public Compte(String idCompte, String nom, String prenom, Date dateDeNaissance, String ville, String photoDeProfil, String motDePasse, String role) {
+    public Compte(String idCompte, String nom, String prenom, Date dateDeNaissance, String ville, String photoDeProfil, String motDePasse, String role, String villeinteret, String catégorieinteret) {
         this.idCompte = idCompte;
         this.nom = nom;
         this.prenom = prenom;
@@ -121,6 +113,8 @@ public class Compte implements Serializable {
         this.photoDeProfil = photoDeProfil;
         this.motDePasse = motDePasse;
         this.role = role;
+        this.villeinteret = villeinteret;
+        this.catégorieinteret = catégorieinteret;
     }
 
     public String getNom() {
@@ -187,28 +181,10 @@ public class Compte implements Serializable {
         this.role = role;
     }
 
-    @XmlTransient
-    public List<Publication> getPublicationList() {
-        return publicationList;
-    }
-
-    public void setPublicationList(List<Publication> publicationList) {
-        this.publicationList = publicationList;
-    }
-
-    @XmlTransient
-    public List<Commentaire> getCommentaireList() {
-        return commentaireList;
-    }
-
-    public void setCommentaireList(List<Commentaire> commentaireList) {
-        this.commentaireList = commentaireList;
-    }
-
     public String getVilleinteret() {
         return villeinteret;
     }
-    
+
     public List<String> getVilleinteretList() {
         return Arrays.asList(villeinteret.split(","));
     }
@@ -220,7 +196,7 @@ public class Compte implements Serializable {
     public String getCatégorieinteret() {
         return catégorieinteret;
     }
-    
+
     public List<String> getCatégorieinteretList() {
         return Arrays.asList(catégorieinteret.split(","));
     }
@@ -253,11 +229,11 @@ public class Compte implements Serializable {
     public String toString() {
         return "com.beans.Compte[ idCompte=" + idCompte + " ]";
     }
-
+    
     @XmlTransient
     public List<Publication> getPublicationsSignalés() {
         return publicationsSignalés;
-    }
+}
 
     public void setPublicationsSignalés(List<Publication> publicationsSignalés) {
         this.publicationsSignalés = publicationsSignalés;

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="false" antiResourceLocking="false" path="">
-     
+<Context reloadable="true" antiJARLocking="false" antiResourceLocking="false" path="">
+    <Resources>
+       <PreResources base="E://Documents//UploadedFiles" className="org.apache.catalina.webresources.DirResourceSet" webAppMount="/files" />
+   </Resources>
 </Context>

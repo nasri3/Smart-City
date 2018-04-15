@@ -6,8 +6,8 @@
 package com.beans;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -47,6 +47,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 
+    @OneToMany(mappedBy = "publication")
+    private List<Notification> notificationList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,14 +66,16 @@ public class Publication implements Serializable {
     @Size(min = 1, max = 25)
     @Column(name = "Type")
     private String type = "T";
-    @Size(max = 45)
-    @Column(name = "Ville")
-    private String ville = "L";
     @Basic(optional = false)
     @NotNull
     @Column(name = "Date de création")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp date_de_création = Timestamp.from(Instant.now());
+    private Date datedecréation = new Date();
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "Ville")
+    private String ville = "V";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -87,7 +92,7 @@ public class Publication implements Serializable {
     private int nbSignal;
     @Size(max = 1000)
     @Column(name = "Exprimer")
-    private String exprimer = " ";
+    private String exprimer = "";
     @Basic(optional = false)
     @NotNull
     @Column(name = "Anonyme")
@@ -106,14 +111,16 @@ public class Publication implements Serializable {
         this.idPublication = idPublication;
     }
 
-    public Publication(Integer idPublication, String titre, String type, Timestamp date_de_création, String catégorie, String etat, int nbSignal) {
+    public Publication(Integer idPublication, String titre, String type, Date datedecréation, String ville, String catégorie, String etat, int nbSignal, boolean anonyme) {
         this.idPublication = idPublication;
         this.titre = titre;
         this.type = type;
-        this.date_de_création = date_de_création;
+        this.datedecréation = datedecréation;
+        this.ville = ville;
         this.catégorie = catégorie;
         this.etat = etat;
         this.nbSignal = nbSignal;
+        this.anonyme = anonyme;
     }
 
     public Integer getIdPublication() {
@@ -140,21 +147,21 @@ public class Publication implements Serializable {
         this.type = type;
     }
 
+    public String getDatedecréation() {
+        String dc = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(datedecréation);
+        return dc;
+    }
+
+    public void setDatedecréation(Date datedecréation) {
+        this.datedecréation = datedecréation;
+    }
+
     public String getVille() {
         return ville;
     }
 
     public void setVille(String ville) {
         this.ville = ville;
-    }
-
-    public String getDate_de_création() {
-        String dt = date_de_création.toString().substring(0, date_de_création.toString().lastIndexOf('.'));
-        return dt;
-    }
-
-    public void setDate_de_création(Timestamp date_de_création) {
-        this.date_de_création = date_de_création;
     }
 
     public String getCatégorie() {
@@ -238,4 +245,14 @@ public class Publication implements Serializable {
     public String toString() {
         return "com.beans.Publication[ idPublication=" + idPublication + " ]";
     }
+
+    @XmlTransient
+    public List<Notification> getNotificationList() {
+        return notificationList;
+    }
+
+    public void setNotificationList(List<Notification> notificationList) {
+        this.notificationList = notificationList;
+    }
+    
 }

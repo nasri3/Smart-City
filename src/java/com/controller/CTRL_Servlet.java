@@ -27,6 +27,9 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 public class CTRL_Servlet extends HttpServlet {
 
     @EJB
+    private NotificationFacade notificationFacade;
+
+    @EJB
     private CommentaireFacade commentaireFacade;
 
     @EJB
@@ -96,106 +99,46 @@ public class CTRL_Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         String operation = request.getParameter("operation");
-        Compte compte = (Compte) request.getSession().getAttribute("compte");
+        Compte compte = compteFacade.find(((Compte) request.getSession().getAttribute("compte")).getIdCompte());
         Publication publication;
         String idPub, idCompte;
         ArrayList<Publication> publications = new ArrayList();
         ArrayList<Publication> pubs = (ArrayList<Publication>) request.getSession().getAttribute("pubs");
 
-        switch (compte.getRole()) {
-            case "Administrateur":
-                switch (operation) {
-                    /*
-                    case "envoyerAlerte":
-                        idCompte = request.getParameter("idCompte");
-                        idPub = request.getParameter("idPub");
-                        break;*/
-                    case "supprimerPub":
-                        idPub = request.getParameter("idPub");
-                        publication = publicationFacade.find(idPub);
-                        if (publication == null) {
-                            System.out.println("pub" + idPub + " Not Found");
-                            response.getWriter().write("pub" + idPub);
-                            return;
-                        }
-                        String uploadPath = getServletContext().getInitParameter("uploadPath");
-                        Files.delete(Paths.get(uploadPath + publication.getTitre()));
-                        publicationFacade.remove(publication);
-                        response.getWriter().write("pub" + idPub);
-                        pubs.remove(publication);
-                        request.getSession().setAttribute("pubs", pubs);
-                        System.out.println(operation + " : pub" + idPub);
-                        break;
-                    case "supprimerCompte":
-                        idCompte = request.getParameter("idCompte");
-                        compteFacade.remove(compteFacade.find(idCompte));
-                        response.sendRedirect("/");
-                        break;
-                }
-            case "Sous administrateur":
-                switch (operation) {
-                    case "marquerEtat":
-                        idPub = request.getParameter("idPub");
-                        String etat = request.getParameter("etat");
-                        if (!Arrays.asList("résolu", "non résolu", "entrain de résolution").contains(etat)) {
-                            System.out.println("etat non valide");
-                            response.sendRedirect("/");
-                            return;
-                        }
-                        publication = publicationFacade.find(idPub);
-                        publication.setEtat(etat);
-                        publicationFacade.edit(publication);
-                        break;
-                }
-            case "Utilisateur":
-                switch (operation) {
-                    case "ajouterPublications":
-                        String titre = request.getParameter("titre");
-                        idPub = request.getParameter("idPub");
-                        if (titre.equals("Page d'accueil")) {
-                            publications.addAll(publicationFacade.ajouterPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList(), Integer.valueOf(idPub)));
-                        } else {
-                            publications.addAll(publicationFacade.ajouterVosPublications(Integer.valueOf(idPub), compte));
-                        }
-                        request.getSession().setAttribute("publications", publications);
-
-                        pubs.addAll(publications);
-                        request.getSession().setAttribute("pubs", pubs);
-                        break;
-                    case "initialiserPublications":
-                        publications.addAll(publicationFacade.initialiserPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList()));
-                        request.getSession().setAttribute("publications", publications);
-                        request.getSession().setAttribute("pubs", publications);
-                        break;
-                    case "initialiserVosPublications":
-                        publications.addAll(publicationFacade.initialiserVosPublications(compte));
-                        request.getSession().setAttribute("publications", publications);
-                        request.getSession().setAttribute("pubs", publications);
-                        break;
-                    case "raifraichirCommentaires":
-                        idPub = request.getParameter("idPub");
-                        int nbCom = Integer.valueOf(request.getParameter("nbCom"));
-                        publication = publicationFacade.find(idPub);
-                        if (publication != null && publication.getCommentaireList().size() != nbCom) {
-                            for (int i = 0; i < pubs.size(); i++) {
-                                if (Objects.equals(pubs.get(i).getIdPublication(), Integer.valueOf(idPub))) {
-                                    pubs.set(i, publication);
-                                    response.getWriter().write(i + "");
-                                    break;
-                                }
+        if (compte == null) {
+            request.logout();
+            request.getSession().invalidate();
+            response.sendRedirect("/");
+            return;
+        } else {
+            switch (compte.getRole()) {
+                case "Administrateur":
+                    switch (operation) {
+                        case "initialiserComptes":
+                            request.getSession().setAttribute("comptes", compteFacade.findAll());
+                            System.out.print(compteFacade.findAll().size());
+                            break;
+                        case "envoyerAlerte":
+                            idCompte = request.getParameter("idCompte");
+                            Compte compte2 = compteFacade.find(idCompte);
+                            if (compte2 == null) {
+                                System.out.println("compte : " + idCompte + " non trouvé");
+                                return;
                             }
-                        } else {
-                            response.getWriter().write("-1");
-                        }
-                        break;
-                    case "supprimerPub":
-                        System.out.println("pub");
-                        idPub = request.getParameter("idPub");
-                        publication = publicationFacade.find(idPub);
-                        if (publication == null) {
-                            System.out.println("pub" + idPub + " Not Found");
-                            response.getWriter().write("pub" + idPub);
-                        } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
+                            Notification notif = new Notification();
+                            notif.setDestinataire(compte2);
+                            notif.setExpéditeur(compte);
+                            notif.setTexte("Alerte");
+                            notificationFacade.create(notif);
+                            break;
+                        case "supprimerPub":
+                            idPub = request.getParameter("idPub");
+                            publication = publicationFacade.find(idPub);
+                            if (publication == null) {
+                                System.out.println("pub" + idPub + " Not Found");
+                                response.getWriter().write("pub" + idPub);
+                                return;
+                            }
                             String uploadPath = getServletContext().getInitParameter("uploadPath");
                             Files.delete(Paths.get(uploadPath + publication.getTitre()));
                             publicationFacade.remove(publication);
@@ -203,72 +146,156 @@ public class CTRL_Servlet extends HttpServlet {
                             pubs.remove(publication);
                             request.getSession().setAttribute("pubs", pubs);
                             System.out.println(operation + " : pub" + idPub);
-                        }
-                        break;
-                    case "signalerPub":
-                        idPub = request.getParameter("idPub");
-                        publication = publicationFacade.find(idPub);
-                        if (publication == null || compte.DejaSignaler(publication)) {
+                            break;
+                        case "supprimerCompte":
+                            idCompte = request.getParameter("idCompte");
+                            compteFacade.remove(compteFacade.find(idCompte));
+                            break;
+                    }
+                case "Sous administrateur":
+                    switch (operation) {
+                        case "marquerEtat":
+                            idPub = request.getParameter("idPub");
+                            String etat = request.getParameter("etat");
+                            if (!Arrays.asList("résolu", "non résolu", "entrain de résolution").contains(etat)) {
+                                System.out.println("etat non valide");
+                                response.sendRedirect("/");
+                                return;
+                            }
+                            publication = publicationFacade.find(idPub);
+                            publication.setEtat(etat);
+                            publicationFacade.edit(publication);
+                            break;
+                    }
+                case "Utilisateur":
+                    switch (operation) {
+                        case "ajouterPublications":
+                            String titre = request.getParameter("titre");
+                            idPub = request.getParameter("idPub");
+                            if (titre.equals("Page d'accueil")) {
+                                publications.addAll(publicationFacade.ajouterPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList(), Integer.valueOf(idPub)));
+                            } else {
+                                publications.addAll(publicationFacade.ajouterVosPublications(Integer.valueOf(idPub), compte));
+                            }
+                            request.getSession().setAttribute("publications", publications);
+
+                            pubs.addAll(publications);
+                            request.getSession().setAttribute("pubs", pubs);
+                            break;
+                        case "initialiserPublications":
+                            publications.addAll(publicationFacade.initialiserPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList()));
+                            request.getSession().setAttribute("publications", publications);
+                            request.getSession().setAttribute("pubs", publications);
+                            break;
+                        case "initialiserVosPublications":
+                            publications.addAll(publicationFacade.initialiserVosPublications(compte));
+                            request.getSession().setAttribute("publications", publications);
+                            request.getSession().setAttribute("pubs", publications);
+                            break;
+                        case "raifraichirCommentaires":
+                            idPub = request.getParameter("idPub");
+                            int nbCom = Integer.valueOf(request.getParameter("nbCom"));
+                            publication = publicationFacade.find(idPub);
+                            if (publication != null && publication.getCommentaireList().size() != nbCom) {
+                                for (int i = 0; i < pubs.size(); i++) {
+                                    if (Objects.equals(pubs.get(i).getIdPublication(), Integer.valueOf(idPub))) {
+                                        pubs.set(i, publication);
+                                        response.getWriter().write(i + "");
+                                        break;
+                                    }
+                                }
+                            } else {
+                                response.getWriter().write("-1");
+                            }
+                            break;
+                        case "supprimerPub":
+                            System.out.println("pub");
+                            idPub = request.getParameter("idPub");
+                            publication = publicationFacade.find(idPub);
+                            if (publication == null) {
+                                System.out.println("pub" + idPub + " Not Found");
+                                response.getWriter().write("pub" + idPub);
+                            } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
+                                String uploadPath = getServletContext().getInitParameter("uploadPath");
+                                Files.delete(Paths.get(uploadPath + publication.getTitre()));
+                                publicationFacade.remove(publication);
+                                response.getWriter().write("pub" + idPub);
+                                pubs.remove(publication);
+                                request.getSession().setAttribute("pubs", pubs);
+                                System.out.println(operation + " : pub" + idPub);
+                            }
+                            break;
+                        case "signalerPub":
+                            idPub = request.getParameter("idPub");
+                            publication = publicationFacade.find(idPub);
+                            if (publication == null || compte.DejaSignaler(publication)) {
+                                return;
+                            }
+                            compte.SignalerPublication(publication);
+                            compteFacade.edit(compte);
+                            /*if(publication.getNotificationList().size() == 3){
+                            Notification n = new Notification();
+                            n.setDestinataire(publication.getCompte());
+                            n.setPublication(publication);
+                            n.setTexte("Alerte : Attention, votre publication ");
+                        }*/
+                            System.out.println(operation + " : " + idPub);
+                            break;
+                        case "commenter":
+                            idPub = request.getParameter("idPub");
+                            String text = request.getParameter("texte");
+                            publication = publicationFacade.find(idPub);
+                            if (publication == null || text == null) {
+                                return;
+                            }
+                            Commentaire commentaire = new Commentaire();
+                            commentaire.setCompte(compte);
+                            commentaire.setPublication(publication);
+                            commentaire.setTexte(text);
+                            commentaireFacade.create(commentaire);
+                            System.out.println(operation + " : " + idPub);
+                            break;
+                        case "toggleCatégorie":
+                            String catégorie = request.getParameter("catégorie");
+                            String catégorieinteret = compte.getCatégorieinteret();
+                            if (!catégorieinteret.contains(catégorie)) {
+                                compte.setCatégorieinteret(catégorieinteret + "," + catégorie);
+                            } else {
+                                compte.setCatégorieinteret(catégorieinteret.replace("," + catégorie, ""));
+                            }
+                            compteFacade.edit(compte);
+                            response.sendRedirect("/");
+                            break;
+                        case "toggleVille":
+                            String ville = request.getParameter("ville");
+                            String villeinteret = compte.getVilleinteret();
+                            if (!villeinteret.contains(ville)) {
+                                compte.setVilleinteret(villeinteret + "," + ville);
+                            } else {
+                                compte.setVilleinteret(villeinteret.replace("," + ville, ""));
+                            }
+                            compteFacade.edit(compte);
+                            response.sendRedirect("/");
+                            break;
+                        case "deconnecter":
+                            request.logout();
+                            request.getSession().invalidate();
+                            request.getServletContext().log("User successfully logged out logged out " + compte);
+                            response.sendRedirect("/");
                             return;
-                        }
-                        compte.SignalerPublication(publication);
-                        compteFacade.edit(compte);
-                        request.getSession().setAttribute("compte", compte);
-                        System.out.println(operation + " : " + idPub);
-                        break;
-                    case "commenter":
-                        idPub = request.getParameter("idPub");
-                        String text = request.getParameter("texte");
-                        publication = publicationFacade.find(idPub);
-                        if (publication == null || text == null) {
+                        case "supprimerMonCompte":
+                            request.logout();
+                            request.getSession().invalidate();
+                            compteFacade.remove(compte);
+                            response.sendRedirect("/");
                             return;
-                        }
-                        Commentaire commentaire = new Commentaire();
-                        commentaire.setCompte(compte);
-                        commentaire.setPublication(publication);
-                        commentaire.setTexte(text);
-                        commentaireFacade.create(commentaire);
-                        System.out.println(operation + " : " + idPub);
-                        break;
-                    case "toggleCatégorie":
-                        String catégorie = request.getParameter("catégorie");
-                        String catégorieinteret = compte.getCatégorieinteret();
-                        if (!catégorieinteret.contains(catégorie)) {
-                            compte.setCatégorieinteret(catégorieinteret + "," + catégorie);
-                        } else {
-                            compte.setCatégorieinteret(catégorieinteret.replace("," + catégorie, ""));
-                        }
-                        compteFacade.edit(compte);
-                        request.getSession().setAttribute("compte", compte);
-                        break;
-                    case "toggleVille":
-                        String ville = request.getParameter("ville");
-                        String villeinteret = compte.getVilleinteret();
-                        if (!villeinteret.contains(ville)) {
-                            compte.setVilleinteret(villeinteret + "," + ville);
-                        } else {
-                            compte.setVilleinteret(villeinteret.replace("," + ville, ""));
-                        }
-                        compteFacade.edit(compte);
-                        request.getSession().setAttribute("compte", compte);
-                        break;
-                    case "deconnecter":
-                        request.logout();
-                        request.getSession().invalidate();
-                        request.getServletContext().log("User successfully logged out logged out " + compte);
-                        response.sendRedirect("/");
-                        break;
-                    case "supprimerMonCompte":
-                        request.logout();
-                        request.getSession().invalidate();
-                        compteFacade.remove(compte);
-                        response.sendRedirect("/");
-                        break;
-                    default:
-                        response.sendRedirect("/");
-                        break;
-                }
+                        default:
+                            response.sendRedirect("/");
+                            return;
+                    }
+            }
         }
+        request.getSession().setAttribute("compte", compte);
     }
 
 }

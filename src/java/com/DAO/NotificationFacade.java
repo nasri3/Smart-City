@@ -5,13 +5,17 @@
  */
 package com.DAO;
 
-import com.beans.Commentaire;
+import com.beans.Notification;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ *
+ * @author Wissem
+ */
 @Stateless
-public class CommentaireFacade extends AbstractFacade<Commentaire> {
+public class NotificationFacade extends AbstractFacade<Notification> {
 
     @PersistenceContext(unitName = "PCDPU")
     private EntityManager em;
@@ -21,8 +25,8 @@ public class CommentaireFacade extends AbstractFacade<Commentaire> {
         return em;
     }
 
-    public CommentaireFacade() {
-        super(Commentaire.class);
+    public NotificationFacade() {
+        super(Notification.class);
     }
     
 }

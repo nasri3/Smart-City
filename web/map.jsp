@@ -24,11 +24,64 @@
                 margin: 0;
                 padding: 0;
             }
+
+            #panel {
+                position: absolute;
+                top: 5px;
+                left: 50%;
+                margin-left: -180px;
+                width: 350px;
+                z-index: 5;
+                background-color: #fff;
+                padding: 5px;
+                border: 1px solid #999;
+            }
+            #latlng {
+                width: 225px;
+            }
         </style>
     </head>
     <body>
+        <script>
+            function codeLatLng() {
+                var input = document.getElementById('latlng').value;
+                var latlngStr = input.split(',', 2);
+                var lat = parseFloat(latlngStr[0]);
+                var lng = parseFloat(latlngStr[1]);
+                //alert(lat);
+                var latlng = new google.maps.LatLng(lat, lng);
+                geocoder.geocode({'latLng': latlng}, function (results, status) {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                            map.setZoom(15);
+                            marker = new google.maps.Marker({
+                                position: latlng,
+                                map: map
+                            });
+                            var str = results[1].formatted_address;
+                            var n = str.indexOf(",");
+                            var res = str.slice(0, n);
+                            document.getElementById('ville').value = res;
+                            infowindow.setContent(results[0].formatted_address);
+                            infowindow.open(map, marker);
+                        } else {
+                            alert('No results found');
+                        }
+                    } else {
+                        alert('Geocoder failed due to: ' + status);
+                    }
+                });
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+
+        </script>
+        <div id="panel">
+            <input id="latlng" type="text" value="36.5806067, 10.862080399999968">
+            <input type="button" value="Reverse Geocode" onclick="codeLatLng()">
+            <input type="text" id="ville" value="ville" >
+        </div>
         <div id="map"></div>
-        <c:set var="pos" value="10"></c:set>
         <script>
             // Note: This example requires that you consent to location sharing when
             // prompted by your browser. If you see the error "The Geolocation service
@@ -70,7 +123,7 @@
             }
 
             function getCity(lat, lng) {
-                var  latlng = new google.maps.LatLng(lat, lng);
+                var latlng = new google.maps.LatLng(lat, lng);
 
                 new google.maps.Geocoder().geocode({'latLng': latlng}, function (results, status) {
                     if (status === google.maps.GeocoderStatus.OK) {
@@ -80,8 +133,8 @@
                             for (var r = 0, rl = results.length; r < rl; r += 1) {
                                 var result = results[r];
                                 for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
-                                        component = result.address_components[c];
-                                    }
+                                    component = result.address_components[c];
+                                }
                                 if (!city && result.types[0] === 'locality') {
                                     for (c = 0, lc = result.address_components.length; c < lc; c += 1) {
                                         component = result.address_components[c];

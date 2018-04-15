@@ -32,6 +32,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Notifications</a>
                         </li>
+                        <c:if test='${compte.getRole() == "Administrateur"}'>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Administration">Administration</a>
+                            </li>
+                        </c:if>
                         <li class="nav-item">
                             <a class="nav-link" href="#">À propos</a>
                         </li>

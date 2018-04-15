@@ -113,7 +113,7 @@
                     </div>
                     <!-- Soumettre -->
                     <div class="pb-5">
-                        <button type="submit" class="btn btn-outline-primary col-12">Soumettre</button>
+                        <button type="submit" class="btn btn-block btn-outline-secondary">Soumettre</button>
                     </div>
                 </form>
             </div>

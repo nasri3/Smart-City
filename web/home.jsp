@@ -34,6 +34,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Notifications</a>
                         </li>
+                        <c:if test='${compte.getRole() == "Administrateur"}'>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Administration">Administration</a>
+                            </li>
+                        </c:if>
                         <li class="nav-item">
                             <a class="nav-link" href="#">À propos</a>
                         </li>
@@ -61,18 +66,18 @@
                         <c:forEach items="${Catégories}" var="catégorie">
                             <c:choose>
                                 <c:when test='${compte.getCatégorieinteret().contains(catégorie)}'>
-                                    <button class="col btn btn-success" onclick="toggleCatégorie(this)">${catégorie}</button>
+                                    <a class="col btn btn-success" href="ctrl?operation=toggleCatégorie&catégorie=${catégorie}">${catégorie}</a>
                                 </c:when>
-                                <c:otherwise><button class="col btn btn-outline-success" onclick="toggleCatégorie(this)">${catégorie}</button></c:otherwise>
+                                <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=toggleCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
                             </c:choose>
                         </c:forEach>
                         <label class="col-12">Ville</label>
                         <c:forEach items="${Villes}" var="ville">
                             <c:choose>
                                 <c:when test='${compte.getVilleinteret().contains(ville)}'>
-                                    <button class="col btn btn-danger" onclick="toggleVille(this)">${ville}</button>
+                                    <a class="col btn btn-danger" href="ctrl?operation=toggleVille&ville=${ville}">${ville}</a>
                                 </c:when>
-                                <c:otherwise><button class="col btn btn-outline-danger" onclick="toggleVille(this)">${ville}</button></c:otherwise>
+                                <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=toggleVille&ville=${ville}">${ville}</a></c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </div>
