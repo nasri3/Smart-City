@@ -9,7 +9,7 @@ var auto = setInterval(function () {
                 return;
             }
             var d = document.createElement('div');
-            $(d).load("home_1.jsp?i=" + responseText + " #com", function () {
+            $(d).load("navigation.jsp?i=" + responseText + " #com", function () {
                 if ($(d).find("#com").attr("id", "comm").children("div").length === 0)
                     $("#com" + idPub).collapse("hide");
                 $("#com" + idPub).find("#comm").replaceWith($(d).find("#comm"));
@@ -66,7 +66,7 @@ function afficherPlus(idPub) {
     var d = document.createElement("div");
     $("#afficherPlus").html('<i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i>');
     $.get("ctrl?operation=ajouterPublications&idPub=" + idPub + "&titre=" + document.title, function () {
-        $(d).load("home_1.jsp #publications", function () {
+        $(d).load("navigation.jsp #publications", function () {
             $("#afficherPlus").fadeOut(300, function () {
                 document.getElementById("afficherPlus").outerHTML = "";
                 if ($(d.firstChild).children().length === 1)
@@ -91,7 +91,7 @@ function initialiser() {
     $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i></div>');
     $.get("ctrl?operation=initialiserPublications", function () {
         var d = document.createElement('div');
-        $(d).load("home_1.jsp #publications", function () {
+        $(d).load("navigation.jsp #publications", function () {
             setCommentaireTextAreaFct(d);
             $("#publications").html($(d).children());
         });

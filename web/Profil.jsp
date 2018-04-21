@@ -32,7 +32,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Notifications</a>
                         </li>
-                        <c:if test='${compte.getRole() == "Administrateur"}'>
+                        <c:if test='${compte.getType() == "Administrateur"}'>
                             <li class="nav-item">
                                 <a class="nav-link" href="Administration">Administration</a>
                             </li>
@@ -119,7 +119,7 @@
             }
             $.get("ctrl?operation=initialiserVosPublications", function () {
                 var d1 = document.createElement('div'), d2 = document.createElement('div');
-                $(d1).load("home_1.jsp #publications", function () {
+                $(d1).load("navigation.jsp #publications", function () {
                     setCommentaireTextAreaFct(d1);
                     $("#corps").append($(d1).children());
                 });

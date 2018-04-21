@@ -76,7 +76,7 @@
             <description/>
             <url-pattern>/profil</url-pattern>
             <url-pattern>/home.jsp</url-pattern>
-            <url-pattern>/home_1.jsp</url-pattern>
+            <url-pattern>/navigation.jsp</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Tous les utilisateurs (servlet)</web-resource-name>

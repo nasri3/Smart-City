@@ -6,6 +6,7 @@
 package com.beans;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -37,12 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Compte.findAll", query = "SELECT c FROM Compte c order by c.idCompte desc")})
 public class Compte implements Serializable {
-
-    @JoinTable(name = "signalisation", joinColumns = {
-        @JoinColumn(name = "compte", referencedColumnName = "IdCompte")}, inverseJoinColumns = {
-        @JoinColumn(name = "publication", referencedColumnName = "IdPublication")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Publication> publicationsSignalés;
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
@@ -85,17 +80,25 @@ public class Compte implements Serializable {
     @NotNull
     @Size(min = 1, max = 25)
     @Column(name = "Role")
-    private String role = "Utilisateur";
+    private String type = "Utilisateur";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1000)
     @Column(name = "Ville-interet")
-    private String villeinteret = " ";
+    private String villeinteret = "Ariana,Bèja,Ben Arous,Bizerte,Gabès,Gafsa,Jendouba,Kairouan,Kasserine,"
+            + "Kébili,Kef,Mahdia,Manouba,Médenine,Monastir,Nabeul,Sfax,Sidi Bouzid,Siliana,"
+            + "Sousse,Tataouine,Tozeur,Tunis,Zaghouan";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 1000)
     @Column(name = "Catégorie-interet")
-    private String catégorieinteret = " ";
+    private String categorieinteret = "Agriculture,Education,Environnement,Financière,Infrastructure,Santé,"
+            + "Sécurité,Sport,Tourisme,Transport";
+    @JoinTable(name = "signalisation", joinColumns = {
+        @JoinColumn(name = "compte", referencedColumnName = "IdCompte")}, inverseJoinColumns = {
+        @JoinColumn(name = "publication", referencedColumnName = "IdPublication")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Publication> publicationsSignales;
 
     public Compte() {
     }
@@ -104,7 +107,7 @@ public class Compte implements Serializable {
         this.idCompte = idCompte;
     }
 
-    public Compte(String idCompte, String nom, String prenom, Date dateDeNaissance, String ville, String photoDeProfil, String motDePasse, String role, String villeinteret, String catégorieinteret) {
+    public Compte(String idCompte, String nom, String prenom, Date dateDeNaissance, String ville, String photoDeProfil, String motDePasse, String type, String villeinteret, String categorieinteret) {
         this.idCompte = idCompte;
         this.nom = nom;
         this.prenom = prenom;
@@ -112,9 +115,9 @@ public class Compte implements Serializable {
         this.ville = ville;
         this.photoDeProfil = photoDeProfil;
         this.motDePasse = motDePasse;
-        this.role = role;
+        this.type = type;
         this.villeinteret = villeinteret;
-        this.catégorieinteret = catégorieinteret;
+        this.categorieinteret = categorieinteret;
     }
 
     public String getNom() {
@@ -133,8 +136,9 @@ public class Compte implements Serializable {
         this.prenom = prenom;
     }
 
-    public Date getDateDeNaissance() {
-        return dateDeNaissance;
+    public String getDateDeNaissance() {
+        String dn = new SimpleDateFormat("dd-MM-yyyy").format(dateDeNaissance);
+        return dn;
     }
 
     public void setDateDeNaissance(Date dateDeNaissance) {
@@ -173,12 +177,12 @@ public class Compte implements Serializable {
         this.motDePasse = motDePasse;
     }
 
-    public String getRole() {
-        return role;
+    public String getType() {
+        return type;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getVilleinteret() {
@@ -188,21 +192,21 @@ public class Compte implements Serializable {
     public List<String> getVilleinteretList() {
         return Arrays.asList(villeinteret.split(","));
     }
-    
+
     public void setVilleinteret(String villeinteret) {
         this.villeinteret = villeinteret;
     }
 
-    public String getCatégorieinteret() {
-        return catégorieinteret;
+    public String getCategorieinteret() {
+        return categorieinteret;
     }
 
-    public List<String> getCatégorieinteretList() {
-        return Arrays.asList(catégorieinteret.split(","));
+    public List<String> getCategorieinteretList() {
+        return Arrays.asList(categorieinteret.split(","));
     }
 
-    public void setCatégorieinteret(String catégorieinteret) {
-        this.catégorieinteret = catégorieinteret;
+    public void setCategorieinteret(String categorieinteret) {
+        this.categorieinteret = categorieinteret;
     }
 
     @Override
@@ -229,21 +233,21 @@ public class Compte implements Serializable {
     public String toString() {
         return "com.beans.Compte[ idCompte=" + idCompte + " ]";
     }
-    
-    @XmlTransient
-    public List<Publication> getPublicationsSignalés() {
-        return publicationsSignalés;
-}
 
-    public void setPublicationsSignalés(List<Publication> publicationsSignalés) {
-        this.publicationsSignalés = publicationsSignalés;
+    @XmlTransient
+    public List<Publication> getPublicationsSignales() {
+        return publicationsSignales;
     }
-    
+
+    public void setPublicationsSignales(List<Publication> publicationsSignales) {
+        this.publicationsSignales = publicationsSignales;
+    }
+
     public void SignalerPublication(Publication publication) {
-        this.publicationsSignalés.add(publication);
+        this.publicationsSignales.add(publication);
     }
-    
+
     public boolean DejaSignaler(Publication publication) {
-        return publicationsSignalés.contains(publication);
+        return publicationsSignales.contains(publication);
     }
 }

@@ -27,16 +27,16 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 public class CTRL_Servlet extends HttpServlet {
 
     @EJB
-    private NotificationFacade notificationFacade;
+    private NotificationDAO notificationFacade;
 
     @EJB
-    private CommentaireFacade commentaireFacade;
+    private CommentaireDAO commentaireFacade;
 
     @EJB
-    private CompteFacade compteFacade;
+    private CompteDAO compteFacade;
 
     @EJB
-    private PublicationFacade publicationFacade;
+    private PublicationDAO publicationFacade;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -111,23 +111,34 @@ public class CTRL_Servlet extends HttpServlet {
             response.sendRedirect("/");
             return;
         } else {
-            switch (compte.getRole()) {
+            switch (compte.getType()) {
                 case "Administrateur":
                     switch (operation) {
                         case "initialiserComptes":
                             request.getSession().setAttribute("comptes", compteFacade.findAll());
                             System.out.print(compteFacade.findAll().size());
                             break;
+                        case "modifierType":
+                            idCompte = request.getParameter("idCompte");
+                            String type = request.getParameter("type");
+                            Compte compte2 = compteFacade.find(idCompte);
+                            if (compte2 == null) {
+                                System.out.println("compte : " + idCompte + " non trouvé");
+                                return;
+                            }
+                            compte2.setType(type);
+                            compteFacade.edit(compte2);
+                            break;
                         case "envoyerAlerte":
                             idCompte = request.getParameter("idCompte");
-                            Compte compte2 = compteFacade.find(idCompte);
+                            compte2 = compteFacade.find(idCompte);
                             if (compte2 == null) {
                                 System.out.println("compte : " + idCompte + " non trouvé");
                                 return;
                             }
                             Notification notif = new Notification();
                             notif.setDestinataire(compte2);
-                            notif.setExpéditeur(compte);
+                            notif.setExpediteur(compte);
                             notif.setTexte("Alerte");
                             notificationFacade.create(notif);
                             break;
@@ -173,7 +184,7 @@ public class CTRL_Servlet extends HttpServlet {
                             String titre = request.getParameter("titre");
                             idPub = request.getParameter("idPub");
                             if (titre.equals("Page d'accueil")) {
-                                publications.addAll(publicationFacade.ajouterPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList(), Integer.valueOf(idPub)));
+                                publications.addAll(publicationFacade.ajouterPublications(compte.getCategorieinteretList(), compte.getVilleinteretList(), Integer.valueOf(idPub)));
                             } else {
                                 publications.addAll(publicationFacade.ajouterVosPublications(Integer.valueOf(idPub), compte));
                             }
@@ -183,7 +194,7 @@ public class CTRL_Servlet extends HttpServlet {
                             request.getSession().setAttribute("pubs", pubs);
                             break;
                         case "initialiserPublications":
-                            publications.addAll(publicationFacade.initialiserPublications(compte.getCatégorieinteretList(), compte.getVilleinteretList()));
+                            publications.addAll(publicationFacade.initialiserPublications(compte.getCategorieinteretList(), compte.getVilleinteretList()));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                             break;
@@ -256,12 +267,12 @@ public class CTRL_Servlet extends HttpServlet {
                             System.out.println(operation + " : " + idPub);
                             break;
                         case "toggleCatégorie":
-                            String catégorie = request.getParameter("catégorie");
-                            String catégorieinteret = compte.getCatégorieinteret();
-                            if (!catégorieinteret.contains(catégorie)) {
-                                compte.setCatégorieinteret(catégorieinteret + "," + catégorie);
+                            String categorie = request.getParameter("catégorie");
+                            String categorieinteret = compte.getCategorieinteret();
+                            if (!categorieinteret.contains(categorie)) {
+                                compte.setCategorieinteret(categorieinteret + "," + categorie);
                             } else {
-                                compte.setCatégorieinteret(catégorieinteret.replace("," + catégorie, ""));
+                                compte.setCategorieinteret(categorieinteret.replace("," + categorie, ""));
                             }
                             compteFacade.edit(compte);
                             response.sendRedirect("/");

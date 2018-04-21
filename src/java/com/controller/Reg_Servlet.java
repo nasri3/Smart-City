@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 public class Reg_Servlet extends HttpServlet {
 
     @EJB
-    private CompteFacade compteFacade;
+    private CompteDAO compteFacade;
     @EJB
-    private PublicationFacade publicationFacade;
+    private PublicationDAO publicationFacade;
 
     private static final long serialVersionUID = 1L;
 
@@ -84,7 +84,7 @@ public class Reg_Servlet extends HttpServlet {
         System.out.println(IdCompte + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + cryptWithMD5(MotDePasse1) + " " + Ville);
         //3.Inserer la compte dans la BD
         compteFacade.create(compte);
-        System.out.println("role : " + compte.getRole());
+        System.out.println("type : " + compte.getType());
         SeConnecter(request, response, IdCompte, MotDePasse);
         request.getSession().setAttribute("compte", compte);
         response.sendRedirect("/");

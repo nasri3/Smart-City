@@ -12,6 +12,8 @@
         <script src="js/jquery-latest.min.js" type="text/javascript"></script>
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
+        
+        <link rel="stylesheet" href="css/style.css">
         <title>Connexion</title>
     </head>
     <body>
@@ -42,14 +44,14 @@
                     <div id="cin" class="form-group">
                         <label for="CIN">CIN</label>
                         <input id="CIN" name="CIN" pattern="[0-9]{8}" maxlength="8" type="text" placeholder="CIN" class="form-control" required>
-                        <label class="badge badge-danger">${erreurCmpt}</label> 
+                        <label class="errormessage">${erreurCmpt}</label> 
                     </div>
                     
                     <!-- Mot de passe -->
                     <div class="form-group"> 
                         <label for="MotDePasse">Mot de passe</label>
                         <input id="MotDePasse" name="Mot de passe" type="password" placeholder="Mot de passe" class="form-control" required>
-                        <label class="badge badge-danger">${erreurMP}</label>
+                        <label class="errormessage">${erreurMP}</label>
                     </div>
                     <button type="submit" class="btn btn-block">Se connecter</button>
 

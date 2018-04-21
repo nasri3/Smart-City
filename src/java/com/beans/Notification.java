@@ -49,7 +49,7 @@ public class Notification implements Serializable {
     @NotNull
     @Column(name = "Date de création")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datedecréation = new Date();
+    private Date datedecreation = new Date();
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 5000)
@@ -64,7 +64,7 @@ public class Notification implements Serializable {
     private Compte destinataire;
     @JoinColumn(name = "Expéditeur", referencedColumnName = "IdCompte")
     @ManyToOne
-    private Compte expéditeur;
+    private Compte expediteur;
     @JoinColumn(name = "Publication", referencedColumnName = "IdPublication")
     @ManyToOne
     private Publication publication = null;
@@ -76,9 +76,9 @@ public class Notification implements Serializable {
         this.idNotification = idNotification;
     }
 
-    public Notification(Integer idNotification, Date datedecréation, String texte, boolean vu) {
+    public Notification(Integer idNotification, Date datedecreation, String texte, boolean vu) {
         this.idNotification = idNotification;
-        this.datedecréation = datedecréation;
+        this.datedecreation = datedecreation;
         this.texte = texte;
         this.vu = vu;
     }
@@ -91,12 +91,12 @@ public class Notification implements Serializable {
         this.idNotification = idNotification;
     }
 
-    public Date getDatedecréation() {
-        return datedecréation;
+    public Date getDatedecreation() {
+        return datedecreation;
     }
 
-    public void setDatedecréation(Date datedecréation) {
-        this.datedecréation = datedecréation;
+    public void setDatedecreation(Date datedecreation) {
+        this.datedecreation = datedecreation;
     }
 
     public String getTexte() {
@@ -123,12 +123,12 @@ public class Notification implements Serializable {
         this.destinataire = destinataire;
     }
 
-    public Compte getExpéditeur() {
-        return expéditeur;
+    public Compte getExpediteur() {
+        return expediteur;
     }
 
-    public void setExpéditeur(Compte expéditeur) {
-        this.expéditeur = expéditeur;
+    public void setExpediteur(Compte expediteur) {
+        this.expediteur = expediteur;
     }
 
     public Publication getPublication() {

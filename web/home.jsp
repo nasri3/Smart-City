@@ -22,39 +22,40 @@
     <body>
 
         <!-- debut menu haut de la page ***************************** -->
-        <nav class="navbar navbar-expand-md bg-secondary navbar-dark fixed-top">
-            <div class="container">
-                <div class="navbar-brand">Accueil</div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="profil">${compte.getPrenom()} ${compte.getNom()}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Notifications</a>
-                        </li>
-                        <c:if test='${compte.getRole() == "Administrateur"}'>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Administration">Administration</a>
-                            </li>
-                        </c:if>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">À propos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contactez-nous</a>
-                        </li>
-                    </ul>
-                    <a class="btn btn-primary" href="ctrl?operation=deconnecter"><span class="fa fa-sign-out-alt"></span>Déconnexion</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="background-color: #4d636f;">
+            <a class="navbar-brand" href="#">Logo</a>
+            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navb">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                </div>
+            <div class="collapse navbar-collapse" id="navb">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="profil">${compte.getPrenom()} ${compte.getNom()}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Notifications</a>
+                    </li>
+                    <c:if test='${compte.getRole() == "Administrateur"}'>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Administration">Administration</a>
+                        </li>
+                    </c:if>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">À propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contactez-nous</a>
+                    </li>
+                </ul>
+                <a class="btn btn-primary" href="ctrl?operation=deconnecter"><span class="fa fa-sign-out-alt"></span>Déconnexion</a>
+
             </div>
         </nav>
 
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row">  
-            <div class="col-md-2 mx-1 my-1 pb-2" id="menug">
+            <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
                 <div class="card text-center">
                     <div class="card-body">
                         <img src="files/${compte.getPhotoDeProfil()}" class="rounded-circle" height="35" width="35" alt="Avatar">
@@ -100,7 +101,7 @@
 
 
             <!-- debut corps (milieu) de la page ***************************** -->
-            <div class="offset-md-2 col-md-8" id="corps"> 
+            <div class="offset-md-3 col-md-7" id="corps"> 
                 <label class="btn btn-block btn-outline-primary" data-toggle="modal" data-target="#uploadForm">Nouvelle Publication</label>
                 <form class="modal fade align-content-center" id="uploadForm" action="upload" method="post" enctype="multipart/form-data">
                     <div class="modal-dialog modal-dialog-centered">

@@ -70,7 +70,7 @@ public class Publication implements Serializable {
     @NotNull
     @Column(name = "Date de création")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date datedecréation = new Date();
+    private Date datedecreation = new Date();
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -80,7 +80,7 @@ public class Publication implements Serializable {
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "Catégorie")
-    private String catégorie = "C";
+    private String categorie = "C";
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -111,13 +111,13 @@ public class Publication implements Serializable {
         this.idPublication = idPublication;
     }
 
-    public Publication(Integer idPublication, String titre, String type, Date datedecréation, String ville, String catégorie, String etat, int nbSignal, boolean anonyme) {
+    public Publication(Integer idPublication, String titre, String type, Date datedecreation, String ville, String categorie, String etat, int nbSignal, boolean anonyme) {
         this.idPublication = idPublication;
         this.titre = titre;
         this.type = type;
-        this.datedecréation = datedecréation;
+        this.datedecreation = datedecreation;
         this.ville = ville;
-        this.catégorie = catégorie;
+        this.categorie = categorie;
         this.etat = etat;
         this.nbSignal = nbSignal;
         this.anonyme = anonyme;
@@ -147,13 +147,13 @@ public class Publication implements Serializable {
         this.type = type;
     }
 
-    public String getDatedecréation() {
-        String dc = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(datedecréation);
+    public String getDatedecreation() {
+        String dc = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(datedecreation);
         return dc;
     }
 
-    public void setDatedecréation(Date datedecréation) {
-        this.datedecréation = datedecréation;
+    public void setDatedecreation(Date datedecreation) {
+        this.datedecreation = datedecreation;
     }
 
     public String getVille() {
@@ -164,12 +164,12 @@ public class Publication implements Serializable {
         this.ville = ville;
     }
 
-    public String getCatégorie() {
-        return catégorie;
+    public String getCategorie() {
+        return categorie;
     }
 
-    public void setCatégorie(String catégorie) {
-        this.catégorie = catégorie;
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
     }
 
     public String getEtat() {

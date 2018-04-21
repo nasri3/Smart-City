@@ -1,7 +1,6 @@
 package com.controller;
 
-import com.DAO.CompteFacade;
-import com.DAO.PublicationFacade;
+import com.DAO.PublicationDAO;
 import com.beans.Compte;
 import com.beans.Publication;
 import java.io.BufferedInputStream;
@@ -32,10 +31,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 public class UP_Servlet extends HttpServlet {
 
     @EJB
-    private CompteFacade compteFacade;
-
-    @EJB
-    private PublicationFacade publicationFacade;
+    private PublicationDAO publicationDAO;
 
     private static final long serialVersionUID = 1L;
 
@@ -81,7 +77,7 @@ public class UP_Servlet extends HttpServlet {
                     String FileType = itemFile.getContentType();
                     String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
                     String uploadPath = getServletContext().getInitParameter("uploadPath");
-                    String name = publication.getDatedecréation().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
+                    String name = publication.getDatedecreation().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
                     
                     //upload le fichier
                     String res = saveFile(itemFile, imageVideoAllowedTypes, 524288000, uploadPath + name);
@@ -103,7 +99,7 @@ public class UP_Servlet extends HttpServlet {
                             publication.setExprimer(s);
                             break;
                         case "Catégorie":
-                            publication.setCatégorie(s);
+                            publication.setCategorie(s);
                             break;
                         case "Ville":
                             publication.setVille(s);
@@ -118,7 +114,7 @@ public class UP_Servlet extends HttpServlet {
             Logger.getLogger(UP_Servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        publicationFacade.create(publication);
+        publicationDAO.create(publication);
 
         response.sendRedirect("/");
     }

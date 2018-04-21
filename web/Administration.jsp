@@ -9,7 +9,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/style.css">
         <script src="js/jquery.min.js" type="text/javascript"></script>
         <script src="js/jquery-latest.min.js" type="text/javascript"></script>
         <script src="js/popper.min.js" type="text/javascript"></script>
@@ -28,7 +27,7 @@
                             <a class="nav-link" href="/">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Profil">${compte.getPrenom()} ${compte.getNom()}</a>
+                            <a class="nav-link" href="/profil">${compte.getPrenom()} ${compte.getNom()}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Notifications</a>
@@ -45,7 +44,7 @@
                 </div>
             </div>
         </nav>
-        <div id="corps"><hr>
+        <div id="corps" style="padding-top: 30px; margin-top: 30px;"><hr>
             <c:forEach items="${comptes}" var="compte">
                 <div id="compte${compte.getIdCompte()}" class="row m-2 p-2">
                     <div class="col">${compte.getIdCompte()}</div>
@@ -53,33 +52,96 @@
                     <div class="col">${compte.getPrenom()}</div>
                     <div class="col">${compte.getDateDeNaissance()}</div>
                     <div class="col">${compte.getVille()}</div>
-                    <div class="col btn btn-primary">${compte.getRole()}</div>
-                    <div class="col btn btn-primary" onclick="supprimerCompte('${compte.getIdCompte()}')">Supprimer son Compte</div>
-                    <div class="col btn btn-primary" onclick="envoyerAlerte('${compte.getIdCompte()}')">Lui envoyer une alerte</div>
+                    <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#modifierTypeDeCompteModal" 
+                         onclick="setIdCompte('${compte.getIdCompte()}')">${compte.getType()}</div>
+                    <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#supprimerCompteModal"
+                         onclick="setIdCompte('${compte.getIdCompte()}')">Supprimer son Compte</div>
+                    <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#envoyerAlerteModal" 
+                         onclick="setIdCompte('${compte.getIdCompte()}')">Lui envoyer une alerte</div>
                     <a class="col btn btn-link" href="/Administration/${compte.getIdCompte()}">Voir ces publications</a>
-                </div><hr>
+                </div>
+                <hr>
             </c:forEach>
+            <div class="modal text-left" id="modifierTypeDeCompteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le type de ce compte en :</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row" id="choixDeType">
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
+                                    onclick = "modifierType('Administrateur')">Administrateur</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
+                                    onclick = "modifierType('Sous administrateur')">Sous administrateur</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
+                                    onclick = "modifierType('Utilisateur')">Utilisateur</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal text-left" id="supprimerCompteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement ce compte?</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row">
+                            <button class="btn btn-primary p-2 m-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal text-left" id="envoyerAlerteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Envoyer une alerte à ce compte?</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row">
+                            <button class="btn btn-primary p-2 m-2 col-5" onclick="envoyerAlerte()" data-dismiss="modal">oui</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
         </div>
         <script>
-            $.get("ctrl?operation=initialiserComptes", function () {
-                var d = document.createElement('div');
-                $(d).load("Administration #corps", function () {
-                    $("#corps").html($(d).children());
-                });
-            });
-            
-            function supprimerCompte(idCompte) {
-                $.get("ctrl?operation=supprimerCompte&idCompte=" + idCompte, function (responseText) {
-                    $("#compte" + idCompte).fadeOut("slow", function () {
-                        $(this).remove();
+            initialiser();
+            function initialiser() {
+                $.get("ctrl?operation=initialiserComptes", function () {
+                    var d = document.createElement('div');
+                    $(d).load("Administration #corps", function () {
+                        $("#corps").html($(d).children());
                     });
                 });
             }
 
-            function envoyerAlerte(idCompte) {
+            var idCompte;
+            function setIdCompte(id) {
+                idCompte = id;
+            }
+
+            function modifierType(type) {
+                $.get("ctrl?operation=modifierType&idCompte=" + idCompte + "&type=" + type, function (responseText) {
+                    initialiser();
+                });
+            }
+
+            function supprimerCompte() {
+                $.get("ctrl?operation=supprimerCompte&idCompte=" + idCompte, function (responseText) {
+                    initialiser();
+                });
+            }
+
+            function envoyerAlerte() {
                 alert(idCompte);
                 $.get("ctrl?operation=envoyerAlerte&idCompte=" + idCompte, function () {
                     alert("succes");
+                    initialiser();
                 });
             }
         </script>

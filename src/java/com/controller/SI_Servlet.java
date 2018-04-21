@@ -1,7 +1,6 @@
 package com.controller;
 
-import com.DAO.CompteFacade;
-import com.DAO.PublicationFacade;
+import com.DAO.CompteDAO;
 import com.beans.Compte;
 import static com.controller.Reg_Servlet.cryptWithMD5;
 import java.io.IOException;
@@ -17,9 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SI_Servlet extends HttpServlet {
 
     @EJB
-    private CompteFacade compteFacade;
-    @EJB
-    private PublicationFacade publicationFacade;
+    private CompteDAO compteDAO;
     private static final long serialVersionUID = 1L;
 
     public SI_Servlet() {
@@ -32,7 +29,7 @@ public class SI_Servlet extends HttpServlet {
         System.out.println("hh:::::::hh");
         String IdCompte = request.getParameter("CIN");
         String MotDePasse = cryptWithMD5(request.getParameter("Mot de passe"));
-        Compte compte = compteFacade.find(IdCompte);
+        Compte compte = compteDAO.find(IdCompte);
         if (compte != null && compte.getMotDePasse().equals(MotDePasse)) {
             SeConnecter(request, response, IdCompte, MotDePasse);
             request.getSession().setAttribute("compte", compte);
@@ -58,9 +55,9 @@ public class SI_Servlet extends HttpServlet {
         String[] Villes = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine", 
             "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", 
             "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
-        String[] Catégories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé", 
+        String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé", 
             "Sécurité", "Sport", "Tourisme", "Transport"};
         request.getSession().setAttribute("Villes", Villes);
-        request.getSession().setAttribute("Catégories", Catégories);
+        request.getSession().setAttribute("Catégories", Categories);
     }
 }
