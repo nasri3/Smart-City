@@ -36,6 +36,7 @@ public class Reg_Servlet extends HttpServlet {
      * @throws javax.servlet.ServletException
      * @throws java.io.IOException
      */
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // TODO Auto-generated method stub
@@ -46,6 +47,7 @@ public class Reg_Servlet extends HttpServlet {
         String Prenom = request.getParameter("Prenom");
         String DateDeNaissance = request.getParameter("DateDeNaissance");
         if (request.getParameter("g-recaptcha-response") == null || request.getParameter("g-recaptcha-response").isEmpty()) {
+            response.sendRedirect("Register");
             return;
         }
 

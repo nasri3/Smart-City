@@ -6,6 +6,7 @@
 package com.beans;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -65,9 +67,6 @@ public class Notification implements Serializable {
     @JoinColumn(name = "Expéditeur", referencedColumnName = "IdCompte")
     @ManyToOne
     private Compte expediteur;
-    @JoinColumn(name = "Publication", referencedColumnName = "IdPublication")
-    @ManyToOne
-    private Publication publication = null;
 
     public Notification() {
     }
@@ -91,8 +90,9 @@ public class Notification implements Serializable {
         this.idNotification = idNotification;
     }
 
-    public Date getDatedecreation() {
-        return datedecreation;
+    public String getDatedecreation() {
+        String dc = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(datedecreation);
+        return dc;
     }
 
     public void setDatedecreation(Date datedecreation) {
@@ -131,14 +131,6 @@ public class Notification implements Serializable {
         this.expediteur = expediteur;
     }
 
-    public Publication getPublication() {
-        return publication;
-    }
-
-    public void setPublication(Publication publication) {
-        this.publication = publication;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -163,5 +155,5 @@ public class Notification implements Serializable {
     public String toString() {
         return "com.beans.Notification[ idNotification=" + idNotification + " ]";
     }
-    
-}
+
+    }

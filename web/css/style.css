@@ -4,7 +4,7 @@ body{ font-size: small; }
 
 p{ word-break: break-all; }      
 #menug {
-    padding-top: 70px;
+    padding-top: 15vh;
     background-color: #f1f1f0;
     height: 100vh;
     position: fixed;

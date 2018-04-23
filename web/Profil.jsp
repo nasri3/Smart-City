@@ -33,9 +33,14 @@
                     <li class="nav-item mx-2"><a class="nav-link selected" href="profil"><i class="fa fa-user fa-2x"></i> Profil</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">
-                            <span class="fa fa-bell fa-2x"></span><span class="badge badge-danger">3</span> Notifications</a>
+                        <a class="nav-link" href="Notifications">
+                            <span class="fa fa-bell fa-2x"></span>
+                            <span id="nbNotif" class="badge badge-danger">${nbNotif}</span> Notifications</a>
                     </li>
+                    <c:if test='${compte.getType() == "Sous administrateur"}'>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Etablissement"> <i class="fa fa-building fa-2x"></i> Etablissement</a>
+                        </li>
+                    </c:if>
                     <c:if test='${compte.getType() == "Administrateur"}'>
                         <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
                         </li>
@@ -106,7 +111,7 @@
                     </div>
                 </form>
 
-                <h1 class="ml-4">Vos Publications</h1><hr>
+                <h1 class="ml-4">Mes Publications</h1><hr>
             </div>
 
         </div>
@@ -115,7 +120,7 @@
             {
                 window.location.reload();
             }
-            $.get("ctrl?operation=initialiserVosPublications", function () {
+            $.get("ctrl?operation=initialiserMesPublications", function () {
                 var d1 = document.createElement('div'), d2 = document.createElement('div');
                 $(d1).load("navigation.jsp #publications", function () {
                     setCommentaireTextAreaFct(d1);

@@ -33,12 +33,13 @@
                     <li class="nav-item mx-2"><a class="nav-link" href="profil"><i class="fa fa-user fa-2x"></i> Profil</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">
-                            <span class="fa fa-bell fa-2x"></span><span class="badge badge-danger">3</span> Notifications</a>
+                        <a class="nav-link" href="Notifications">
+                            <span class="fa fa-bell fa-2x"></span>
+                            <span id="nbNotif" class="badge badge-danger">${nbNotif}</span> Notifications</a>
                     </li>
                     <li class="nav-item mx-2 selected"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
                     </li>
-                        <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
+                    <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
                     </li>
                 </ul>
                 <li class="navbar-nav nav-item"><a href="ctrl?operation=deconnecter" class="nav-link mx-2"><i class="fa fa-sign-out-alt fa-2x"></i> Déconnexion</a></li>
@@ -46,31 +47,31 @@
             </div>
         </nav>
 
-        <div id="corps" style="padding-top: 30px; margin-top: 30px;"><hr>
-            <c:forEach items="${comptes}" var="compte">
-                <div id="compte${compte.getIdCompte()}" class="row m-2 p-2">
-                    <div class="col">${compte.getIdCompte()}</div>
-                    <div class="col">${compte.getNom()}</div>
-                    <div class="col">${compte.getPrenom()}</div>
-                    <div class="col">${compte.getDateDeNaissance()}</div>
-                    <div class="col">${compte.getVille()}</div>
-                    <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#modifierTypeDeCompteModal" 
-                         onclick="setIdCompte('${compte.getIdCompte()}')">${compte.getType()}</div>
-                    <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#supprimerCompteModal"
-                         onclick="setIdCompte('${compte.getIdCompte()}')">Supprimer son Compte</div>
-                    <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#envoyerAlerteModal" 
-                         onclick="setIdCompte('${compte.getIdCompte()}')">Lui envoyer une alerte</div>
-                    <a class="col btn btn-link" href="/Administration/${compte.getIdCompte()}">Voir ces publications</a>
-                </div>
-                <hr>
-            </c:forEach>
+        <div id="corps">
+            <div id="comptes">
+                <c:forEach items="${comptes}" var="compte">
+                    <div id="compte${compte.getIdCompte()}" class="media-body commentaire row">
+                        <div class="col">${compte.getIdCompte()}</div>
+                        <div class="col">${compte.getNom()}</div>
+                        <div class="col">${compte.getPrenom()}</div>
+                        <div class="col">${compte.getDateDeNaissance()}</div>
+                        <div class="col">${compte.getVille()}</div>
+                        <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#modifierTypeDeCompteModal" 
+                             onclick="setIdCompte('${compte.getIdCompte()}')">${compte.getType()}</div>
+                        <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#supprimerCompteModal"
+                             onclick="setIdCompte('${compte.getIdCompte()}')">Supprimer son Compte</div>
+                        <div class="col m-2 btn btn-primary" data-toggle="modal" data-target="#envoyerAlerteModal" 
+                             onclick="setIdCompte('${compte.getIdCompte()}')">Lui envoyer une alerte</div>
+                        <a class="col btn btn-link" href="/Administration/${compte.getIdCompte()}">Voir ces publications</a>
+                    </div>
+                </c:forEach>
             <div class="modal text-left" id="modifierTypeDeCompteModal">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Modifier le type de ce compte en :</h5>
                             <button class="close" data-dismiss="modal">&times;</button>
-                        </div>
+            </div>
                         <div class="modal-body row" id="choixDeType">
                             <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
                                     onclick = "modifierType('Administrateur')">Administrateur</button>
@@ -78,7 +79,7 @@
                                     onclick = "modifierType('Sous administrateur')">Sous administrateur</button>
                             <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
                                     onclick = "modifierType('Utilisateur')">Utilisateur</button>
-                        </div>
+        </div>
                     </div>  
                 </div>
             </div>
@@ -117,7 +118,7 @@
                 $.get("ctrl?operation=initialiserComptes", function () {
                     var d = document.createElement('div');
                     $(d).load("Administration #corps", function () {
-                        $("#corps").html($(d).children());
+                        $("#corps").html($(d).children().children());
                     });
                 });
             }
@@ -140,9 +141,8 @@
             }
 
             function envoyerAlerte() {
-                alert(idCompte);
                 $.get("ctrl?operation=envoyerAlerte&idCompte=" + idCompte, function () {
-                    alert("succes");
+                    alert("Alerte envoy\351");
                     initialiser();
                 });
             }

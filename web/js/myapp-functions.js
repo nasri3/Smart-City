@@ -1,4 +1,4 @@
-var auto = setInterval(function () {
+setInterval(function () {
     $(".commentaires.collapse.show").each(function () {
         var idPub = $(this).attr("id").replace("com", "");
         var nbCom = $("#com" + idPub).find("#comm").children("div").length;
@@ -16,7 +16,13 @@ var auto = setInterval(function () {
             });
         });
     });
-}, 1000); // refresh every 1000 milliseconds
+}, 1000); // raifraichir les commentaires chaque 1 seconde
+
+setInterval(function () {
+    $.get("ctrl?operation=raifraichirNotifications", function(responseText){
+        $("#nbNotif").html(responseText);
+    });
+}, 5000); // raifraichir les notifications chaque 1 seconde
 
 function publier() {
     var fileSize = document.getElementById('UpFile').files[0].size;
@@ -25,9 +31,8 @@ function publier() {
     if (fileSize < 524288000 && allowedTypes.includes(fileType)) {
         $("#uploadForm").submit();
     } else
-        alert("Le fichier doit etre de type image ou video et la taille de fichier doit etre inferieur a 500MO");
+        alert("Le fichier doit \352tre de type image ou video et la taille de fichier doit \352tre inf\350rieur \340 500MO");
 }
-;
 
 function supprimer(idPub) {
     $.get("ctrl?operation=supprimerPub&idPub=" + idPub, function (responseText) {
@@ -39,7 +44,12 @@ function supprimer(idPub) {
 
 function signaler(idPub) {
     $.get("ctrl?operation=signalerPub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().first().html('<div class="dropdown-item">Publication Signalé</div>');
+        $("#dropdown" + idPub).children().eq(0).html('<div>Publication Signalé</div>');
+    });
+}
+function suivre(idPub) {
+    $.get("ctrl?operation=suivrePub&idPub=" + idPub, function () {
+        $("#dropdown" + idPub).children().eq(1).html('<div>Publication Suivi</div>');
     });
 }
 
@@ -59,7 +69,7 @@ function ChangerPhotoDeProfil() {
     if (fileSize < 10485760 && allowedTypes.includes(fileType)) {
         $("#PhotoDeProfilForm").submit();
     } else
-        alert("Le fichier doit etre de type image et la taille de fichier doit etre inferieur a 10MO");
+        alert("Le fichier doit \352tre de type image et la taille de fichier doit \352tre inf\350rieur \340 10MO");
 }
 
 function afficherPlus(idPub) {
@@ -88,6 +98,9 @@ function setCommentaireTextAreaFct(d) {
 }
 
 function initialiser() {
+    $.get("ctrl?operation=raifraichirNotifications", function(responseText){
+        $("#nbNotif").html(responseText);
+    });
     $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>');
     $.get("ctrl?operation=initialiserPublications", function () {
         var d = document.createElement('div');

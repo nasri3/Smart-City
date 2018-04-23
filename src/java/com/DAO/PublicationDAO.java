@@ -47,7 +47,7 @@ public class PublicationDAO extends AbstractDAO<Publication> {
                 .setMaxResults(5).getResultList();
     }
 
-    public List<Publication> initialiserVosPublications(Compte compte) {
+    public List<Publication> initialiserMesPublications(Compte compte) {
         return getEntityManager().createNamedQuery("Publication.findbyCompte")
                 .setParameter("compte", compte)
                 .setMaxResults(5).getResultList();
@@ -78,7 +78,7 @@ public class PublicationDAO extends AbstractDAO<Publication> {
                 .setMaxResults(3).getResultList();
     }
 
-    public List<Publication> ajouterVosPublications(int idDerniere, Compte compte) {
+    public List<Publication> ajouterMesPublications(int idDerniere, Compte compte) {
         return getEntityManager().createNamedQuery("Publication.findbyCompteAfterId")
                 .setParameter("compte", compte)
                 .setParameter("idDerniere", idDerniere).setMaxResults(3).getResultList();

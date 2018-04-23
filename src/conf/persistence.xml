@@ -5,6 +5,7 @@
     <class>com.beans.Publication</class>
     <class>com.beans.Commentaire</class>
     <class>com.beans.Compte</class>
+    <class>com.beans.Notification</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>

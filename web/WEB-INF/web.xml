@@ -32,6 +32,14 @@
         <servlet-name>Administration</servlet-name>
         <jsp-file>/Administration.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Notifications</servlet-name>
+        <jsp-file>/Notifications.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>Statistiques</servlet-name>
+        <jsp-file>/Statistiques.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -60,6 +68,14 @@
         <servlet-name>Administration</servlet-name>
         <url-pattern>/Administration</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Notifications</servlet-name>
+        <url-pattern>/Notifications</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Statistiques</servlet-name>
+        <url-pattern>/Statistiques</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>-1</session-timeout>
         <cookie-config>
@@ -77,6 +93,8 @@
             <url-pattern>/profil</url-pattern>
             <url-pattern>/home.jsp</url-pattern>
             <url-pattern>/navigation.jsp</url-pattern>
+            <url-pattern>/Notifications</url-pattern>
+            <url-pattern>/Statistiques</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Tous les utilisateurs (servlet)</web-resource-name>
@@ -101,6 +119,8 @@
             <url-pattern>/Register.jsp</url-pattern>
             <url-pattern>/Profil.jsp</url-pattern>
             <url-pattern>/Administration.jsp</url-pattern>
+            <url-pattern>/Notifications.jsp</url-pattern>
+            <url-pattern>/Statistiques.jsp</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>

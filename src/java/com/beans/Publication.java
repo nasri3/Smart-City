@@ -18,10 +18,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -51,8 +53,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 
-    @OneToMany(mappedBy = "publication")
-    private List<Notification> notificationList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -250,13 +250,5 @@ public class Publication implements Serializable {
         return "com.beans.Publication[ idPublication=" + idPublication + " ]";
     }
 
-    @XmlTransient
-    public List<Notification> getNotificationList() {
-        return notificationList;
-    }
 
-    public void setNotificationList(List<Notification> notificationList) {
-        this.notificationList = notificationList;
     }
-    
-}

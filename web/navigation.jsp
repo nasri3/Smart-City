@@ -71,9 +71,18 @@
                                                 <button onclick="signaler(${idPub})" class="dropdown-item">signaler</button>
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="dropdown-item">Publication Signalé</div>
+                                                <div>Publication Signalé</div>
                                             </c:otherwise>
                                         </c:choose>
+                                        <c:choose>
+                                            <c:when test="${!compte.DejaSuivi(publication)}">
+                                                <button onclick="suivre(${idPub})" class="dropdown-item">suivre</button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div>Publication Suivi</div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                                <button class="dropdown-item">Partager sur facebook</button>
                                         <c:if test='${(compte==publication.getCompte())}'>
                                             <button onclick="supprimer(${idPub})" class="dropdown-item">supprimer</button>
                                         </c:if>

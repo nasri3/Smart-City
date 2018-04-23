@@ -71,7 +71,6 @@ public class CTRL_Servlet extends HttpServlet {
                 String FileType = itemFile.getContentType();
                 // Process a regular form field
                 if (!itemFile.isFormField()) {
-                    long FileSize = itemFile.getSize();
                     String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
                     String filename = compte.getPrenom() + compte.getNom() + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
                     List imageAllowedTypes = Arrays.asList("image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml");
@@ -135,6 +134,8 @@ public class CTRL_Servlet extends HttpServlet {
                             if (compte2 == null) {
                                 System.out.println("compte : " + idCompte + " non trouvé");
                                 return;
+                            } else {
+                                System.out.println("compte : " + idCompte + " trouvé");
                             }
                             Notification notif = new Notification();
                             notif.setDestinataire(compte2);
@@ -169,12 +170,13 @@ public class CTRL_Servlet extends HttpServlet {
                             idPub = request.getParameter("idPub");
                             String etat = request.getParameter("etat");
                             if (!Arrays.asList("résolu", "non résolu", "entrain de résolution").contains(etat)) {
-                                System.out.println("etat non valide");
+                                System.out.println("état non valide");
                                 response.sendRedirect("/");
                                 return;
                             }
                             publication = publicationDAO.find(idPub);
                             publication.setEtat(etat);
+                            
                             publicationDAO.edit(publication);
                             break;
                     }
@@ -186,7 +188,7 @@ public class CTRL_Servlet extends HttpServlet {
                             if (titre.equals("Page d'accueil")) {
                                 publications.addAll(publicationDAO.ajouterPublications(compte.getCategorieinteret(), compte.getVilleinteret(), Integer.valueOf(idPub)));
                             } else {
-                                publications.addAll(publicationDAO.ajouterVosPublications(Integer.valueOf(idPub), compte));
+                                publications.addAll(publicationDAO.ajouterMesPublications(Integer.valueOf(idPub), compte));
                             }
                             request.getSession().setAttribute("publications", publications);
 
@@ -198,8 +200,8 @@ public class CTRL_Servlet extends HttpServlet {
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                             break;
-                        case "initialiserVosPublications":
-                            publications.addAll(publicationDAO.initialiserVosPublications(compte));
+                        case "initialiserMesPublications":
+                            publications.addAll(publicationDAO.initialiserMesPublications(compte));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                             break;
@@ -218,6 +220,17 @@ public class CTRL_Servlet extends HttpServlet {
                             } else {
                                 response.getWriter().write("-1");
                             }
+                            break;
+                        case "raifraichirNotifications":
+                            int nbNotif = compte.getNbreNotificationsNonVus();
+                            request.getSession().setAttribute("nbNotif", nbNotif);
+                            response.getWriter().write("" + nbNotif);
+                            break;
+                        case "setNotificationsVus":
+                            compte.setNotificationsVus();
+                            compteDAO.edit(compte);
+                            request.getSession().setAttribute("nbNotif", 0);
+                            System.out.println("okokoko");
                             break;
                         case "supprimerPub":
                             System.out.println("pub");
@@ -251,6 +264,15 @@ public class CTRL_Servlet extends HttpServlet {
                             n.setTexte("Alerte : Attention, votre publication ");
                         }*/
                             System.out.println(operation + " : " + idPub);
+                            break;
+                        case "suivrePub":
+                            idPub = request.getParameter("idPub");
+                            publication = publicationDAO.find(idPub);
+                            if (publication == null || compte.DejaSuivi(publication)) {
+                                return;
+                            }
+                            compte.SuivrePublication(publication);
+                            compteDAO.edit(compte);
                             break;
                         case "commenter":
                             idPub = request.getParameter("idPub");

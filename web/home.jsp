@@ -20,7 +20,7 @@
 
     </head>
     <body>
-
+        
         <!-- debut menu haut de la page ***************************** -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
             <a class="navbar-brand text-white">COCO</a>
@@ -35,9 +35,14 @@
                     <li class="nav-item mx-2"><a class="nav-link" href="profil"><i class="fa fa-user fa-2x"></i> Profil</a>
                     </li>
                     <li class="nav-item mx-2">
-                        <a class="nav-link" href="#">
-                            <span class="fa fa-bell fa-2x"></span><span class="badge badge-danger">3</span> Notifications</a>
+                        <a class="nav-link" href="Notifications">
+                            <span class="fa fa-bell fa-2x"></span>
+                            <span id="nbNotif" class="badge badge-danger">${nbNotif}</span> Notifications</a>
                     </li>
+                    <c:if test='${compte.getType() == "Sous administrateur"}'>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Etablissement"> <i class="fa fa-building fa-2x"></i> Etablissement</a>
+                        </li>
+                    </c:if>
                     <c:if test='${compte.getType() == "Administrateur"}'>
                         <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
                         </li>
