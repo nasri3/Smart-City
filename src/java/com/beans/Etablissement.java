@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Etablissement.findByIdEtablissement", query = "SELECT e FROM Etablissement e WHERE e.idEtablissement = :idEtablissement")
     , @NamedQuery(name = "Etablissement.findByNom", query = "SELECT e FROM Etablissement e WHERE e.nom = :nom")
     , @NamedQuery(name = "Etablissement.findByVille", query = "SELECT e FROM Etablissement e WHERE e.ville = :ville")
-    , @NamedQuery(name = "Etablissement.findByCat\u00e9gorie", query = "SELECT e FROM Etablissement e WHERE e.cat\u00e9gorie = :cat\u00e9gorie")})
+    , @NamedQuery(name = "Etablissement.findByCatégorie", query = "SELECT e FROM Etablissement e WHERE e.categorie = :categorie")})
 public class Etablissement implements Serializable {
 
     private static final long serialVersionUID = 1L;

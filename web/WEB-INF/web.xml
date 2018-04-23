@@ -40,6 +40,10 @@
         <servlet-name>Statistiques</servlet-name>
         <jsp-file>/Statistiques.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Etablissement</servlet-name>
+        <jsp-file>/Etablissement.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -75,6 +79,10 @@
     <servlet-mapping>
         <servlet-name>Statistiques</servlet-name>
         <url-pattern>/Statistiques</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Etablissement</servlet-name>
+        <url-pattern>/Etablissement</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>-1</session-timeout>
@@ -121,6 +129,7 @@
             <url-pattern>/Administration.jsp</url-pattern>
             <url-pattern>/Notifications.jsp</url-pattern>
             <url-pattern>/Statistiques.jsp</url-pattern>
+            <url-pattern>/Etablissement.jsp</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -136,6 +145,18 @@
         <auth-constraint>
             <description/>
             <role-name>Administrateur</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Sous administrateur</display-name>
+        <web-resource-collection>
+            <web-resource-name>Etablissement</web-resource-name>
+            <description/>
+            <url-pattern>/Etablissement</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>Sous administrateur</role-name>
         </auth-constraint>
     </security-constraint>
     <login-config>

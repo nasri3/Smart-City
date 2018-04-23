@@ -37,6 +37,9 @@ public class CTRL_Servlet extends HttpServlet {
 
     @EJB
     private PublicationDAO publicationDAO;
+    
+    @EJB
+    private EtablissementDAO etablissementDAO;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -125,9 +128,23 @@ public class CTRL_Servlet extends HttpServlet {
                                 System.out.println("compte : " + idCompte + " non trouvé");
                                 return;
                             }
+                            compte2.setEtablissement(null);
                             compte2.setType(type);
                             compteDAO.edit(compte2);
                             break;
+                        case "modifierSousAdministrateur":
+                            idCompte = request.getParameter("idCompte");
+                            String etablissement = request.getParameter("etablissement");
+                            compte2 = compteDAO.find(idCompte);
+                            if (compte2 == null) {
+                                System.out.println("compte : " + idCompte + " non trouvé");
+                                return;
+                            }
+                            Etablissement e = etablissementDAO.findByNom(etablissement);
+                            compte2.setEtablissement(e);
+                            compte2.setType("Sous administrateur");
+                            compteDAO.edit(compte2);
+                            return;
                         case "envoyerAlerte":
                             idCompte = request.getParameter("idCompte");
                             compte2 = compteDAO.find(idCompte);
@@ -171,12 +188,19 @@ public class CTRL_Servlet extends HttpServlet {
                             String etat = request.getParameter("etat");
                             if (!Arrays.asList("résolu", "non résolu", "entrain de résolution").contains(etat)) {
                                 System.out.println("état non valide");
-                                response.sendRedirect("/");
                                 return;
                             }
                             publication = publicationDAO.find(idPub);
                             publication.setEtat(etat);
-                            
+                            Notification notif = new Notification();
+                            notif.setExpediteur(compte);
+                            notif.setTexte("<g>Un changement en état de publication suivis</g><br>"
+                                    + "Publication : <a href='"+ idPub +"'> </a><br>"
+                                    + "Cette cas est maintenant" + etat );
+                            publication.getCompteSuiviList().forEach(c->{
+                                notif.setDestinataire(c);
+                                notificationDAO.create(notif);
+                            });
                             publicationDAO.edit(publication);
                             break;
                     }

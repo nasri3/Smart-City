@@ -76,3 +76,5 @@ p{ word-break: break-all; }
 .fas {color: gray; padding-right: 4px;padding-left: 1px;}
 
 .fa-ellipsis-h:hover { color: gray; cursor: pointer;}
+
+.col {margin: 2px;}

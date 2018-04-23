@@ -71,7 +71,7 @@
                                                 <button onclick="signaler(${idPub})" class="dropdown-item">signaler</button>
                                             </c:when>
                                             <c:otherwise>
-                                                <div>Publication Signalé</div>
+                                                <button class="dropdown-item">Publication Signalé</button>
                                             </c:otherwise>
                                         </c:choose>
                                         <c:choose>
@@ -79,7 +79,7 @@
                                                 <button onclick="suivre(${idPub})" class="dropdown-item">suivre</button>
                                             </c:when>
                                             <c:otherwise>
-                                                <div>Publication Suivi</div>
+                                                <button class="dropdown-item">Publication Suivi</button>
                                             </c:otherwise>
                                         </c:choose>
                                                 <button class="dropdown-item">Partager sur facebook</button>

@@ -44,12 +44,12 @@ function supprimer(idPub) {
 
 function signaler(idPub) {
     $.get("ctrl?operation=signalerPub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().eq(0).html('<div>Publication Signalé</div>');
+        $("#dropdown" + idPub).children().eq(0).replaceWith('<button class="dropdown-item">Publication Signalé</button>');
     });
 }
 function suivre(idPub) {
     $.get("ctrl?operation=suivrePub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().eq(1).html('<div>Publication Suivi</div>');
+        $("#dropdown" + idPub).children().eq(1).replaceWith('<button class="dropdown-item">Publication Suivi</button>');
     });
 }
 

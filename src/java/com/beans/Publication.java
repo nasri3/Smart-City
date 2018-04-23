@@ -53,6 +53,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 
+    @ManyToMany(mappedBy = "publicationsSuivis", fetch = FetchType.LAZY)
+    private List<Compte> compteSuiviList;
+
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -248,6 +251,15 @@ public class Publication implements Serializable {
     @Override
     public String toString() {
         return "com.beans.Publication[ idPublication=" + idPublication + " ]";
+    }
+
+    @XmlTransient
+    public List<Compte> getCompteSuiviList() {
+        return compteSuiviList;
+    }
+
+    public void setCompteSuiviList(List<Compte> compteSuiviList) {
+        this.compteSuiviList = compteSuiviList;
     }
 
 
