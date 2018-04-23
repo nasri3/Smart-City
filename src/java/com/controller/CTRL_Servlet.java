@@ -27,16 +27,16 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 public class CTRL_Servlet extends HttpServlet {
 
     @EJB
-    private NotificationDAO notificationFacade;
+    private NotificationDAO notificationDAO;
 
     @EJB
-    private CommentaireDAO commentaireFacade;
+    private CommentaireDAO commentaireDAO;
 
     @EJB
-    private CompteDAO compteFacade;
+    private CompteDAO compteDAO;
 
     @EJB
-    private PublicationDAO publicationFacade;
+    private PublicationDAO publicationDAO;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,7 +48,7 @@ public class CTRL_Servlet extends HttpServlet {
             if (!compte.getPhotoDeProfil().equals("avatar.png")) {
                 Files.delete(Paths.get(uploadPath + compte.getPhotoDeProfil()));
                 compte.setPhotoDeProfil("avatar.png");
-                compteFacade.edit(compte);
+                compteDAO.edit(compte);
                 request.getSession().setAttribute("compte", compte);
             }
             response.sendRedirect("/profil");
@@ -82,7 +82,7 @@ public class CTRL_Servlet extends HttpServlet {
                             Files.delete(Paths.get(uploadPath + compte.getPhotoDeProfil()));
                         }
                         compte.setPhotoDeProfil(filename);
-                        compteFacade.edit(compte);
+                        compteDAO.edit(compte);
                         request.getSession().setAttribute("compte", compte);
                     }
                     response.sendRedirect("/profil");
@@ -99,7 +99,7 @@ public class CTRL_Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         String operation = request.getParameter("operation");
-        Compte compte = compteFacade.find(((Compte) request.getSession().getAttribute("compte")).getIdCompte());
+        Compte compte = compteDAO.find(((Compte) request.getSession().getAttribute("compte")).getIdCompte());
         Publication publication;
         String idPub, idCompte;
         ArrayList<Publication> publications = new ArrayList();
@@ -115,23 +115,23 @@ public class CTRL_Servlet extends HttpServlet {
                 case "Administrateur":
                     switch (operation) {
                         case "initialiserComptes":
-                            request.getSession().setAttribute("comptes", compteFacade.findAll());
-                            System.out.print(compteFacade.findAll().size());
+                            request.getSession().setAttribute("comptes", compteDAO.findAll());
+                            System.out.print(compteDAO.findAll().size());
                             break;
                         case "modifierType":
                             idCompte = request.getParameter("idCompte");
                             String type = request.getParameter("type");
-                            Compte compte2 = compteFacade.find(idCompte);
+                            Compte compte2 = compteDAO.find(idCompte);
                             if (compte2 == null) {
                                 System.out.println("compte : " + idCompte + " non trouvé");
                                 return;
                             }
                             compte2.setType(type);
-                            compteFacade.edit(compte2);
+                            compteDAO.edit(compte2);
                             break;
                         case "envoyerAlerte":
                             idCompte = request.getParameter("idCompte");
-                            compte2 = compteFacade.find(idCompte);
+                            compte2 = compteDAO.find(idCompte);
                             if (compte2 == null) {
                                 System.out.println("compte : " + idCompte + " non trouvé");
                                 return;
@@ -140,11 +140,11 @@ public class CTRL_Servlet extends HttpServlet {
                             notif.setDestinataire(compte2);
                             notif.setExpediteur(compte);
                             notif.setTexte("Alerte");
-                            notificationFacade.create(notif);
+                            notificationDAO.create(notif);
                             break;
                         case "supprimerPub":
                             idPub = request.getParameter("idPub");
-                            publication = publicationFacade.find(idPub);
+                            publication = publicationDAO.find(idPub);
                             if (publication == null) {
                                 System.out.println("pub" + idPub + " Not Found");
                                 response.getWriter().write("pub" + idPub);
@@ -152,7 +152,7 @@ public class CTRL_Servlet extends HttpServlet {
                             }
                             String uploadPath = getServletContext().getInitParameter("uploadPath");
                             Files.delete(Paths.get(uploadPath + publication.getTitre()));
-                            publicationFacade.remove(publication);
+                            publicationDAO.remove(publication);
                             response.getWriter().write("pub" + idPub);
                             pubs.remove(publication);
                             request.getSession().setAttribute("pubs", pubs);
@@ -160,7 +160,7 @@ public class CTRL_Servlet extends HttpServlet {
                             break;
                         case "supprimerCompte":
                             idCompte = request.getParameter("idCompte");
-                            compteFacade.remove(compteFacade.find(idCompte));
+                            compteDAO.remove(compteDAO.find(idCompte));
                             break;
                     }
                 case "Sous administrateur":
@@ -173,9 +173,9 @@ public class CTRL_Servlet extends HttpServlet {
                                 response.sendRedirect("/");
                                 return;
                             }
-                            publication = publicationFacade.find(idPub);
+                            publication = publicationDAO.find(idPub);
                             publication.setEtat(etat);
-                            publicationFacade.edit(publication);
+                            publicationDAO.edit(publication);
                             break;
                     }
                 case "Utilisateur":
@@ -184,9 +184,9 @@ public class CTRL_Servlet extends HttpServlet {
                             String titre = request.getParameter("titre");
                             idPub = request.getParameter("idPub");
                             if (titre.equals("Page d'accueil")) {
-                                publications.addAll(publicationFacade.ajouterPublications(compte.getCategorieinteretList(), compte.getVilleinteretList(), Integer.valueOf(idPub)));
+                                publications.addAll(publicationDAO.ajouterPublications(compte.getCategorieinteret(), compte.getVilleinteret(), Integer.valueOf(idPub)));
                             } else {
-                                publications.addAll(publicationFacade.ajouterVosPublications(Integer.valueOf(idPub), compte));
+                                publications.addAll(publicationDAO.ajouterVosPublications(Integer.valueOf(idPub), compte));
                             }
                             request.getSession().setAttribute("publications", publications);
 
@@ -194,19 +194,19 @@ public class CTRL_Servlet extends HttpServlet {
                             request.getSession().setAttribute("pubs", pubs);
                             break;
                         case "initialiserPublications":
-                            publications.addAll(publicationFacade.initialiserPublications(compte.getCategorieinteretList(), compte.getVilleinteretList()));
+                            publications.addAll(publicationDAO.initialiserPublications(compte.getCategorieinteret(), compte.getVilleinteret()));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                             break;
                         case "initialiserVosPublications":
-                            publications.addAll(publicationFacade.initialiserVosPublications(compte));
+                            publications.addAll(publicationDAO.initialiserVosPublications(compte));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                             break;
                         case "raifraichirCommentaires":
                             idPub = request.getParameter("idPub");
                             int nbCom = Integer.valueOf(request.getParameter("nbCom"));
-                            publication = publicationFacade.find(idPub);
+                            publication = publicationDAO.find(idPub);
                             if (publication != null && publication.getCommentaireList().size() != nbCom) {
                                 for (int i = 0; i < pubs.size(); i++) {
                                     if (Objects.equals(pubs.get(i).getIdPublication(), Integer.valueOf(idPub))) {
@@ -222,14 +222,14 @@ public class CTRL_Servlet extends HttpServlet {
                         case "supprimerPub":
                             System.out.println("pub");
                             idPub = request.getParameter("idPub");
-                            publication = publicationFacade.find(idPub);
+                            publication = publicationDAO.find(idPub);
                             if (publication == null) {
                                 System.out.println("pub" + idPub + " Not Found");
                                 response.getWriter().write("pub" + idPub);
                             } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
                                 String uploadPath = getServletContext().getInitParameter("uploadPath");
                                 Files.delete(Paths.get(uploadPath + publication.getTitre()));
-                                publicationFacade.remove(publication);
+                                publicationDAO.remove(publication);
                                 response.getWriter().write("pub" + idPub);
                                 pubs.remove(publication);
                                 request.getSession().setAttribute("pubs", pubs);
@@ -238,12 +238,12 @@ public class CTRL_Servlet extends HttpServlet {
                             break;
                         case "signalerPub":
                             idPub = request.getParameter("idPub");
-                            publication = publicationFacade.find(idPub);
+                            publication = publicationDAO.find(idPub);
                             if (publication == null || compte.DejaSignaler(publication)) {
                                 return;
                             }
                             compte.SignalerPublication(publication);
-                            compteFacade.edit(compte);
+                            compteDAO.edit(compte);
                             /*if(publication.getNotificationList().size() == 3){
                             Notification n = new Notification();
                             n.setDestinataire(publication.getCompte());
@@ -255,7 +255,7 @@ public class CTRL_Servlet extends HttpServlet {
                         case "commenter":
                             idPub = request.getParameter("idPub");
                             String text = request.getParameter("texte");
-                            publication = publicationFacade.find(idPub);
+                            publication = publicationDAO.find(idPub);
                             if (publication == null || text == null) {
                                 return;
                             }
@@ -263,29 +263,32 @@ public class CTRL_Servlet extends HttpServlet {
                             commentaire.setCompte(compte);
                             commentaire.setPublication(publication);
                             commentaire.setTexte(text);
-                            commentaireFacade.create(commentaire);
+                            commentaireDAO.create(commentaire);
                             System.out.println(operation + " : " + idPub);
                             break;
                         case "toggleCatégorie":
+                            String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé",
+                                "Sécurité", "Sport", "Tourisme", "Transport"};
                             String categorie = request.getParameter("catégorie");
-                            String categorieinteret = compte.getCategorieinteret();
-                            if (!categorieinteret.contains(categorie)) {
-                                compte.setCategorieinteret(categorieinteret + "," + categorie);
+                            if (!Arrays.asList(Categories).contains(categorie)) {
+                                compte.setCategorieinteret("");
                             } else {
-                                compte.setCategorieinteret(categorieinteret.replace("," + categorie, ""));
+                                compte.setCategorieinteret(categorie);
                             }
-                            compteFacade.edit(compte);
+                            compteDAO.edit(compte);
                             response.sendRedirect("/");
                             break;
                         case "toggleVille":
+                            String[] Villes = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine",
+                                "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana",
+                                "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
                             String ville = request.getParameter("ville");
-                            String villeinteret = compte.getVilleinteret();
-                            if (!villeinteret.contains(ville)) {
-                                compte.setVilleinteret(villeinteret + "," + ville);
+                            if (!Arrays.asList(Villes).contains(ville)) {
+                                compte.setVilleinteret("");
                             } else {
-                                compte.setVilleinteret(villeinteret.replace("," + ville, ""));
+                                compte.setVilleinteret(ville);
                             }
-                            compteFacade.edit(compte);
+                            compteDAO.edit(compte);
                             response.sendRedirect("/");
                             break;
                         case "deconnecter":
@@ -297,7 +300,7 @@ public class CTRL_Servlet extends HttpServlet {
                         case "supprimerMonCompte":
                             request.logout();
                             request.getSession().invalidate();
-                            compteFacade.remove(compte);
+                            compteDAO.remove(compte);
                             response.sendRedirect("/");
                             return;
                         default:

@@ -11,7 +11,8 @@ p{ word-break: break-all; }
 }
 
 #menud {
-    padding-top: 70px;
+    padding-top: 15vh;
+    padding-bottom: 10vh;
     background-color: #f1f1f0;
     height: 100vh;
     position: fixed;
@@ -27,13 +28,14 @@ p{ word-break: break-all; }
 
 
 @media screen and (max-width: 767px) {
-    
+
     #menug {
         position: initial;
         width: 100%;
         height: auto;
     }
     #menud {
+        padding-top: 5vh;
         position: initial;
         width: 100%;
         height: auto;
@@ -43,7 +45,7 @@ p{ word-break: break-all; }
         padding-right: 0%;
         padding-left: 0%;
     }
-    
+
 }
 .commentaires{}  
 
@@ -61,12 +63,16 @@ p{ word-break: break-all; }
     margin: 2px 0;
 }
 
-.errormessage, .warningmessage, .infomessage, .successmessage, .plainmessage {
-    background: #EFEFEF 6px 8px no-repeat;
-        background-image: none;
-    border: 1px dotted #CCCCCC;
-    margin: 4px 0;
-    overflow: auto;
-    padding: 8px 28px;
-    text-align: justify;
+.nav-item a {color : white !important;}
+.nav-item a:hover { background-color: whitesmoke; color: black !important; }
+.selected { background-color: gray; }
+
+.carousel-inner img {
+    height: 40vh;
+    width: inherit;
 }
+.carousel-indicators {bottom: auto; top: 10px;}
+
+.fas {color: gray; padding-right: 4px;padding-left: 1px;}
+
+.fa-ellipsis-h:hover { color: gray; cursor: pointer;}

@@ -20,39 +20,37 @@
     </head>
     <body>
         <!-- debut menu haut de la page ***************************** -->
-        <nav class="navbar navbar-expand-md bg-secondary navbar-dark fixed-top">
-            <div class="container">
-                <div class="navbar-brand">${compte.getPrenom()} ${compte.getNom()}</div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Notifications</a>
-                        </li>
-                        <c:if test='${compte.getType() == "Administrateur"}'>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Administration">Administration</a>
-                            </li>
-                        </c:if>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">À propos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contactez-nous</a>
-                        </li>
-                    </ul>
-                    <a class="btn btn-primary" href="ctrl?operation=deconnecter"><span class="fa fa-sign-out-alt"></span>Déconnexion</a>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
+            <a class="navbar-brand text-white">COCO</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                </div>
+            <div id="navb" style="" class="navbar-collapse collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item mx-2"><a class="nav-link" href="/"><i class="fa fa-home fa-2x"></i> Accueil</a>
+                    </li>
+                    <li class="nav-item mx-2"><a class="nav-link selected" href="profil"><i class="fa fa-user fa-2x"></i> Profil</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="#">
+                            <span class="fa fa-bell fa-2x"></span><span class="badge badge-danger">3</span> Notifications</a>
+                    </li>
+                    <c:if test='${compte.getType() == "Administrateur"}'>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
+                        </li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
+                        </li>
+                    </c:if>
+                </ul>
+                <li class="navbar-nav nav-item"><a href="ctrl?operation=deconnecter" class="nav-link mx-2"><i class="fa fa-sign-out-alt fa-2x"></i> Déconnexion</a></li>
+
             </div>
         </nav>
 
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row" id="page">  
-            <div class="col-md-2 mx-1 my-1 pb-2" id="menug">
+            <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
                 <div class="card text-center justify-content-md-center">
                     <div class="card-header">
                         <img src="files/${compte.getPhotoDeProfil()}" class="rounded-circle" height="50" width="50" alt="Avatar">
@@ -70,7 +68,7 @@
 
 
             <!-- debut corps (milieu) de la page ***************************** -->
-            <div class="offset-md-2 col-md-8" id="corps">
+            <div class="offset-md-3 col-md-6" id="corps">
                 <div class="modal fade text-left" id="modifModal">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -108,7 +106,7 @@
                     </div>
                 </form>
 
-                <h1>Vos Publications</h1><hr>
+                <h1 class="ml-4">Vos Publications</h1><hr>
             </div>
 
         </div>

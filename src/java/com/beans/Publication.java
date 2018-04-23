@@ -41,9 +41,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Publication.findAll", query = "SELECT p FROM Publication p order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findAllAfterId", query = "SELECT p FROM Publication p where p.idPublication<:idDerniere order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCatégoriesVilles", query = "SELECT p FROM Publication p where p.catégorie in :catégories and p.ville in :villes order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCategorie", query = "SELECT p FROM Publication p where p.categorie = :categorie order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyVille", query = "SELECT p FROM Publication p where p.ville = :ville order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCategorieVille", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.ville = :ville order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCategorieAfterId", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyVilleAfterId", query = "SELECT p FROM Publication p where p.ville = :ville and p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCategorieVilleAfterId", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.ville = :ville and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCatégoriesVillesAfterId", query = "SELECT p FROM Publication p where p.catégorie in :catégories and p.ville in :villes and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 

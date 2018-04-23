@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n")
     , @NamedQuery(name = "Notification.findByIdNotification", query = "SELECT n FROM Notification n WHERE n.idNotification = :idNotification")
-    , @NamedQuery(name = "Notification.findByDatedecréation", query = "SELECT n FROM Notification n WHERE n.datedecréation = :datedecréation")
+    , @NamedQuery(name = "Notification.findByDatedecreation", query = "SELECT n FROM Notification n WHERE n.datedecreation = :datedecreation")
     , @NamedQuery(name = "Notification.findByTexte", query = "SELECT n FROM Notification n WHERE n.texte = :texte")
     , @NamedQuery(name = "Notification.findByVu", query = "SELECT n FROM Notification n WHERE n.vu = :vu")})
 public class Notification implements Serializable {

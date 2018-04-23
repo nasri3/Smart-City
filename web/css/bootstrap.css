@@ -5892,6 +5892,17 @@ button.close {
   -webkit-transform: translateX(0);
   transform: translateX(0);
 }
+.carousel-item-next,
+.active.carousel-item-right {
+  -webkit-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+.carousel-item-prev,
+.active.carousel-item-left {
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
 /*
 @supports ((-webkit-transform-style: preserve-3d) or (transform-style: preserve-3d)) {
   .carousel-item-next.carousel-item-left,
@@ -5901,11 +5912,7 @@ button.close {
   }
 }
 
-.carousel-item-next,
-.active.carousel-item-right {
-  -webkit-transform: translateX(100%);
-  transform: translateX(100%);
-}
+
 
 @supports ((-webkit-transform-style: preserve-3d) or (transform-style: preserve-3d)) {
   .carousel-item-next,
@@ -5915,11 +5922,6 @@ button.close {
   }
 }
 
-.carousel-item-prev,
-.active.carousel-item-left {
-  -webkit-transform: translateX(-100%);
-  transform: translateX(-100%);
-}
 
 @supports ((-webkit-transform-style: preserve-3d) or (transform-style: preserve-3d)) {
   .carousel-item-prev,

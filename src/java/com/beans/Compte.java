@@ -79,21 +79,18 @@ public class Compte implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 25)
-    @Column(name = "Role")
+    @Column(name = "Type")
     private String type = "Utilisateur";
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 50)
     @Column(name = "Ville-interet")
-    private String villeinteret = "Ariana,Bèja,Ben Arous,Bizerte,Gabès,Gafsa,Jendouba,Kairouan,Kasserine,"
-            + "Kébili,Kef,Mahdia,Manouba,Médenine,Monastir,Nabeul,Sfax,Sidi Bouzid,Siliana,"
-            + "Sousse,Tataouine,Tozeur,Tunis,Zaghouan";
+    private String villeinteret = "";
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 1000)
+    @Size(min = 1, max = 50)
     @Column(name = "Catégorie-interet")
-    private String categorieinteret = "Agriculture,Education,Environnement,Financière,Infrastructure,Santé,"
-            + "Sécurité,Sport,Tourisme,Transport";
+    private String categorieinteret = "";
     @JoinTable(name = "signalisation", joinColumns = {
         @JoinColumn(name = "compte", referencedColumnName = "IdCompte")}, inverseJoinColumns = {
         @JoinColumn(name = "publication", referencedColumnName = "IdPublication")})
@@ -189,20 +186,12 @@ public class Compte implements Serializable {
         return villeinteret;
     }
 
-    public List<String> getVilleinteretList() {
-        return Arrays.asList(villeinteret.split(","));
-    }
-
     public void setVilleinteret(String villeinteret) {
         this.villeinteret = villeinteret;
     }
 
     public String getCategorieinteret() {
         return categorieinteret;
-    }
-
-    public List<String> getCategorieinteretList() {
-        return Arrays.asList(categorieinteret.split(","));
     }
 
     public void setCategorieinteret(String categorieinteret) {

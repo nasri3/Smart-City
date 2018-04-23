@@ -1,4 +1,4 @@
-<%@page import="com.DAO.CompteFacade"%>
+<%@page import="com.DAO.CompteDAO"%>
 <%@page import="com.beans.Compte"%>
 <%@page import="java.util.List"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -14,36 +14,38 @@
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/myapp-functions.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" href="css/style.css">
         <title>Administration</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-md bg-secondary navbar-dark fixed-top">
-            <div class="container">
-                <div class="navbar-brand">Administration</div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/profil">${compte.getPrenom()} ${compte.getNom()}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Notifications</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">À propos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contactez-nous</a>
-                        </li>
-                    </ul>
-                    <a class="btn btn-primary" href="ctrl?operation=deconnecter"><span class="fa fa-sign-out-alt"></span>Déconnexion</a>
 
-                </div>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
+            <a class="navbar-brand text-white">COCO</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navb" style="" class="navbar-collapse collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item mx-2"><a class="nav-link" href="/"><i class="fa fa-home fa-2x"></i> Accueil</a>
+                    </li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="profil"><i class="fa fa-user fa-2x"></i> Profil</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="#">
+                            <span class="fa fa-bell fa-2x"></span><span class="badge badge-danger">3</span> Notifications</a>
+                    </li>
+                    <li class="nav-item mx-2 selected"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
+                    </li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
+                    </li>
+                </ul>
+                <li class="navbar-nav nav-item"><a href="ctrl?operation=deconnecter" class="nav-link mx-2"><i class="fa fa-sign-out-alt fa-2x"></i> Déconnexion</a></li>
+
             </div>
         </nav>
+
         <div id="corps" style="padding-top: 30px; margin-top: 30px;"><hr>
             <c:forEach items="${comptes}" var="compte">
                 <div id="compte${compte.getIdCompte()}" class="row m-2 p-2">

@@ -22,33 +22,30 @@
     <body>
 
         <!-- debut menu haut de la page ***************************** -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="background-color: #4d636f;">
-            <a class="navbar-brand" href="#">Logo</a>
-            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navb">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
+            <a class="navbar-brand text-white">COCO</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navb">
+            <div id="navb" style="" class="navbar-collapse collapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="profil">${compte.getPrenom()} ${compte.getNom()}</a>
+                    <li class="nav-item mx-2"><a class="nav-link selected" href="/"><i class="fa fa-home fa-2x"></i> Accueil</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
+                    <li class="nav-item mx-2"><a class="nav-link" href="profil"><i class="fa fa-user fa-2x"></i> Profil</a>
                     </li>
-                    <c:if test='${compte.getRole() == "Administrateur"}'>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Administration">Administration</a>
+                    <li class="nav-item mx-2">
+                        <a class="nav-link" href="#">
+                            <span class="fa fa-bell fa-2x"></span><span class="badge badge-danger">3</span> Notifications</a>
+                    </li>
+                    <c:if test='${compte.getType() == "Administrateur"}'>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
+                        </li>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
                         </li>
                     </c:if>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">À propos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contactez-nous</a>
-                    </li>
                 </ul>
-                <a class="btn btn-primary" href="ctrl?operation=deconnecter"><span class="fa fa-sign-out-alt"></span>Déconnexion</a>
+                <li class="navbar-nav nav-item"><a href="ctrl?operation=deconnecter" class="nav-link mx-2"><i class="fa fa-sign-out-alt fa-2x"></i> Déconnexion</a></li>
 
             </div>
         </nav>
@@ -64,44 +61,42 @@
 
                     <div class="row card-footer">
                         <label class="col-12">Catégorie</label>
+                        <c:choose>
+                            <c:when test='${compte.getCategorieinteret().equals("")}'>
+                                <a class="col btn btn-success">Tous</a>
+                            </c:when>
+                            <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=toggleCatégorie">Tous</a></c:otherwise>
+                        </c:choose>
                         <c:forEach items="${Catégories}" var="catégorie">
                             <c:choose>
-                                <c:when test='${compte.getCatégorieinteret().contains(catégorie)}'>
-                                    <a class="col btn btn-success" href="ctrl?operation=toggleCatégorie&catégorie=${catégorie}">${catégorie}</a>
+                                <c:when test='${compte.getCategorieinteret().equals(catégorie)}'>
+                                    <a class="col btn btn-success">${catégorie}</a>
                                 </c:when>
                                 <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=toggleCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
                             </c:choose>
                         </c:forEach>
                         <label class="col-12">Ville</label>
+                        <c:choose>
+                            <c:when test='${compte.getVilleinteret().equals("")}'>
+                                <a class="col btn btn-danger">Tous</a>
+                            </c:when>
+                            <c:otherwise><a class="col btn btn-outline-danger"  href="ctrl?operation=toggleVille">Tous</a></c:otherwise>
+                        </c:choose>
                         <c:forEach items="${Villes}" var="ville">
                             <c:choose>
-                                <c:when test='${compte.getVilleinteret().contains(ville)}'>
-                                    <a class="col btn btn-danger" href="ctrl?operation=toggleVille&ville=${ville}">${ville}</a>
+                                <c:when test='${compte.getVilleinteret().equals(ville)}'>
+                                    <a class="col btn btn-danger">${ville}</a>
                                 </c:when>
                                 <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=toggleVille&ville=${ville}">${ville}</a></c:otherwise>
                             </c:choose>
                         </c:forEach>
-                    </div>
-                    <div class="card-footer">
-                        <label for="setCatégorie">Catégorie</label>
-                        <select id="setCatégorie" name="Catégorie" class="form-control">
-                            <c:forEach items="${Catégories}" var="catégorie">
-                                <option>${catégorie}</option>
-                            </c:forEach>
-                        </select>
-                        <label for="setVille">Ville</label>
-                        <select id="setVille" name="Ville" class="form-control">
-                            <c:forEach items="${Villes}" var="ville">
-                                <option>${ville}</option>
-                            </c:forEach>
-                        </select>
                     </div>
                 </div>
             </div>
 
 
             <!-- debut corps (milieu) de la page ***************************** -->
-            <div class="offset-md-3 col-md-7" id="corps"> 
+            <div class="offset-md-3 col-md-6" id="corps"> 
                 <label class="btn btn-block btn-outline-primary" data-toggle="modal" data-target="#uploadForm">Nouvelle Publication</label>
                 <form class="modal fade align-content-center" id="uploadForm" action="upload" method="post" enctype="multipart/form-data">
                     <div class="modal-dialog modal-dialog-centered">
@@ -166,10 +161,45 @@
 
             <!-- debut menu droite (milieu) de la page ***************************** -->
 
-            <div class="col-md-2" id="menud">
-                <div class="">
-                    <h4>&Eacute;vènements</h4><hr>
-                </div>
+            <div class="col-md-3" id="menud">
+                <h4>&Eacute;vènements</h4><hr>
+                <div id="events" class="carousel slide" data-ride="carousel">
+
+                    <div class="carousel-inner text-center">
+                        <ul class="carousel-indicators">
+                            <li data-target="#events" data-slide-to="0" class="active"></li>
+                            <li data-target="#events" data-slide-to="1"></li>
+                            <li data-target="#events" data-slide-to="2"></li>
+                        </ul>
+                        <div class="carousel-item active">
+                            <img src="img/6.jpg" alt="Los Angeles">
+                            <div class="">
+                                <h3>Los Angeles</h3>
+                                <p>We had such a great time in LA!</p>
+                            </div>   
+                        </div> 
+                        <div class="carousel-item">
+                            <img src="img/7.jpg" alt="Chicago">
+                            <div class="">
+                                <h3>Chicago</h3>
+                                <p>Thank you, Chicago!</p>
+                            </div>   
+                        </div>
+                        <div class="carousel-item">
+                            <img src="img/9.jpg" alt="New York">
+                            <div class="">
+                                <h3>New York</h3>
+                                <p>We love the Big Apple!</p>
+                            </div>   
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#events" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#events" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+                </div> 
             </div>
         </div>
         <script>

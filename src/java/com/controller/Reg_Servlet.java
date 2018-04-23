@@ -24,9 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class Reg_Servlet extends HttpServlet {
 
     @EJB
-    private CompteDAO compteFacade;
-    @EJB
-    private PublicationDAO publicationFacade;
+    private CompteDAO compteDAO;
 
     private static final long serialVersionUID = 1L;
 
@@ -66,7 +64,7 @@ public class Reg_Servlet extends HttpServlet {
             request.getRequestDispatcher("/Register").forward(request, response);
             return;
         }
-        if (compteFacade.find(IdCompte) != null) {
+        if (compteDAO.find(IdCompte) != null) {
             request.setAttribute("erreurCmpt", "Compte existant");
             request.getRequestDispatcher("/Register").forward(request, response);
             return;
@@ -83,7 +81,7 @@ public class Reg_Servlet extends HttpServlet {
         compte.setVille(Ville);
         System.out.println(IdCompte + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + cryptWithMD5(MotDePasse1) + " " + Ville);
         //3.Inserer la compte dans la BD
-        compteFacade.create(compte);
+        compteDAO.create(compte);
         System.out.println("type : " + compte.getType());
         SeConnecter(request, response, IdCompte, MotDePasse);
         request.getSession().setAttribute("compte", compte);

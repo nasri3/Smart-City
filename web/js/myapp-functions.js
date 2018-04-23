@@ -64,7 +64,7 @@ function ChangerPhotoDeProfil() {
 
 function afficherPlus(idPub) {
     var d = document.createElement("div");
-    $("#afficherPlus").html('<i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i>');
+    $("#afficherPlus").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
     $.get("ctrl?operation=ajouterPublications&idPub=" + idPub + "&titre=" + document.title, function () {
         $(d).load("navigation.jsp #publications", function () {
             $("#afficherPlus").fadeOut(300, function () {
@@ -88,7 +88,7 @@ function setCommentaireTextAreaFct(d) {
 }
 
 function initialiser() {
-    $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i></div>');
+    $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>');
     $.get("ctrl?operation=initialiserPublications", function () {
         var d = document.createElement('div');
         $(d).load("navigation.jsp #publications", function () {

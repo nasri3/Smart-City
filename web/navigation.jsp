@@ -1,4 +1,4 @@
-<%@page import="com.DAO.PublicationFacade"%>
+<%@page import="com.DAO.PublicationDAO"%>
 <%@page import="javax.ejb.EJB"%>
 <%@page import="com.beans.Publication"%>
 <%@page import="java.util.ArrayList"%>
@@ -54,17 +54,17 @@
                         <c:set var="Cmpt" value="${publication.getCompte()}"/>
                     </c:if>
                     <div class="media">
-                        <img src="files/${Cmpt.getPhotoDeProfil()}" class="rounded-circle" height="45" width="45" alt="Avatar">
+                        <img src="files/${Cmpt.getPhotoDeProfil()}" class="rounded-circle mt-2" height="45" width="45" alt="Avatar">
                         <div class="media-body ml-2" style="font-family: calibri;">
                             <div class="media">
-                                <div class="col">
-                                    <a href="#">${Cmpt.getPrenom()} ${Cmpt.getNom()}</a><br>
-                                    <time datetime="${publication.getDatedecréation()}">${publication.getDatedecréation()}</time>
+                                <div style="font-size: 15px;" class="col-10"> <big><g>${Cmpt.getPrenom()} ${Cmpt.getNom()}</g></big><br>
+                                    <i class="fas fa-calendar-alt"></i>${publication.getDatedecreation()}<br>
+                                    <i class="fas fa-map-marker-alt"></i> ${publication.getVille()} 
+                                    <i class="fas fa-th"></i> ${publication.getCategorie()}
                                     <br>
-                                    <i class="fa fa-map-marker"> ${publication.getVille()} ${publication.getCatégorie()} </i>
                                 </div>
                                 <div class="media-body text-right">
-                                    <button class="btn btn-light fa fa-caret-square-down" data-toggle="dropdown"></button>
+                                    <i class="fa fa-ellipsis-h" data-toggle="dropdown"></i>
                                     <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right">
                                         <c:choose>
                                             <c:when test="${!compte.DejaSignaler(publication)}">
@@ -82,16 +82,17 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
                     <div class="text-center">
                         <c:choose>
                             <c:when test='${publication.getType().contains("video")}'>
-                                <video controls style="width:100%;">
+                                <video controls style="max-width: 100%; max-height: 75vh;">
                                     <source src="files/${publication.getTitre()}" type="video/mp4">
                                 </video>
                             </c:when>
                             <c:otherwise>
                                 <a href="files/${publication.getTitre()}" target="_blank">
-                                    <img src="files/${publication.getTitre()}" style="width: 100%;" alt="">
+                                    <img src="files/${publication.getTitre()}" style="max-width: 100%; max-height: 75vh;" alt="">
                                 </a>
                             </c:otherwise>
                         </c:choose>
@@ -99,13 +100,17 @@
                             <p style="white-space: pre-line;">${publication.getExprimer()}</p>
                         </div>
                     </div>
+                    <hr>
 
                     <div class="container-fluid">
                         <div id="monCommentaire${idPub}">
                             <div class="media">
                                 <img class="rounded-circle mt-2" src="files/${compte.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
-                                <div class="media-body row ml-1">
-                                    <textarea class="form-control" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..."></textarea>
+                                <div class="media-body ml-1 row">
+                                    <textarea class="form-control col-md-8" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..." style="height: 62px; font-size:small;"></textarea>
+                                    <div class="col-md-2 text-center">
+                                        <button class="btn btn-primary mt-2" onclick="commenter(${idPub})"><i class="fa fa-comment"> Commenter</i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +119,7 @@
                         </label>
                         <div id="com${idPub}" class="commentaires collapse mt-1">
                             <div id="comm" class="text-center">
-                                <i class="fas fa-circle-notch fa-spin" style="font-size: x-large;"></i>
+                                <i class="fas fa-circle-notch fa-spin fa-2x"></i>
                             </div>
                         </div>
                     </div>
@@ -126,6 +131,6 @@
                 </div>
             </c:if>
         </div>
-        
+
     </body>
 </html>

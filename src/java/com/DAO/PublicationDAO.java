@@ -26,32 +26,54 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     public PublicationDAO() {
         super(Publication.class);
     }
-    
-    public List<Publication> findAll() {
-        return getEntityManager().createNamedQuery("Publication.findAll").getResultList();
-}
 
-    public List<Publication> getFirst5() {
-        return getEntityManager().createNamedQuery("Publication.findAll").setMaxResults(5).getResultList();
-    }
-
-    public List<Publication> initialiserPublications(List<String> categories, List<String> villes) {
-        return getEntityManager().createNamedQuery("Publication.findbyCatégoriesVilles")
-                .setParameter("catégories", categories)
-                .setParameter("villes", villes)
+    public List<Publication> initialiserPublications(String categorie, String ville) {
+        if (categorie.isEmpty()) {
+            if (ville.isEmpty()) {
+                return getEntityManager().createNamedQuery("Publication.findAll").setMaxResults(5).getResultList();
+            }
+            return getEntityManager().createNamedQuery("Publication.findbyVille")
+                    .setParameter("ville", ville)
+                    .setMaxResults(5).getResultList();
+        }
+        if (ville.isEmpty()) {
+            return getEntityManager().createNamedQuery("Publication.findbyCategorie")
+                    .setParameter("categorie", categorie)
+                    .setMaxResults(5).getResultList();
+        }
+        return getEntityManager().createNamedQuery("Publication.findbyCategorieVille")
+                .setParameter("categorie", categorie)
+                .setParameter("ville", ville)
                 .setMaxResults(5).getResultList();
     }
-    
+
     public List<Publication> initialiserVosPublications(Compte compte) {
         return getEntityManager().createNamedQuery("Publication.findbyCompte")
                 .setParameter("compte", compte)
                 .setMaxResults(5).getResultList();
     }
 
-    public List<Publication> ajouterPublications(List<String> categories, List<String> villes,int idDerniere) {
-        return getEntityManager().createNamedQuery("Publication.findbyCatégoriesVillesAfterId")
-                .setParameter("catégories", categories)
-                .setParameter("villes", villes)
+    public List<Publication> ajouterPublications(String categorie, String ville, int idDerniere) {
+        if (categorie.isEmpty()) {
+            if (ville.isEmpty()) {
+                return getEntityManager().createNamedQuery("Publication.findAllAfterId")
+                        .setParameter("idDerniere", idDerniere)
+                        .setMaxResults(3).getResultList();
+            }
+            return getEntityManager().createNamedQuery("Publication.findbyVilleAfterId")
+                    .setParameter("ville", ville)
+                    .setParameter("idDerniere", idDerniere)
+                    .setMaxResults(3).getResultList();
+        }
+        if (ville.isEmpty()) {
+            return getEntityManager().createNamedQuery("Publication.findbyCategorieAfterId")
+                    .setParameter("categorie", categorie)
+                    .setParameter("idDerniere", idDerniere)
+                    .setMaxResults(3).getResultList();
+        }
+        return getEntityManager().createNamedQuery("Publication.findbyCategorieVilleAfterId")
+                .setParameter("categorie", categorie)
+                .setParameter("ville", ville)
                 .setParameter("idDerniere", idDerniere)
                 .setMaxResults(3).getResultList();
     }

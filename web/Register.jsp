@@ -15,26 +15,7 @@
         <title>Créer un compte</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-md bg-secondary navbar-dark fixed-top">
-            <div class="container">
-                <div class="navbar-brand">Créer un compte</div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Notifications</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">À propos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contactez-nous</a>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-success" href="/"><span class="fa fa-sign-out-alt"></span>Connexion</a>
-                </div>
-            </div>
-        </nav>
+        
         <div class="row justify-content-center py-5 my-5 px-1 mx-1">
             <div class="col-md-4 bg-primary text-white">
                 <h1>Créer un compte</h1>
