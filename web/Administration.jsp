@@ -49,31 +49,33 @@
 
         <div id="corps">
             <div id="comptes">
-                <c:forEach items="${comptes}" var="compte">
-                    <div id="compte${compte.getIdCompte()}" class="media-body commentaire row">
-                        <div class="col">${compte.getIdCompte()}</div>
-                        <div class="col">${compte.getNom()}</div>
-                        <div class="col">${compte.getPrenom()}</div>
-                        <div class="col">${compte.getDateDeNaissance()}</div>
-                        <div class="col">${compte.getVille()}</div>
+                <c:forEach items="${comptes}" var="c">
+                    <c:if test="${compte != c}">
+                    <div id="compte${c.getIdCompte()}" class="media-body commentaire row">
+                        <div class="col">${c.getIdCompte()}</div>
+                        <div class="col">${c.getNom()}</div>
+                        <div class="col">${c.getPrenom()}</div>
+                        <div class="col">${c.getDateDeNaissance()}</div>
+                        <div class="col">${c.getVille()}</div>
                         <div class="col btn btn-primary" data-toggle="modal" data-target="#modifierSousAdministrateurModal" 
-                             onclick="setIdCompte('${compte.getIdCompte()}')">
+                             onclick="setIdCompte('${c.getIdCompte()}')">
                             <c:choose>
-                                <c:when test='${compte.getType()=="Sous administrateur"}'>${compte.getEtablissement().getNom()}</c:when>
+                                <c:when test='${c.getType()=="Sous administrateur"}'>${c.getEtablissement().getNom()}</c:when>
                                 <c:otherwise>Pas d'etablissement</c:otherwise>
                             </c:choose>
                         </div>
                         <div class="col btn btn-primary" data-toggle="modal" data-target="#modifierTypeDeCompteModal" 
-                             onclick="setIdCompte('${compte.getIdCompte()}')">${compte.getType()}</div>
+                             onclick="setIdCompte('${c.getIdCompte()}')">${c.getType()}</div>
                         <div class="col btn btn-primary" data-toggle="modal" data-target="#supprimerCompteModal"
-                             onclick="setIdCompte('${compte.getIdCompte()}')">Supprimer son Compte</div>
+                             onclick="setIdCompte('${c.getIdCompte()}')">Supprimer son Compte</div>
                         <div class="col btn btn-primary" data-toggle="modal" data-target="#envoyerAlerteModal" 
-                             onclick="setIdCompte('${compte.getIdCompte()}')">Lui envoyer une alerte</div>
-                        <a class="col btn btn-link" href="/Administration/${compte.getIdCompte()}">Voir ces publications</a>
+                             onclick="setIdCompte('${c.getIdCompte()}')">Lui envoyer une alerte</div>
+                        <a class="col btn btn-link" href="/Administration/${c.getIdCompte()}">Voir ces publications</a>
                     </div>
+                    </c:if>
                 </c:forEach>
 
-                <div class="modal text-left" id="modifierSousAdministrateurModal">
+                <div class="modal fade text-left" id="modifierSousAdministrateurModal">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -89,7 +91,7 @@
                         </div>  
                     </div>
                 </div>
-                <div class="modal text-left" id="modifierTypeDeCompteModal">
+                <div class="modal fade text-left" id="modifierTypeDeCompteModal">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -105,7 +107,7 @@
                         </div>  
                     </div>
                 </div>
-                <div class="modal text-left" id="supprimerCompteModal">
+                <div class="modal fade text-left" id="supprimerCompteModal">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -119,7 +121,7 @@
                         </div>  
                     </div>
                 </div>
-                <div class="modal text-left" id="envoyerAlerteModal">
+                <div class="modal fade text-left" id="envoyerAlerteModal">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">

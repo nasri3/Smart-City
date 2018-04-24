@@ -45,13 +45,27 @@
 
             </div>
         </nav>
+        <div class="col-md-3 mx-1 my-1 pb-2" id="menug"></div>
 
-        <div id="corps">
+        <div  class="offset-md-3 col-md-6" id="corps">
 
         </div>
 
         <script>
-            
+            if (!!window.performance && window.performance.navigation.type === 2)
+            {
+                window.location.reload();
+            }
+            $.get("ctrl?operation=initialiserEtablissementPublications", function () {
+                var d1 = document.createElement('div');//, d2 = document.createElement('div');
+                $(d1).load("navigation.jsp #publications", function () {
+                    setCommentaireTextAreaFct(d1);
+                    $("#corps").append($(d1).children());
+                });
+                /*$(d2).load("home.jsp #menud", function () {
+                 $("#page").append($(d2).children());
+                 });*/
+            });
         </script>
     </body>
 </html>

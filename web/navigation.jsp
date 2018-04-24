@@ -23,6 +23,18 @@
 
     </head>
     <body style="font-size: small;">
+        <div id="fb-root"></div>
+        <script>(function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id))
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = 'https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.12';
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+
         <!-- debut menu haut de la page ***************************** -->
         <%
             ArrayList<Publication> pubs = (ArrayList<Publication>) session.getAttribute("pubs");
@@ -65,26 +77,29 @@
                                 </div>
                                 <div class="media-body text-right">
                                     <i class="fa fa-ellipsis-h" data-toggle="dropdown"></i>
-                                    <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right">
+                                    <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right nav-item" style="background:#4d636f;">
                                         <c:choose>
                                             <c:when test="${!compte.DejaSignaler(publication)}">
-                                                <button onclick="signaler(${idPub})" class="dropdown-item">signaler</button>
+                                                <a onclick="signaler(${idPub})" class="dropdown-item nav-item">signaler</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <button class="dropdown-item">Publication Signalé</button>
+                                                <a class="dropdown-item nav-item">Publication Signalé</a>
                                             </c:otherwise>
                                         </c:choose>
                                         <c:choose>
                                             <c:when test="${!compte.DejaSuivi(publication)}">
-                                                <button onclick="suivre(${idPub})" class="dropdown-item">suivre</button>
+                                                <a onclick="suivre(${idPub})" class="dropdown-item nav-item">suivre</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <button class="dropdown-item">Publication Suivi</button>
+                                                <a class="dropdown-item nav-item">Publication Suivi</a>
                                             </c:otherwise>
                                         </c:choose>
-                                                <button class="dropdown-item">Partager sur facebook</button>
+                                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fpcdjee.hopto.org%2FpubID&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
+                                                width="102" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" 
+                                            allowTransparency="true" allow="encrypted-media">
+                                        </iframe>
                                         <c:if test='${(compte==publication.getCompte())}'>
-                                            <button onclick="supprimer(${idPub})" class="dropdown-item">supprimer</button>
+                                            <a onclick="supprimer(${idPub})" class="dropdown-item nav-item">supprimer</a>
                                         </c:if>
                                     </div>
                                 </div>
@@ -116,9 +131,9 @@
                             <div class="media">
                                 <img class="rounded-circle mt-2" src="files/${compte.getPhotoDeProfil()}" height="35" width="35" alt="Avatar">
                                 <div class="media-body ml-1 row">
-                                    <textarea class="form-control col-md-8" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..." style="height: 62px; font-size:small;"></textarea>
+                                    <textarea class="form-control col-md-10" name="texte" id="texte${idPub}" placeholder="Ajouter un commentaire..." style="height: 62px; font-size:small;"></textarea>
                                     <div class="col-md-2 text-center">
-                                        <button class="btn btn-primary mt-2" onclick="commenter(${idPub})"><i class="fa fa-comment"> Commenter</i></button>
+                                        <button class="btn btn-primary mt-1 commenterBtn" onclick="commenter(${idPub})"><i class="fa fa-comment"> Commenter</i></button>
                                     </div>
                                 </div>
                             </div>

@@ -37,7 +37,7 @@ public class CTRL_Servlet extends HttpServlet {
 
     @EJB
     private PublicationDAO publicationDAO;
-    
+
     @EJB
     private EtablissementDAO etablissementDAO;
 
@@ -183,6 +183,13 @@ public class CTRL_Servlet extends HttpServlet {
                     }
                 case "Sous administrateur":
                     switch (operation) {
+                        case "initialiserEtablissementPublications":
+                            Etablissement e = compte.getEtablissement();
+                            publicationDAO.initialiserPublications(e.getCategorie(), e.getVille());
+                            request.getSession().setAttribute("publications", publications);
+                            request.getSession().setAttribute("pubs", publications);
+                           
+                            break;
                         case "marquerEtat":
                             idPub = request.getParameter("idPub");
                             String etat = request.getParameter("etat");
@@ -195,9 +202,9 @@ public class CTRL_Servlet extends HttpServlet {
                             Notification notif = new Notification();
                             notif.setExpediteur(compte);
                             notif.setTexte("<g>Un changement en état de publication suivis</g><br>"
-                                    + "Publication : <a href='"+ idPub +"'> </a><br>"
-                                    + "Cette cas est maintenant" + etat );
-                            publication.getCompteSuiviList().forEach(c->{
+                                    + "Publication : <a href='" + idPub + "'> </a><br>"
+                                    + "Cette cas est maintenant" + etat);
+                            publication.getCompteSuiviList().forEach(c -> {
                                 notif.setDestinataire(c);
                                 notificationDAO.create(notif);
                             });
@@ -211,9 +218,13 @@ public class CTRL_Servlet extends HttpServlet {
                             idPub = request.getParameter("idPub");
                             if (titre.equals("Page d'accueil")) {
                                 publications.addAll(publicationDAO.ajouterPublications(compte.getCategorieinteret(), compte.getVilleinteret(), Integer.valueOf(idPub)));
-                            } else {
+                            } else if (titre.equals("Profil")) {
                                 publications.addAll(publicationDAO.ajouterMesPublications(Integer.valueOf(idPub), compte));
+                            } else {
+                                Etablissement e = compte.getEtablissement();
+                                publications.addAll(publicationDAO.ajouterPublications(e.getCategorie(), e.getVille(), Integer.valueOf(idPub)));
                             }
+
                             request.getSession().setAttribute("publications", publications);
 
                             pubs.addAll(publications);

@@ -19,7 +19,7 @@ setInterval(function () {
 }, 1000); // raifraichir les commentaires chaque 1 seconde
 
 setInterval(function () {
-    $.get("ctrl?operation=raifraichirNotifications", function(responseText){
+    $.get("ctrl?operation=raifraichirNotifications", function (responseText) {
         $("#nbNotif").html(responseText);
     });
 }, 5000); // raifraichir les notifications chaque 1 seconde
@@ -90,7 +90,7 @@ function afficherPlus(idPub) {
 
 function setCommentaireTextAreaFct(d) {
     $(d).find("textarea").keypress(function (e) {
-        if (e.keyCode === 13 && !e.shiftKey) {
+        if ($(document.getElementsByClassName("commenterBtn")[0]).css("display") === "none" && e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault();
             commenter($(this).attr("id").toString().replace("texte", ""));
         }
@@ -98,7 +98,7 @@ function setCommentaireTextAreaFct(d) {
 }
 
 function initialiser() {
-    $.get("ctrl?operation=raifraichirNotifications", function(responseText){
+    $.get("ctrl?operation=raifraichirNotifications", function (responseText) {
         $("#nbNotif").html(responseText);
     });
     $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>');

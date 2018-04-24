@@ -94,7 +94,7 @@
                     </div>
                     <!-- Soumettre -->
                     <div class="pb-5">
-                        <button type="submit" class="btn btn-block btn-outline-secondary">Soumettre</button>
+                        <button type="submit" class="btn btn-block btn-success">Soumettre</button>
                     </div>
                 </form>
             </div>
