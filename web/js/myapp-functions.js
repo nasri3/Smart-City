@@ -82,7 +82,7 @@ function afficherPlus(idPub) {
                 if ($(d.firstChild).children().length === 1)
                     $(d).find("#afficherPlus").empty();
                 setCommentaireTextAreaFct(d);
-                $("#publications").append($(d.firstChild).children());
+                $("#publications").append($(d.firstChild).html());
             });
         });
     });
@@ -103,15 +103,19 @@ function initialiser() {
     });
     $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>');
     $.get("ctrl?operation=initialiserPublications", function () {
+        var d1 = document.createElement('div');
+        $(d1).load("home.jsp #menud", function(){
+            $("#menud").html($(d1).children().eq(0).html());
+        });
         var d = document.createElement('div');
         $(d).load("navigation.jsp #publications", function () {
             setCommentaireTextAreaFct(d);
-            $("#publications").html($(d).children());
+            $("#publications").html($(d).html());
         });
     });
 }
-function toggleCatégorie(arg) {
-    $.get("ctrl?operation=toggleCatégorie&catégorie=" + $(arg).html(), function () {
+function modifierCatégorie(arg) {
+    $.get("ctrl?operation=modifierCatégorie&catégorie=" + $(arg).html(), function () {
         if ($(arg).attr("class") === "col btn btn-outline-success")
             $(arg).attr("class", "col btn btn-success");
         else
@@ -120,8 +124,8 @@ function toggleCatégorie(arg) {
     });
 }
 
-function toggleVille(arg) {
-    $.get("ctrl?operation=toggleVille&ville=" + $(arg).html(), function () {
+function modifierGouvernorat(arg) {
+    $.get("ctrl?operation=modifierGouvernorat&gouvernorat=" + $(arg).html(), function () {
         if ($(arg).attr("class") === "col btn btn-outline-danger")
             $(arg).attr("class", "col btn btn-danger");
         else

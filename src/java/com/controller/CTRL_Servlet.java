@@ -40,6 +40,9 @@ public class CTRL_Servlet extends HttpServlet {
 
     @EJB
     private EtablissementDAO etablissementDAO;
+    
+    @EJB
+    private EvenementDAO evenementDAO;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -168,14 +171,14 @@ public class CTRL_Servlet extends HttpServlet {
                                 response.getWriter().write("pub" + idPub);
                                 return;
                             }
+                            publicationDAO.remove(publication);
                             String uploadPath = getServletContext().getInitParameter("uploadPath");
                             Files.delete(Paths.get(uploadPath + publication.getTitre()));
-                            publicationDAO.remove(publication);
                             response.getWriter().write("pub" + idPub);
                             pubs.remove(publication);
                             request.getSession().setAttribute("pubs", pubs);
                             System.out.println(operation + " : pub" + idPub);
-                            break;
+                            return;
                         case "supprimerCompte":
                             idCompte = request.getParameter("idCompte");
                             compteDAO.remove(compteDAO.find(idCompte));
@@ -185,7 +188,7 @@ public class CTRL_Servlet extends HttpServlet {
                     switch (operation) {
                         case "initialiserEtablissementPublications":
                             Etablissement e = compte.getEtablissement();
-                            publicationDAO.initialiserPublications(e.getCategorie(), e.getVille());
+                            publications.addAll(publicationDAO.initialiserEtablissementPublications(e.getCategorie(), e.getVille()));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                            
@@ -217,12 +220,12 @@ public class CTRL_Servlet extends HttpServlet {
                             String titre = request.getParameter("titre");
                             idPub = request.getParameter("idPub");
                             if (titre.equals("Page d'accueil")) {
-                                publications.addAll(publicationDAO.ajouterPublications(compte.getCategorieinteret(), compte.getVilleinteret(), Integer.valueOf(idPub)));
+                                publications.addAll(publicationDAO.ajouterPublications(compte.getCategorie_interet(), compte.getGouvernorat_interet(), Integer.valueOf(idPub)));
                             } else if (titre.equals("Profil")) {
                                 publications.addAll(publicationDAO.ajouterMesPublications(Integer.valueOf(idPub), compte));
                             } else {
                                 Etablissement e = compte.getEtablissement();
-                                publications.addAll(publicationDAO.ajouterPublications(e.getCategorie(), e.getVille(), Integer.valueOf(idPub)));
+                                publications.addAll(publicationDAO.ajouterEtablissementPublications(e.getCategorie(), e.getVille(), Integer.valueOf(idPub)));
                             }
 
                             request.getSession().setAttribute("publications", publications);
@@ -231,9 +234,11 @@ public class CTRL_Servlet extends HttpServlet {
                             request.getSession().setAttribute("pubs", pubs);
                             break;
                         case "initialiserPublications":
-                            publications.addAll(publicationDAO.initialiserPublications(compte.getCategorieinteret(), compte.getVilleinteret()));
+                            publications.addAll(publicationDAO.initialiserPublications(compte.getCategorie_interet(), compte.getGouvernorat_interet()));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
+                            request.getSession().setAttribute("evenements", evenementDAO.findAll());
+                            System.out.println(evenementDAO.findAll().size());
                             break;
                         case "initialiserMesPublications":
                             publications.addAll(publicationDAO.initialiserMesPublications(compte));
@@ -292,12 +297,14 @@ public class CTRL_Servlet extends HttpServlet {
                             }
                             compte.SignalerPublication(publication);
                             compteDAO.edit(compte);
-                            /*if(publication.getNotificationList().size() == 3){
+                            
+                            /*if(publication().size() == 3){
                             Notification n = new Notification();
                             n.setDestinataire(publication.getCompte());
                             n.setPublication(publication);
                             n.setTexte("Alerte : Attention, votre publication ");
-                        }*/
+                            }*/
+                            
                             System.out.println(operation + " : " + idPub);
                             break;
                         case "suivrePub":
@@ -323,31 +330,37 @@ public class CTRL_Servlet extends HttpServlet {
                             commentaireDAO.create(commentaire);
                             System.out.println(operation + " : " + idPub);
                             break;
-                        case "toggleCatégorie":
+                        case "modifierCatégorie":
                             String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé",
                                 "Sécurité", "Sport", "Tourisme", "Transport"};
                             String categorie = request.getParameter("catégorie");
                             if (!Arrays.asList(Categories).contains(categorie)) {
-                                compte.setCategorieinteret("");
+                                compte.setCategorie_interet("");
                             } else {
-                                compte.setCategorieinteret(categorie);
+                                compte.setCategorie_interet(categorie);
                             }
                             compteDAO.edit(compte);
                             response.sendRedirect("/");
                             break;
-                        case "toggleVille":
-                            String[] Villes = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine",
+                        case "modifierGouvernorat":
+                            String[] Gouvernorats = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine",
                                 "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana",
                                 "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
-                            String ville = request.getParameter("ville");
-                            if (!Arrays.asList(Villes).contains(ville)) {
-                                compte.setVilleinteret("");
+                            String gouvernorat = request.getParameter("Gouvernorat");
+                            if (!Arrays.asList(Gouvernorats).contains(gouvernorat)) {
+                                compte.setGouvernorat_interet("");
                             } else {
-                                compte.setVilleinteret(ville);
+                                compte.setGouvernorat_interet(gouvernorat);
                             }
                             compteDAO.edit(compte);
                             response.sendRedirect("/");
                             break;
+                        case "getPublication":
+                            idPub = request.getParameter("idPub");
+                            publication = publicationDAO.find(idPub);
+                            publications.add(publication);
+                            request.getSession().setAttribute("publications", publications);
+                            return;
                         case "deconnecter":
                             request.logout();
                             request.getSession().invalidate();

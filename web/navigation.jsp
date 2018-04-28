@@ -71,13 +71,13 @@
                             <div class="media">
                                 <div style="font-size: 15px;" class="col-10"> <big><g>${Cmpt.getPrenom()} ${Cmpt.getNom()}</g></big><br>
                                     <i class="fas fa-calendar-alt"></i>${publication.getDatedecreation()}<br>
-                                    <i class="fas fa-map-marker-alt"></i> ${publication.getVille()} 
+                                    <i class="fas fa-map-marker-alt"></i> ${publication.getGouvernorat()} 
                                     <i class="fas fa-th"></i> ${publication.getCategorie()}
                                     <br>
                                 </div>
                                 <div class="media-body text-right">
                                     <i class="fa fa-ellipsis-h" data-toggle="dropdown"></i>
-                                    <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right nav-item" style="background:#4d636f;">
+                                    <div id="dropdown${idPub}" class="dropdown-menu dropdown-menu-right nav-item text-center" style="background:#4d636f;">
                                         <c:choose>
                                             <c:when test="${!compte.DejaSignaler(publication)}">
                                                 <a onclick="signaler(${idPub})" class="dropdown-item nav-item">signaler</a>
@@ -94,9 +94,9 @@
                                                 <a class="dropdown-item nav-item">Publication Suivi</a>
                                             </c:otherwise>
                                         </c:choose>
-                                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fpcdjee.hopto.org%2FpubID&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
+                                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fpcdjee.hopto.org%2FPublication%3FidPub%3D${idPub}&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
                                                 width="102" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" 
-                                            allowTransparency="true" allow="encrypted-media">
+                                                allowTransparency="true" allow="encrypted-media">
                                         </iframe>
                                         <c:if test='${(compte==publication.getCompte())}'>
                                             <a onclick="supprimer(${idPub})" class="dropdown-item nav-item">supprimer</a>
@@ -149,7 +149,7 @@
                     </div>
                 </div>
             </c:forEach>
-            <c:if test="${idPub != null}">
+            <c:if test="${idPub != null && publications.size()>=3}">
                 <div class="text-center" id="afficherPlus">
                     <label class="btn btn-link" onclick="afficherPlus(${idPub})">afficher plus..</label>
                 </div>

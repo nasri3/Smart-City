@@ -83,9 +83,9 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body row" id="choixDeType">
-                                <button class="btn btn-primary p-2 col-5" data-dismiss="modal"
+                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
                                         onclick = "modifierSousAdministrateur('Etablissement1')">Etablissement1</button>
-                                <button class="btn btn-primary p-2 col-5" data-dismiss="modal"
+                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
                                         onclick = "modifierSousAdministrateur('Etablissement2')">Etablissement2</button>
                             </div>
                         </div>  
@@ -99,9 +99,9 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body row" id="choixDeType">
-                                <button class="btn btn-primary p-2 col-5" data-dismiss="modal"
+                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
                                         onclick = "modifierType('Administrateur')">Administrateur</button>
-                                <button class="btn btn-primary p-2 col-5" data-dismiss="modal"
+                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
                                         onclick = "modifierType('Utilisateur')">Utilisateur</button>
                             </div>
                         </div>  
@@ -115,8 +115,8 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body row">
-                                <button class="btn btn-primary p-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
-                                <button class="btn btn-primary p-2 col-5" data-dismiss="modal">non</button>
+                                <button class="btn btn-primary p-2 m-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
+                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
                             </div>
                         </div>  
                     </div>
@@ -129,8 +129,8 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body row">
-                                <button class="btn btn-primary p-2 col-5" onclick="envoyerAlerte()" data-dismiss="modal">oui</button>
-                                <button class="btn btn-primary p-2 col-5" data-dismiss="modal">non</button>
+                                <button class="btn btn-primary p-2 m-2 col-5" onclick="envoyerAlerte()" data-dismiss="modal">oui</button>
+                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
                             </div>
                         </div>  
                     </div>

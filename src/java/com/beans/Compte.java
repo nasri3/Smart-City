@@ -87,13 +87,13 @@ public class Compte implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 0, max = 50)
-    @Column(name = "Ville-interet")
-    private String villeinteret = "";
+    @Column(name = "Gouvernorat-interet")
+    private String gouvernorat_interet = "";
     @Basic(optional = false)
     @NotNull
     @Size(min = 0, max = 50)
     @Column(name = "Catégorie-interet")
-    private String categorieinteret = "";
+    private String categorie_interet = "";
     
     @JoinColumn(name = "Etablissement", referencedColumnName = "idEtablissement")
     @ManyToOne
@@ -136,8 +136,8 @@ public class Compte implements Serializable {
         this.photoDeProfil = photoDeProfil;
         this.motDePasse = motDePasse;
         this.type = type;
-        this.villeinteret = villeinteret;
-        this.categorieinteret = categorieinteret;
+        this.gouvernorat_interet = villeinteret;
+        this.categorie_interet = categorieinteret;
     }
 
     public String getNom() {
@@ -205,20 +205,20 @@ public class Compte implements Serializable {
         this.type = type;
     }
 
-    public String getVilleinteret() {
-        return villeinteret;
+    public String getGouvernorat_interet() {
+        return gouvernorat_interet;
     }
 
-    public void setVilleinteret(String villeinteret) {
-        this.villeinteret = villeinteret;
+    public void setGouvernorat_interet(String gouvernorat_interet) {
+        this.gouvernorat_interet = gouvernorat_interet;
     }
 
-    public String getCategorieinteret() {
-        return categorieinteret;
+    public String getCategorie_interet() {
+        return categorie_interet;
     }
 
-    public void setCategorieinteret(String categorieinteret) {
-        this.categorieinteret = categorieinteret;
+    public void setCategorie_interet(String categorie_interet) {
+        this.categorie_interet = categorie_interet;
     }
 
     @XmlTransient

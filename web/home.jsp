@@ -20,7 +20,7 @@
 
     </head>
     <body>
-        
+
         <!-- debut menu haut de la page ***************************** -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
             <a class="navbar-brand text-white">COCO</a>
@@ -67,32 +67,32 @@
                     <div class="row card-footer">
                         <label class="col-12">Catégorie</label>
                         <c:choose>
-                            <c:when test='${compte.getCategorieinteret().equals("")}'>
+                            <c:when test='${compte.getCategorie_interet().equals("")}'>
                                 <a class="col btn btn-success">Tous</a>
                             </c:when>
-                            <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=toggleCatégorie">Tous</a></c:otherwise>
+                            <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie">Tous</a></c:otherwise>
                         </c:choose>
                         <c:forEach items="${Catégories}" var="catégorie">
                             <c:choose>
-                                <c:when test='${compte.getCategorieinteret().equals(catégorie)}'>
+                                <c:when test='${compte.getCategorie_interet().equals(catégorie)}'>
                                     <a class="col btn btn-success">${catégorie}</a>
                                 </c:when>
-                                <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=toggleCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
+                                <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
                             </c:choose>
                         </c:forEach>
-                        <label class="col-12">Ville</label>
+                        <label class="col-12">Gouvernorat</label>
                         <c:choose>
-                            <c:when test='${compte.getVilleinteret().equals("")}'>
+                            <c:when test='${compte.getGouvernorat_interet().equals("")}'>
                                 <a class="col btn btn-danger">Tous</a>
                             </c:when>
-                            <c:otherwise><a class="col btn btn-outline-danger"  href="ctrl?operation=toggleVille">Tous</a></c:otherwise>
+                            <c:otherwise><a class="col btn btn-outline-danger"  href="ctrl?operation=modifierGouvernorat">Tous</a></c:otherwise>
                         </c:choose>
-                        <c:forEach items="${Villes}" var="ville">
+                        <c:forEach items="${Gouvernorats}" var="gouvernorat">
                             <c:choose>
-                                <c:when test='${compte.getVilleinteret().equals(ville)}'>
-                                    <a class="col btn btn-danger">${ville}</a>
+                                <c:when test='${compte.getGouvernorat_interet().equals(gouvernorat)}'>
+                                    <a class="col btn btn-danger">${gouvernorat}</a>
                                 </c:when>
-                                <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=toggleVille&ville=${ville}">${ville}</a></c:otherwise>
+                                <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=modifierGouvernorat&Gouvernorat=${gouvernorat}">${gouvernorat}</a></c:otherwise>
                             </c:choose>
                         </c:forEach>
                     </div>
@@ -133,14 +133,34 @@
                                     </select>
                                 </div>
 
-                                <!-- Ville -->
+                                <!-- Lat -->
+                                <div class="form-group">                 
+                                    <input type="text" re id="Lat" name="Lat" placeholder="Lat">
+                                </div>
+
+                                <!-- Lng -->
+                                <div class="form-group">                 
+                                    <input type="text" re id="Lng" name="Lng" placeholder="Lng">
+                                </div>
+
+                                <!-- Gouvernorat -->
                                 <div class="form-group">
-                                    <label for="Ville">Ville</label>
-                                    <select id="Ville" name="Ville" class="form-control">
-                                        <c:forEach items="${Villes}" var="ville">
-                                            <option>${ville}</option>
+                                    <label for="Gouvernorat">Gouvernorat</label>
+                                    <select id="Gouvernorat" name="Gouvernorat" class="form-control">
+                                        <c:forEach items="${Gouvernorats}" var="gouvernorat">
+                                            <option>${gouvernorat}</option>
                                         </c:forEach>
                                     </select>
+                                </div>
+
+                                <!-- Ville -->
+                                <div class="form-group">                 
+                                    <input type="text" required="" id="Ville" name="Ville" placeholder="Ville">
+                                </div>
+
+                                <!-- Addresse -->
+                                <div class="form-group">                 
+                                    <input type="text" required="" id="Addresse" name="Addresse" placeholder="Addresse">
                                 </div>
 
                                 <!-- Fichier -->
@@ -169,34 +189,26 @@
             <div class="col-md-3" id="menud">
                 <h4>&Eacute;vènements</h4><hr>
                 <div id="events" class="carousel slide" data-ride="carousel">
-
                     <div class="carousel-inner text-center">
                         <ul class="carousel-indicators">
-                            <li data-target="#events" data-slide-to="0" class="active"></li>
-                            <li data-target="#events" data-slide-to="1"></li>
-                            <li data-target="#events" data-slide-to="2"></li>
+                            <li data-target="#events" data-slide-to="0" class="active">
+                            </li>
+                            <c:forEach items="${evenements}" begin="1" varStatus="i">
+                                <li data-target="#events" data-slide-to="${i.index}">
+                                </li>
+                            </c:forEach>
                         </ul>
-                        <div class="carousel-item active">
-                            <img src="img/6.jpg" alt="Los Angeles">
-                            <div class="">
-                                <h3>Los Angeles</h3>
-                                <p>We had such a great time in LA!</p>
-                            </div>   
-                        </div> 
-                        <div class="carousel-item">
-                            <img src="img/7.jpg" alt="Chicago">
-                            <div class="">
-                                <h3>Chicago</h3>
-                                <p>Thank you, Chicago!</p>
-                            </div>   
-                        </div>
-                        <div class="carousel-item">
-                            <img src="img/9.jpg" alt="New York">
-                            <div class="">
-                                <h3>New York</h3>
-                                <p>We love the Big Apple!</p>
-                            </div>   
-                        </div>
+                        <c:forEach items="${evenements}" var="e" varStatus="i">
+                            <c:if test="${i.index == 0}"><div class="carousel-item active"></c:if>
+                            <c:if test="${i.index != 0}"><div class="carousel-item"></c:if>
+                                <img src="files/${e.getImage()}" alt="image">
+                                <div class="">
+                                    <h3>${e.getTitre()}</h3>
+                                    <g>${e.getDate()}</g>
+                                    <p>${e.getTexte()}</p>
+                                </div>   
+                            </div>
+                        </c:forEach>
                     </div>
                     <a class="carousel-control-prev" href="#events" data-slide="prev">
                         <span class="carousel-control-prev-icon"></span>

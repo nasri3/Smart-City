@@ -53,12 +53,12 @@ public class SI_Servlet extends HttpServlet {
         compteAnonyme.setNom("");
         compteAnonyme.setPrenom("Anonyme");
         request.getSession().setAttribute("compteAnonyme", compteAnonyme);
-        String[] Villes = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine", 
+        String[] Gouvernorats = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine", 
             "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana", 
             "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
         String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé", 
             "Sécurité", "Sport", "Tourisme", "Transport"};
-        request.getSession().setAttribute("Villes", Villes);
+        request.getSession().setAttribute("Gouvernorats", Gouvernorats);
         request.getSession().setAttribute("Catégories", Categories);
     }
 }

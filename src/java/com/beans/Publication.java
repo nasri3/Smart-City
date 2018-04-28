@@ -23,7 +23,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -46,16 +45,19 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Publication.findbyCategorie", query = "SELECT p FROM Publication p where p.categorie = :categorie order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyVille", query = "SELECT p FROM Publication p where p.ville = :ville order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCategorieVille", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.ville = :ville order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyGouvernorat", query = "SELECT p FROM Publication p where p.gouvernorat = :gouvernorat order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCategorieGouvernorat", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.gouvernorat = :gouvernorat order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCategorieAfterId", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyVilleAfterId", query = "SELECT p FROM Publication p where p.ville = :ville and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCategorieVilleAfterId", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.ville = :ville and p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyGouvernoratAfterId", query = "SELECT p FROM Publication p where p.gouvernorat = :gouvernorat and p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.findbyCategorieGouvernoratAfterId", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.gouvernorat = :gouvernorat and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
 public class Publication implements Serializable {
 
     @ManyToMany(mappedBy = "publicationsSuivis", fetch = FetchType.LAZY)
     private List<Compte> compteSuiviList;
-
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -93,10 +95,6 @@ public class Publication implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "Etat")
     private String etat = "non résolu";
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Nb_Signal")
-    private int nbSignal;
     @Size(max = 1000)
     @Column(name = "Exprimer")
     private String exprimer = "";
@@ -107,6 +105,25 @@ public class Publication implements Serializable {
     @JoinColumn(name = "Compte", referencedColumnName = "IdCompte")
     @ManyToOne(optional = false)
     private Compte compte;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Lat")
+    private float lat;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Lng")
+    private float lng;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "Gouvernorat")
+    private String gouvernorat;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 80)
+    @Column(name = "Addresse")
+    private String addresse;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.EAGER)
     @OrderBy("idCommentaire desc")
     private List<Commentaire> commentaireList;
@@ -118,7 +135,7 @@ public class Publication implements Serializable {
         this.idPublication = idPublication;
     }
 
-    public Publication(Integer idPublication, String titre, String type, Date datedecreation, String ville, String categorie, String etat, int nbSignal, boolean anonyme) {
+    public Publication(Integer idPublication, String titre, String type, Date datedecreation, String ville, String categorie, String etat, boolean anonyme) {
         this.idPublication = idPublication;
         this.titre = titre;
         this.type = type;
@@ -126,7 +143,6 @@ public class Publication implements Serializable {
         this.ville = ville;
         this.categorie = categorie;
         this.etat = etat;
-        this.nbSignal = nbSignal;
         this.anonyme = anonyme;
     }
 
@@ -155,7 +171,7 @@ public class Publication implements Serializable {
     }
 
     public String getDatedecreation() {
-        String dc = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(datedecreation);
+        String dc = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(datedecreation);
         return dc;
     }
 
@@ -187,14 +203,6 @@ public class Publication implements Serializable {
         this.etat = etat;
     }
 
-    public int getNbSignal() {
-        return nbSignal;
-    }
-
-    public void setNbSignal(int nbSignal) {
-        this.nbSignal = nbSignal;
-    }
-
     public String getExprimer() {
         return exprimer;
     }
@@ -217,6 +225,38 @@ public class Publication implements Serializable {
 
     public void setCompte(Compte compte) {
         this.compte = compte;
+    }
+    
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
+    }
+
+    public String getGouvernorat() {
+        return gouvernorat;
+    }
+
+    public void setGouvernorat(String gouvernorat) {
+        this.gouvernorat = gouvernorat;
+    }
+
+    public String getAddresse() {
+        return addresse;
+    }
+
+    public void setAddresse(String addresse) {
+        this.addresse = addresse;
     }
 
     @XmlTransient
@@ -262,5 +302,4 @@ public class Publication implements Serializable {
         this.compteSuiviList = compteSuiviList;
     }
 
-
-    }
+}

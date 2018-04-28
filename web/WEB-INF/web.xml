@@ -44,6 +44,10 @@
         <servlet-name>Etablissement</servlet-name>
         <jsp-file>/Etablissement.jsp</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>Publication</servlet-name>
+        <jsp-file>/Publication.jsp</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
@@ -84,6 +88,10 @@
         <servlet-name>Etablissement</servlet-name>
         <url-pattern>/Etablissement</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Publication</servlet-name>
+        <url-pattern>/Publication</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>-1</session-timeout>
         <cookie-config>
@@ -103,6 +111,7 @@
             <url-pattern>/navigation.jsp</url-pattern>
             <url-pattern>/Notifications</url-pattern>
             <url-pattern>/Statistiques</url-pattern>
+            <url-pattern>/Publication</url-pattern>
         </web-resource-collection>
         <web-resource-collection>
             <web-resource-name>Tous les utilisateurs (servlet)</web-resource-name>
@@ -130,6 +139,7 @@
             <url-pattern>/Notifications.jsp</url-pattern>
             <url-pattern>/Statistiques.jsp</url-pattern>
             <url-pattern>/Etablissement.jsp</url-pattern>
+            <url-pattern>/Publication.jsp</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
