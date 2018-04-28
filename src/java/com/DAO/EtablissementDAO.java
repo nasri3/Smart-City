@@ -31,11 +31,15 @@ public class EtablissementDAO extends AbstractDAO<Etablissement> {
     public EtablissementDAO() {
         super(Etablissement.class);
     }
-    
-        public Etablissement findByNom(String nom) {
+
+    public List<Etablissement> findAll() {
+        return getEntityManager().createNamedQuery("Etablissement.findAll").getResultList();
+    }
+
+    public Etablissement findByNom(String nom) {
         return (Etablissement) getEntityManager().createNamedQuery("Etablissement.findByNom")
                 .setParameter("nom", nom)
                 .getSingleResult();
     }
-    
+
 }

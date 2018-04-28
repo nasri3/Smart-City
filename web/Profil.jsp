@@ -56,18 +56,65 @@
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row" id="page">  
             <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
-                <div class="card text-center justify-content-md-center">
-                    <div class="card-header">
+                <div class="card card-body bg-white ml-2 text-center">
+                    <div class="form-group">
                         <img src="files/${compte.getPhotoDeProfil()}" class="rounded-circle" height="50" width="50" alt="Avatar">
                     </div>
-                    <div class="card-footer">
-                        <button data-toggle="modal" data-target="#modifModal">
-                            Modifier votre photo de profil
+                    <div class="form-group">
+                        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modifModal">
+                            Modifier la photo de profil
                         </button>
-                        <button data-toggle="modal" data-target="#supprModal">
-                            Supprimer votre compte
+                        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#supprModal">
+                            Supprimer le compte
                         </button>
                     </div>
+                    <form action="register" method="get">
+                        <!-- CIN -->
+                        <div class="form-group">
+                            <label for="CIN">CIN</label>
+                            <label id="CIN">${compte.getIdCompte()}</label>
+                        </div>
+
+                        <!-- Nom -->
+                        <div class="form-group">
+                            <label for="Nom">Nom de la famille</label>  
+                            <input id="Nom" name="Nom" type="text" value="${compte.getNom()}" class="form-control" required>
+                        </div>
+
+                        <!-- Prenom -->
+                        <div class="form-group">
+                            <label for="Prenom">Prénom</label>  
+                            <input id="Prenom" name="Prenom" type="text" value="${compte.getPrenom()}" class="form-control" required>
+                        </div>
+
+                        <!-- Date De Naissance -->
+                        <div class="form-group">
+                            <label for="DateDeNaissance">Date de Naissance</label>  
+                            <input  id="DateDeNaissance" name='DateDeNaissance' value="${compte.getDateDeNaissance()}" type="date" class="form-control" required>
+                        </div>
+                        <!-- Ville -->
+                        <div class="form-group">
+                            <label for="Ville">Ville</label>
+                            <input id="Ville" name="Ville" type="text" value="${compte.getVille()}" placeholder="Ville" class="form-control" required>
+                        </div>
+
+                        <!-- Mot de passe 1-->
+                        <div class="form-group">
+                            <label for="MotDePasse1">Nouvelle mot de passe</label>
+                            <input id="MotDePasse1" name="MotDePasse1" type="password" value="" placeholder="Mot de passe" class="form-control">
+                        </div>
+
+                        <!-- Mot de passe 2-->
+                        <div class="form-group">
+                            <label for="MotDePasse2">Confirmer le mot de passe</label>
+                            <input id="MotDePasse2" name="MotDePasse2" type="password" value="" placeholder="Mot de passe" class="form-control">
+                            <label class="badge badge-danger">${erreurMP}</label>
+                        </div>
+                        <!-- Soumettre -->
+                        <div class="pb-5">
+                            <button type="submit" class="btn btn-block btn-success">Enregistrer les modifications</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -78,7 +125,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Modifier votre photo de profil</h4>
+                                <h4 class="modal-title">Modifier la photo de profil</h4>
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <form class="modal-header"  action="ctrl" method="post">
@@ -86,6 +133,7 @@
                             </form>
                             <form id="PhotoDeProfilForm" class="modal-body row"  action="ctrl" method="post" enctype="multipart/form-data">
                                 <label class="btn btn-primary col-7 m-2 p-2 text-center" for="fichier">
+                                    <input type="hidden" name="operation" value="modifierPhotoDeProfil">
                                     <input id="fichier" type="file" required hidden name="fichier" accept="image/*"
                                            onchange="$('#upload-file-info').html('Parcourir');$('#upload-file-info').html(this.files[0].name);">
                                     <span id="upload-file-info">Parcourir</span>
@@ -99,7 +147,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement votre compte</h5>
+                                <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement le compte</h5>
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body row">

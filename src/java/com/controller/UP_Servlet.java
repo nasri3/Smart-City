@@ -109,11 +109,9 @@ public class UP_Servlet extends HttpServlet {
                             break;
                         case "Lat":
                             publication.setLat(Float.valueOf(s));
-                            System.out.println("fl : " + Float.valueOf(s));
                             break;
                         case "Lng":
                             publication.setLng(Float.valueOf(s));
-                            System.out.println("fl : " + Float.valueOf(s));
                             break;
                         case "Gouvernorat":
                             publication.setGouvernorat(s);

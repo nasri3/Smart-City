@@ -89,6 +89,39 @@ public class Reg_Servlet extends HttpServlet {
         request.getSession().setAttribute("compte", compte);
         response.sendRedirect("/");
     }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String Nom = request.getParameter("Nom");
+        String Prenom = request.getParameter("Prenom");
+        String DateDeNaissance = request.getParameter("DateDeNaissance");
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date DateNaissance = null;
+        try {
+            DateNaissance = new Date(formatter.parse(DateDeNaissance).getTime());
+        } catch (ParseException ex1) {
+            Logger.getLogger(Reg_Servlet.class.getName()).log(Level.SEVERE, null, ex1);
+        }
+        String Ville = request.getParameter("Ville");
+        String MotDePasse1 = request.getParameter("MotDePasse1");
+        String MotDePasse2 = request.getParameter("MotDePasse2");
+        if (!MotDePasse1.equals(MotDePasse2)) {
+            request.setAttribute("erreurMP", "Mot De Passe non conforme");
+            request.getRequestDispatcher("/profil").forward(request, response);
+            return;
+        }
+        Compte compte = compteDAO.find(((Compte) request.getSession().getAttribute("compte")).getIdCompte());
+        compte.setNom(Nom);
+        compte.setPrenom(Prenom);
+        compte.setDateDeNaissance(DateNaissance);
+        compte.setVille(Ville);
+        if(!MotDePasse1.isEmpty()){
+            String MotDePasse = cryptWithMD5(MotDePasse1);
+            compte.setMotDePasse(MotDePasse);
+        }
+        compteDAO.edit(compte);
+        response.sendRedirect("/profil");
+    }
 
     //MD5 Cryptage
     private static MessageDigest md;

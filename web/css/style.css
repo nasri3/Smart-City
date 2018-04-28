@@ -8,6 +8,7 @@ p{ word-break: break-all; }
     background-color: #f1f1f0;
     height: 100vh;
     position: fixed;
+    overflow-y: scroll;
 }
 
 #menud {

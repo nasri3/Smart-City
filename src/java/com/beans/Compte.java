@@ -157,7 +157,7 @@ public class Compte implements Serializable {
     }
 
     public String getDateDeNaissance() {
-        String dn = new SimpleDateFormat("dd-MM-yyyy").format(dateDeNaissance);
+        String dn = new SimpleDateFormat("yyyy-MM-dd").format(dateDeNaissance);
         return dn;
     }
 

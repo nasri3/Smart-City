@@ -110,7 +110,7 @@
                     <div class="text-center">
                         <c:choose>
                             <c:when test='${publication.getType().contains("video")}'>
-                                <video controls style="max-width: 100%; max-height: 75vh;">
+                                <video controls style="width: 100%;">
                                     <source src="files/${publication.getTitre()}" type="video/mp4">
                                 </video>
                             </c:when>

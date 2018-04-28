@@ -5,8 +5,12 @@ import com.beans.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +44,7 @@ public class CTRL_Servlet extends HttpServlet {
 
     @EJB
     private EtablissementDAO etablissementDAO;
-    
+
     @EJB
     private EvenementDAO evenementDAO;
 
@@ -71,15 +75,59 @@ public class CTRL_Servlet extends HttpServlet {
             itemlist = upload.parseRequest(new ServletRequestContext(request));
             // Process the uploaded items
             Iterator iter = itemlist.iterator();
+            List imageAllowedTypes = Arrays.asList("image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml");
 
             while (iter.hasNext()) {
                 FileItem itemFile = (FileItem) iter.next();
                 String FileType = itemFile.getContentType();
                 // Process a regular form field
-                if (!itemFile.isFormField()) {
+                if (itemFile.isFormField()) {
+                    String s = itemFile.getString("UTF-8");
+                    if (!s.equals("modifierPhotoDeProfil")) {
+                        Evenement evenement = new Evenement();
+                        while (iter.hasNext()) {
+                            itemFile = (FileItem) iter.next();
+                            FileType = itemFile.getContentType();
+
+                            if (!itemFile.isFormField()) {
+                                String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
+                                String filename = (new Date()).toString().replaceAll("[^0-9]", "") + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
+
+                                //upload le fichier
+                                String res = UP_Servlet.saveFile(itemFile, imageAllowedTypes, 52428800, uploadPath + filename);
+                                if (res.equals("succes")) {
+                                    evenement.setImage(filename);
+                                    evenementDAO.create(evenement);
+                                }
+                            } else {
+                                s = itemFile.getString("UTF-8");
+                                System.out.println("::::::::" + itemFile.getFieldName() + "::::" + s);
+                                switch (itemFile.getFieldName()) {
+                                    case "Titre":
+                                        evenement.setTitre(s);
+                                        break;
+                                    case "Texte":
+                                        evenement.setTexte(s);
+                                        break;
+                                    case "Date":
+                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                                        Date date = null;
+                                        try {
+                                            date = new Date(formatter.parse(s).getTime());
+                                        } catch (ParseException ex1) {
+                                            Logger.getLogger(CTRL_Servlet.class.getName()).log(Level.SEVERE, null, ex1);
+                                        }
+                                        evenement.setDate(date);
+                                        break;
+                                }
+                            }
+                        }
+                        response.sendRedirect("/Etablissement");
+                        return;
+                    }
+                } else {
                     String extension = (FileType.equals("image/svg+xml")) ? "svg" : FileType.substring(FileType.lastIndexOf("/") + 1);
                     String filename = compte.getPrenom() + compte.getNom() + RandomStringUtils.randomAlphanumeric(10) + "." + extension;
-                    List imageAllowedTypes = Arrays.asList("image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml");
                     //upload le fichier
                     String res = UP_Servlet.saveFile(itemFile, imageAllowedTypes, 10485760, uploadPath + filename);
                     if (res.equals("succes")) {
@@ -121,7 +169,7 @@ public class CTRL_Servlet extends HttpServlet {
                     switch (operation) {
                         case "initialiserComptes":
                             request.getSession().setAttribute("comptes", compteDAO.findAll());
-                            System.out.print(compteDAO.findAll().size());
+                            request.getSession().setAttribute("Etablissements", etablissementDAO.findAll());
                             break;
                         case "modifierType":
                             idCompte = request.getParameter("idCompte");
@@ -191,7 +239,7 @@ public class CTRL_Servlet extends HttpServlet {
                             publications.addAll(publicationDAO.initialiserEtablissementPublications(e.getCategorie(), e.getVille()));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
-                           
+
                             break;
                         case "marquerEtat":
                             idPub = request.getParameter("idPub");
@@ -297,14 +345,13 @@ public class CTRL_Servlet extends HttpServlet {
                             }
                             compte.SignalerPublication(publication);
                             compteDAO.edit(compte);
-                            
+
                             /*if(publication().size() == 3){
                             Notification n = new Notification();
                             n.setDestinataire(publication.getCompte());
                             n.setPublication(publication);
                             n.setTexte("Alerte : Attention, votre publication ");
                             }*/
-                            
                             System.out.println(operation + " : " + idPub);
                             break;
                         case "suivrePub":

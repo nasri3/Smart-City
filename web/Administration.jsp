@@ -83,10 +83,10 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body row" id="choixDeType">
-                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
-                                        onclick = "modifierSousAdministrateur('Etablissement1')">Etablissement1</button>
-                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
-                                        onclick = "modifierSousAdministrateur('Etablissement2')">Etablissement2</button>
+                            <c:forEach items="${Etablissements}" var="etablissement">
+                                <div class="btn btn-primary col" data-dismiss="modal"
+                                        onclick = "modifierSousAdministrateur('${etablissement.getNom()}')">${etablissement.getNom()}</div>
+                            </c:forEach>
                             </div>
                         </div>  
                     </div>

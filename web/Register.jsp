@@ -16,7 +16,7 @@
     </head>
     <body>
         
-        <div class="row justify-content-center py-5 my-5 px-1 mx-1">
+        <div class="row justify-content-center py-1 my-1 px-1 mx-1">
             <div class="col-md-4 bg-primary text-white">
                 <h1>Créer un compte</h1>
                 <form id="registerForm" action="register" method="post">
@@ -47,32 +47,7 @@
                     <!-- Ville -->
                     <div class="form-group">
                         <label for="Ville">Ville</label>
-                        <select id="Ville" name="Ville" class="form-control dropdown">
-                            <option>Ariana</option>
-                            <option>Bèja</option>
-                            <option>Ben Arous</option>
-                            <option>Bizerte</option>
-                            <option>Gabès</option>
-                            <option>Gafsa</option>
-                            <option>Jendouba</option>
-                            <option>Kairouan</option>
-                            <option>Kasserine</option>
-                            <option>Kébili</option>
-                            <option>Kef</option>
-                            <option>Mahdia</option>
-                            <option>Manouba</option>
-                            <option>Médenine</option>
-                            <option>Monastir</option>
-                            <option>Nabeul</option>
-                            <option>Sfax</option>
-                            <option>Sidi Bouzid</option>
-                            <option>Siliana</option>
-                            <option>Sousse</option>
-                            <option>Tataouine</option>
-                            <option>Tozeur</option>
-                            <option>Tunis</option>
-                            <option>Zaghouan</option>
-                        </select>
+                        <input id="Ville" name="Ville" type="text" placeholder="Ville" class="form-control" required>
                     </div>
 
                     <!-- Mot de passe 1-->

@@ -18,7 +18,7 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
 
     </head>
-    <body class="offset-md-2 col-md-7" id="corps">
+    <body class="offset-md-2 col-md-8 pt-4" id="corps">
 
     </body>
     <script>

@@ -135,12 +135,12 @@
 
                                 <!-- Lat -->
                                 <div class="form-group">                 
-                                    <input type="text" re id="Lat" name="Lat" placeholder="Lat">
+                                    <input class="form-control" type="text" re id="Lat" name="Lat" placeholder="Lat">
                                 </div>
 
                                 <!-- Lng -->
                                 <div class="form-group">                 
-                                    <input type="text" re id="Lng" name="Lng" placeholder="Lng">
+                                    <input class="form-control" type="text" re id="Lng" name="Lng" placeholder="Lng">
                                 </div>
 
                                 <!-- Gouvernorat -->
@@ -155,12 +155,12 @@
 
                                 <!-- Ville -->
                                 <div class="form-group">                 
-                                    <input type="text" required="" id="Ville" name="Ville" placeholder="Ville">
+                                    <input class="form-control" type="text" required="" id="Ville" name="Ville" placeholder="Ville">
                                 </div>
 
                                 <!-- Addresse -->
                                 <div class="form-group">                 
-                                    <input type="text" required="" id="Addresse" name="Addresse" placeholder="Addresse">
+                                    <input class="form-control" type="text" required="" id="Addresse" name="Addresse" placeholder="Addresse">
                                 </div>
 
                                 <!-- Fichier -->
@@ -202,7 +202,7 @@
                             <c:if test="${i.index == 0}"><div class="carousel-item active"></c:if>
                             <c:if test="${i.index != 0}"><div class="carousel-item"></c:if>
                                 <img src="files/${e.getImage()}" alt="image">
-                                <div class="">
+                                <div>
                                     <h3>${e.getTitre()}</h3>
                                     <g>${e.getDate()}</g>
                                     <p>${e.getTexte()}</p>
