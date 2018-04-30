@@ -64,9 +64,6 @@
                         <button class="btn btn-success btn-block" data-toggle="modal" data-target="#modifModal">
                             Modifier la photo de profil
                         </button>
-                        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#supprModal">
-                            Supprimer le compte
-                        </button>
                     </div>
                     <form action="register" method="get">
                         <!-- CIN -->
@@ -114,6 +111,10 @@
                         <div class="pb-5">
                             <button type="submit" class="btn btn-block btn-success">Enregistrer les modifications</button>
                         </div>
+                        <br><br>
+                        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#supprModal">
+                            Supprimer le compte
+                        </button>
                     </form>
                 </div>
             </div>

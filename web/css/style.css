@@ -1,20 +1,21 @@
 html { overflow-x: hidden; }
 
-body{ font-size: small; }
+body{ 
+    font-size: small; 
+    background-color: #f1f1f0;
+}
 
 p{ word-break: break-all; }      
 #menug {
-    padding-top: 15vh;
-    background-color: #f1f1f0;
+    padding-top: 60px;
     height: 100vh;
     position: fixed;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #menud {
     padding-top: 15vh;
     padding-bottom: 10vh;
-    background-color: #f1f1f0;
     height: 100vh;
     position: fixed;
     right: 0;

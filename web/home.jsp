@@ -58,13 +58,12 @@
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row">  
             <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <img src="files/${compte.getPhotoDeProfil()}" class="rounded-circle" height="35" width="35" alt="Avatar">
-                        <a href="profil">${compte.getPrenom()} ${compte.getNom()}</a>
+                <div class="text-center my-1 py-3" style="background-color: #b0bdc5; color:blue;">
+                        <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle" width="45" height="45">
+                        <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
                     </div>
 
-                    <div class="row card-footer">
+                    <div class="row">
                         <label class="col-12">Catégorie</label>
                         <c:choose>
                             <c:when test='${compte.getCategorie_interet().equals("")}'>
@@ -96,7 +95,6 @@
                             </c:choose>
                         </c:forEach>
                     </div>
-                </div>
             </div>
 
 
