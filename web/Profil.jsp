@@ -66,6 +66,7 @@
                         </button>
                     </div>
                     <form action="register" method="get">
+                        <hr>
                         <!-- CIN -->
                         <div class="form-group">
                             <label for="CIN">CIN</label>
@@ -108,14 +109,14 @@
                             <label class="badge badge-danger">${erreurMP}</label>
                         </div>
                         <!-- Soumettre -->
-                        <div class="pb-5">
+                        <div class="form-group">
                             <button type="submit" class="btn btn-block btn-success">Enregistrer les modifications</button>
                         </div>
-                        <br><br>
+                        <hr>
+                    </form>
                         <button class="btn btn-success btn-block" data-toggle="modal" data-target="#supprModal">
                             Supprimer le compte
                         </button>
-                    </form>
                 </div>
             </div>
 
