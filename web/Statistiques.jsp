@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -33,8 +34,14 @@
                             <span class="fa fa-bell fa-2x"></span>
                             <span id="nbNotif" class="badge badge-danger">${nbNotif}</span> Notifications</a>
                     </li>
-                    <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
-                    </li>
+                    <c:if test='${compte.getType() == "Sous administrateur"}'>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Etablissement"> <i class="fa fa-building fa-2x"></i> ${compte.getEtablissement().getNom()}</a>
+                        </li>
+                    </c:if>
+                    <c:if test='${compte.getType() == "Administrateur"}'>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
+                        </li>
+                    </c:if>
                     <li class="nav-item mx-2 selected"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
                     </li>
                 </ul>

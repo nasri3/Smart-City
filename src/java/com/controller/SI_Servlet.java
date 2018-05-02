@@ -26,8 +26,7 @@ public class SI_Servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        System.out.println("hh:::::::hh");
+        
         String CIN = request.getParameter("CIN");
         String MotDePasse = cryptWithMD5(request.getParameter("Mot de passe"));
         Compte compte = compteDAO.find(CIN);

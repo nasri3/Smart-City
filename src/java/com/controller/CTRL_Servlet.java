@@ -157,12 +157,12 @@ public class CTRL_Servlet extends HttpServlet {
         String idPub, idCompte;
         ArrayList<Publication> publications = new ArrayList();
         ArrayList<Publication> pubs = (ArrayList<Publication>) request.getSession().getAttribute("pubs");
+        response.setContentType("text/html;charset=UTF-8");
 
         if (compte == null) {
             request.logout();
             request.getSession().invalidate();
             response.sendRedirect("/");
-            return;
         } else {
             switch (compte.getType()) {
                 case "Administrateur":
@@ -262,16 +262,24 @@ public class CTRL_Servlet extends HttpServlet {
                                 notificationDAO.create(notif);
                             });
                             break;
-                        case "AjouterSousAdministrateur":
+                        case "verifierExistenceCompteUtilisateur":
                             idCompte = request.getParameter("idCompte");
                             Compte compte2 = compteDAO.find(idCompte);
-                            if (compte2 == null || !compte2.getType().equals("Utilisateur")) {
-                                System.out.println("erreur");
-                                return;
+                            if (compte2 == null) {
+                                response.getWriter().write("<div class='form-control bg-danger'>Compte inexistant</div>");
+                            } else if (!compte2.getType().equals("Utilisateur")) {
+                                response.getWriter().write("<div class='form-control bg-danger'>Compte pas de type utilisateur</div>");
+                            } else {
+                                response.getWriter().write("<div class='form-control bg-success'>Compte trouvé : <big>" + compte2.getPrenom() + " " + compte2.getNom() + "</big></div>");
                             }
+                            return;
+                        case "changerRoleEnSousAdministrateur":
+                            idCompte = request.getParameter("idCompte");
+                            compte2 = compteDAO.find(idCompte);
                             compte2.setType("Sous administrateur");
                             compte2.setEtablissement(compte.getEtablissement());
                             compteDAO.edit(compte2);
+                            response.getWriter().write(compte2.getPrenom() + " " + compte2.getNom());
                             break;
                     }
                     break;

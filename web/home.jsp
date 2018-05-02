@@ -46,9 +46,9 @@
                     <c:if test='${compte.getType() == "Administrateur"}'>
                         <li class="nav-item mx-2"><a class="nav-link" href="Administration"> <i class="fa fa-briefcase fa-2x"></i> Administration</a>
                         </li>
-                        <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
-                        </li>
                     </c:if>
+                    <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
+                    </li>
                 </ul>
                 <li class="navbar-nav nav-item"><a href="ctrl?operation=deconnecter" class="nav-link mx-2"><i class="fa fa-sign-out-alt fa-2x"></i> Déconnexion</a></li>
 
@@ -59,42 +59,42 @@
         <div class="row">  
             <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
                 <div class="text-center my-1 py-3" style="background-color: #b0bdc5; color:blue;">
-                        <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle" width="45" height="45">
-                        <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
-                    </div>
+                    <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle" width="45" height="45">
+                    <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
+                </div>
 
-                    <div class="row">
-                        <label class="col-12">Catégorie</label>
+                <div class="row">
+                    <label class="col-12">Catégorie</label>
+                    <c:choose>
+                        <c:when test='${compte.getCategorie_interet().equals("")}'>
+                            <a class="col btn btn-success">Tous</a>
+                        </c:when>
+                        <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie">Tous</a></c:otherwise>
+                    </c:choose>
+                    <c:forEach items="${Catégories}" var="catégorie">
                         <c:choose>
-                            <c:when test='${compte.getCategorie_interet().equals("")}'>
-                                <a class="col btn btn-success">Tous</a>
+                            <c:when test='${compte.getCategorie_interet().equals(catégorie)}'>
+                                <a class="col btn btn-success">${catégorie}</a>
                             </c:when>
-                            <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie">Tous</a></c:otherwise>
+                            <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
                         </c:choose>
-                        <c:forEach items="${Catégories}" var="catégorie">
-                            <c:choose>
-                                <c:when test='${compte.getCategorie_interet().equals(catégorie)}'>
-                                    <a class="col btn btn-success">${catégorie}</a>
-                                </c:when>
-                                <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                        <label class="col-12">Gouvernorat</label>
+                    </c:forEach>
+                    <label class="col-12">Gouvernorat</label>
+                    <c:choose>
+                        <c:when test='${compte.getGouvernorat_interet().equals("")}'>
+                            <a class="col btn btn-danger">Tous</a>
+                        </c:when>
+                        <c:otherwise><a class="col btn btn-outline-danger"  href="ctrl?operation=modifierGouvernorat">Tous</a></c:otherwise>
+                    </c:choose>
+                    <c:forEach items="${Gouvernorats}" var="gouvernorat">
                         <c:choose>
-                            <c:when test='${compte.getGouvernorat_interet().equals("")}'>
-                                <a class="col btn btn-danger">Tous</a>
+                            <c:when test='${compte.getGouvernorat_interet().equals(gouvernorat)}'>
+                                <a class="col btn btn-danger">${gouvernorat}</a>
                             </c:when>
-                            <c:otherwise><a class="col btn btn-outline-danger"  href="ctrl?operation=modifierGouvernorat">Tous</a></c:otherwise>
+                            <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=modifierGouvernorat&Gouvernorat=${gouvernorat}">${gouvernorat}</a></c:otherwise>
                         </c:choose>
-                        <c:forEach items="${Gouvernorats}" var="gouvernorat">
-                            <c:choose>
-                                <c:when test='${compte.getGouvernorat_interet().equals(gouvernorat)}'>
-                                    <a class="col btn btn-danger">${gouvernorat}</a>
-                                </c:when>
-                                <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=modifierGouvernorat&Gouvernorat=${gouvernorat}">${gouvernorat}</a></c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                    </div>
+                    </c:forEach>
+                </div>
             </div>
 
 
@@ -198,32 +198,32 @@
                         </ul>
                         <c:forEach items="${evenements}" var="e" varStatus="i">
                             <c:if test="${i.index == 0}"><div class="carousel-item active"></c:if>
-                            <c:if test="${i.index != 0}"><div class="carousel-item"></c:if>
-                                <img src="files/${e.getImage()}" alt="image">
-                                <div>
-                                    <h3>${e.getTitre()}</h3>
-                                    <g>${e.getDate()}</g>
-                                    <p>${e.getTexte()}</p>
-                                </div>   
-                            </div>
-                        </c:forEach>
-                    </div>
-                    <a class="carousel-control-prev" href="#events" data-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </a>
-                    <a class="carousel-control-next" href="#events" data-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </a>
-                </div> 
+                                <c:if test="${i.index != 0}"><div class="carousel-item"></c:if>
+                                    <img src="files/${e.getImage()}" alt="image">
+                                    <div>
+                                        <h3>${e.getTitre()}</h3>
+                                        <g>${e.getDate()}</g>
+                                        <p>${e.getTexte()}</p>
+                                    </div>   
+                                </div>
+                            </c:forEach>
+                        </div>
+                        <a class="carousel-control-prev" href="#events" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#events" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
+                    </div> 
+                </div>
             </div>
-        </div>
-        <script>
-            if (!!window.performance && window.performance.navigation.type === 2)
-            {
-                window.location.reload();
-            }
-            initialiser();
-        </script>
+            <script>
+                if (!!window.performance && window.performance.navigation.type === 2)
+                {
+                    window.location.reload();
+                }
+                initialiser();
+            </script>
 
     </body>
 </html>

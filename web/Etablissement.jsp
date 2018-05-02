@@ -40,15 +40,36 @@
                     </li>
                     <li class="nav-item mx-2"><a class="nav-link selected" href="Etablissement"> <i class="fa fa-building fa-2x"></i> ${etablissement.getNom()}</a>
                     </li>
+                    <li class="nav-item mx-2"><a class="nav-link" href="Statistiques"> <i class="fa fa-2x">&#xf201;</i> Statistiques</a>
+                    </li>
                 </ul>
                 <li class="navbar-nav nav-item"><a href="ctrl?operation=deconnecter" class="nav-link mx-2"><i class="fa fa-sign-out-alt fa-2x"></i> Déconnexion</a></li>
 
             </div>
         </nav>
-        <div class="col-md-3 mx-1 my-1 pb-2" id="menug"></div>
+        <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
+            <div class="col btn btn-primary" data-toggle="modal" data-target="#CSAModal">
+                Changer un utilisateur en un sous administrateur de cet établissement</div>
+        </div>
 
         <div  class="offset-md-3 col-md-6" id="corps">
 
+        </div>
+
+        <div class="modal fade text-left" id="CSAModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Changer un utilisateur en un sous administrateur de cet établissement</h5>
+                        <button class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" id="CIN" name="idCompte" pattern="[0-9]{8}" maxlength="8" type="text" placeholder="CIN" required>
+                        <label class="mt-1 mb-2 mx-3" id="resultat" name="resultat">Veuillez respecter le format requis.</label>
+                        <button class="btn btn-primary btn-block m-1" disabled="" id="op" data-dismiss="" onclick="">Changer en un sous administrateur</button>
+                    </div>
+                </div>  
+            </div>
         </div>
 
         <script>
@@ -57,15 +78,46 @@
                 window.location.reload();
             }
             $.get("ctrl?operation=initialiserEtablissementPublications", function () {
-                var d1 = document.createElement('div');//, d2 = document.createElement('div');
+                var d1 = document.createElement('div');
                 $(d1).load("navigation.jsp #publications", function () {
                     setCommentaireTextAreaFct(d1);
                     $("#corps").append($(d1).children());
                 });
-                /*$(d2).load("home.jsp #menud", function () {
-                 $("#page").append($(d2).children());
-                 });*/
             });
+
+            function changerRoleEnSousAdministrateur(idCompte) {
+                $.get("ctrl?operation=changerRoleEnSousAdministrateur&idCompte=" + idCompte, function (responseText) {
+                    alert("ok");
+                    alert(responseText + " est maintenant un sous administrateur de cet \351tablissement");
+                });
+            }
+
+            var CIN = document.getElementById("CIN");
+            var op = document.getElementById("op");
+            CIN.oninput = function () {
+                if (CIN.value.length === 8 && !CIN.value.toString().match(/[^0-9]/g)) {
+                    CIN.style = "color:green";
+                    $.get("ctrl?operation=verifierExistenceCompteUtilisateur&idCompte=" + CIN.value, function (responseText) {
+                        $("#resultat").html(responseText);
+                        if (responseText.includes("bg-success")) {
+                            op.disabled = false;
+                            $(op).attr("data-dismiss", "modal");
+                            $(op).attr("onclick", "changerRoleEnSousAdministrateur('" + CIN.value + "')");
+                        } else {
+                            $("#op").attr("data-dismiss", "");
+                            $(op).attr("onclick", "");
+                            op.disabled = true;
+                            CIN.style = "color:red";
+                        }
+                    });
+                } else {
+                    $("#op").attr("data-dismiss", "");
+                    $(op).attr("onclick", "");
+                    op.disabled = true;
+                    $("#resultat").html("Veuillez respecter le format requis.");
+                    CIN.style = "color:red";
+                }
+            };
         </script>
     </body>
 </html>
