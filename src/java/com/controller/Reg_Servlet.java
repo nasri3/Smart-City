@@ -42,7 +42,7 @@ public class Reg_Servlet extends HttpServlet {
         // TODO Auto-generated method stub
 
         // 1. Get Parameters from JSP Page
-        String IdCompte = request.getParameter("CIN");
+        String CIN = request.getParameter("CIN");
         String Nom = request.getParameter("Nom");
         String Prenom = request.getParameter("Prenom");
         String DateDeNaissance = request.getParameter("DateDeNaissance");
@@ -66,7 +66,7 @@ public class Reg_Servlet extends HttpServlet {
             request.getRequestDispatcher("/Register").forward(request, response);
             return;
         }
-        if (compteDAO.find(IdCompte) != null) {
+        if (compteDAO.find(CIN) != null) {
             request.setAttribute("erreurCmpt", "Compte existant");
             request.getRequestDispatcher("/Register").forward(request, response);
             return;
@@ -74,18 +74,18 @@ public class Reg_Servlet extends HttpServlet {
 
         //2. Creation d'un nouvel compte
         Compte compte = new Compte();
-        compte.setIdCompte(IdCompte);
+        compte.setIdCompte(CIN);
         compte.setNom(Nom);
         compte.setPrenom(Prenom);
         compte.setDateDeNaissance(DateNaissance);
         String MotDePasse = cryptWithMD5(MotDePasse1);
         compte.setMotDePasse(MotDePasse);
         compte.setVille(Ville);
-        System.out.println(IdCompte + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + cryptWithMD5(MotDePasse1) + " " + Ville);
+        System.out.println(CIN + " " + Nom + " " + Prenom + " " + DateDeNaissance + " " + cryptWithMD5(MotDePasse1) + " " + Ville);
         //3.Inserer la compte dans la BD
         compteDAO.create(compte);
         System.out.println("type : " + compte.getType());
-        SeConnecter(request, response, IdCompte, MotDePasse);
+        SeConnecter(request, response, CIN, MotDePasse);
         request.getSession().setAttribute("compte", compte);
         response.sendRedirect("/");
     }

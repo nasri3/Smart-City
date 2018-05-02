@@ -170,7 +170,7 @@
             {
                 window.location.reload();
             }
-            $.get("ctrl?operation=initialiserMesPublications", function () {
+            $.get("ctrl?operation=initialiserProfil", function () {
                 var d1 = document.createElement('div'), d2 = document.createElement('div');
                 $(d1).load("navigation.jsp #publications", function () {
                     setCommentaireTextAreaFct(d1);

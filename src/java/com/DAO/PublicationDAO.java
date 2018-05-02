@@ -129,5 +129,11 @@ public class PublicationDAO extends AbstractDAO<Publication> {
                 .setParameter("idDerniere", idDerniere)
                 .setMaxResults(3).getResultList();    
     }
+    
+    public long nombreDeSignalisations(Publication publication){
+        return  (long) getEntityManager().createNamedQuery("Publication.nbreComptesSignales")
+                .setParameter("publication", publication)
+                .getSingleResult();
+    }
 
 }

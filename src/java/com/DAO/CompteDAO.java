@@ -30,5 +30,11 @@ public class CompteDAO extends AbstractDAO<Compte> {
         return getEntityManager().createNamedQuery("Compte.findAll").getResultList();
     }
     
+    public List<Compte> findByType(String type) {
+        return getEntityManager().createNamedQuery("Compte.findByType")
+                .setParameter("type", type)
+                .getResultList();
+    }
+    
      
 }

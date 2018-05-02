@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "compte")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Compte.findAll", query = "SELECT c FROM Compte c order by c.idCompte desc")})
+    @NamedQuery(name = "Compte.findAll", query = "SELECT c FROM Compte c order by c.idCompte desc"),
+    @NamedQuery(name = "Compte.findByType", query = "SELECT c FROM Compte c where c.type = :type")})
 public class Compte implements Serializable {
 
     private static final long serialVersionUID = 1L;

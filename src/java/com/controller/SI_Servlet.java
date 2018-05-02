@@ -28,11 +28,11 @@ public class SI_Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         System.out.println("hh:::::::hh");
-        String IdCompte = request.getParameter("CIN");
+        String CIN = request.getParameter("CIN");
         String MotDePasse = cryptWithMD5(request.getParameter("Mot de passe"));
-        Compte compte = compteDAO.find(IdCompte);
+        Compte compte = compteDAO.find(CIN);
         if (compte != null && compte.getMotDePasse().equals(MotDePasse)) {
-            SeConnecter(request, response, IdCompte, MotDePasse);
+            SeConnecter(request, response, CIN, MotDePasse);
             request.getSession().setAttribute("compte", compte);
             response.sendRedirect("/");
         } else {

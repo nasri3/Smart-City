@@ -53,6 +53,12 @@ function suivre(idPub) {
     });
 }
 
+function changerEtat(idPub, etat) {
+    $.get("ctrl?operation=changerEtat&idPub=" + idPub + "&etat=" + etat, function () {
+         $("#dropdown" + idPub).children().eq(2).html(etat);
+    });
+}
+
 function commenter(idPub) {
     if ($("#texte" + idPub).val() !== "") {
         $.get("ctrl?operation=commenter&idPub=" + idPub + "&" + $("#texte" + idPub).serialize());
@@ -102,7 +108,7 @@ function initialiser() {
         $("#nbNotif").html(responseText);
     });
     $("#publications").html('<div class="text-center"><i class="fas fa-circle-notch fa-spin fa-2x"></i></div>');
-    $.get("ctrl?operation=initialiserPublications", function () {
+    $.get("ctrl?operation=initialiserPageAccueil", function () {
         var d1 = document.createElement('div');
         $(d1).load("home.jsp #menud", function(){
             $("#menud").html($(d1).children().eq(0).html());

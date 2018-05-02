@@ -53,11 +53,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Publication.findbyGouvernoratAfterId", query = "SELECT p FROM Publication p where p.gouvernorat = :gouvernorat and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCategorieGouvernoratAfterId", query = "SELECT p FROM Publication p where p.categorie = :categorie and p.gouvernorat = :gouvernorat and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc")})
-public class Publication implements Serializable {
+    @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc"),
+    @NamedQuery(name = "Publication.nbreComptesSignales", query = "SELECT count(c) FROM Compte c where :publication member of c.publicationsSignales")})
 
-    @ManyToMany(mappedBy = "publicationsSuivis", fetch = FetchType.LAZY)
-    private List<Compte> compteSuiviList;
+public class Publication implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -97,7 +96,7 @@ public class Publication implements Serializable {
     private String etat = "non résolu";
     @Size(max = 1000)
     @Column(name = "Exprimer")
-    private String exprimer = "";
+    private String description = "";
     @Basic(optional = false)
     @NotNull
     @Column(name = "Anonyme")
@@ -128,6 +127,9 @@ public class Publication implements Serializable {
     @OrderBy("idCommentaire desc")
     private List<Commentaire> commentaireList;
 
+    @ManyToMany(mappedBy = "publicationsSuivis", fetch = FetchType.EAGER)
+    private List<Compte> compteSuiviList;
+    
     public Publication() {
     }
 
@@ -203,12 +205,12 @@ public class Publication implements Serializable {
         this.etat = etat;
     }
 
-    public String getExprimer() {
-        return exprimer;
+    public String getDescription() {
+        return description;
     }
 
-    public void setExprimer(String exprimer) {
-        this.exprimer = exprimer;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean getAnonyme() {

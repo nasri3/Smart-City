@@ -95,8 +95,8 @@ public class UP_Servlet extends HttpServlet {
                     String s = itemFile.getString("UTF-8");
                     System.out.println("::::::::" + itemFile.getFieldName() + "::::" + s);
                     switch (itemFile.getFieldName()) {
-                        case "Exprimer":
-                            publication.setExprimer(s);
+                        case "Description":
+                            publication.setDescription(s);
                             break;
                         case "Catégorie":
                             publication.setCategorie(s);

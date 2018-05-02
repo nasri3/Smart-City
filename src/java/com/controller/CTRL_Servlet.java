@@ -232,6 +232,7 @@ public class CTRL_Servlet extends HttpServlet {
                             compteDAO.remove(compteDAO.find(idCompte));
                             break;
                     }
+                    break;
                 case "Sous administrateur":
                     switch (operation) {
                         case "initialiserEtablissementPublications":
@@ -239,194 +240,208 @@ public class CTRL_Servlet extends HttpServlet {
                             publications.addAll(publicationDAO.initialiserEtablissementPublications(e.getCategorie(), e.getVille()));
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
-
                             break;
-                        case "marquerEtat":
+                        case "changerEtat":
                             idPub = request.getParameter("idPub");
                             String etat = request.getParameter("etat");
-                            if (!Arrays.asList("résolu", "non résolu", "entrain de résolution").contains(etat)) {
-                                System.out.println("état non valide");
+                            if (!Arrays.asList("résolu", "non résolu", "en cours de résolution").contains(etat)) {
+                                System.out.println("état " + etat + "non valide");
                                 return;
                             }
+                            System.out.println("état " + etat);
                             publication = publicationDAO.find(idPub);
                             publication.setEtat(etat);
+                            publicationDAO.edit(publication);
                             Notification notif = new Notification();
                             notif.setExpediteur(compte);
                             notif.setTexte("<g>Un changement en état de publication suivis</g><br>"
-                                    + "Publication : <a href='" + idPub + "'> </a><br>"
-                                    + "Cette cas est maintenant" + etat);
+                                    + "Publication: <a href='Publication?idPub=" + idPub + "' target='_blank'>Publication?idPub=" + idPub + "</a><br>"
+                                    + "Cette Publication est maintenant " + etat);
                             publication.getCompteSuiviList().forEach(c -> {
                                 notif.setDestinataire(c);
                                 notificationDAO.create(notif);
                             });
-                            publicationDAO.edit(publication);
+                            break;
+                        case "AjouterSousAdministrateur":
+                            idCompte = request.getParameter("idCompte");
+                            Compte compte2 = compteDAO.find(idCompte);
+                            if (compte2 == null || !compte2.getType().equals("Utilisateur")) {
+                                System.out.println("erreur");
+                                return;
+                            }
+                            compte2.setType("Sous administrateur");
+                            compte2.setEtablissement(compte.getEtablissement());
+                            compteDAO.edit(compte2);
                             break;
                     }
-                case "Utilisateur":
-                    switch (operation) {
-                        case "ajouterPublications":
-                            String titre = request.getParameter("titre");
-                            idPub = request.getParameter("idPub");
-                            if (titre.equals("Page d'accueil")) {
-                                publications.addAll(publicationDAO.ajouterPublications(compte.getCategorie_interet(), compte.getGouvernorat_interet(), Integer.valueOf(idPub)));
-                            } else if (titre.equals("Profil")) {
-                                publications.addAll(publicationDAO.ajouterMesPublications(Integer.valueOf(idPub), compte));
-                            } else {
-                                Etablissement e = compte.getEtablissement();
-                                publications.addAll(publicationDAO.ajouterEtablissementPublications(e.getCategorie(), e.getVille(), Integer.valueOf(idPub)));
-                            }
-
-                            request.getSession().setAttribute("publications", publications);
-
-                            pubs.addAll(publications);
-                            request.getSession().setAttribute("pubs", pubs);
-                            break;
-                        case "initialiserPublications":
-                            publications.addAll(publicationDAO.initialiserPublications(compte.getCategorie_interet(), compte.getGouvernorat_interet()));
-                            request.getSession().setAttribute("publications", publications);
-                            request.getSession().setAttribute("pubs", publications);
-                            request.getSession().setAttribute("evenements", evenementDAO.findAll());
-                            System.out.println(evenementDAO.findAll().size());
-                            break;
-                        case "initialiserMesPublications":
-                            publications.addAll(publicationDAO.initialiserMesPublications(compte));
-                            request.getSession().setAttribute("publications", publications);
-                            request.getSession().setAttribute("pubs", publications);
-                            break;
-                        case "raifraichirCommentaires":
-                            idPub = request.getParameter("idPub");
-                            int nbCom = Integer.valueOf(request.getParameter("nbCom"));
-                            publication = publicationDAO.find(idPub);
-                            if (publication != null && publication.getCommentaireList().size() != nbCom) {
-                                for (int i = 0; i < pubs.size(); i++) {
-                                    if (Objects.equals(pubs.get(i).getIdPublication(), Integer.valueOf(idPub))) {
-                                        pubs.set(i, publication);
-                                        response.getWriter().write(i + "");
-                                        break;
-                                    }
-                                }
-                            } else {
-                                response.getWriter().write("-1");
-                            }
-                            break;
-                        case "raifraichirNotifications":
-                            int nbNotif = compte.getNbreNotificationsNonVus();
-                            request.getSession().setAttribute("nbNotif", nbNotif);
-                            response.getWriter().write("" + nbNotif);
-                            break;
-                        case "setNotificationsVus":
-                            compte.setNotificationsVus();
-                            compteDAO.edit(compte);
-                            request.getSession().setAttribute("nbNotif", 0);
-                            System.out.println("okokoko");
-                            break;
-                        case "supprimerPub":
-                            System.out.println("pub");
-                            idPub = request.getParameter("idPub");
-                            publication = publicationDAO.find(idPub);
-                            if (publication == null) {
-                                System.out.println("pub" + idPub + " Not Found");
-                                response.getWriter().write("pub" + idPub);
-                            } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
-                                String uploadPath = getServletContext().getInitParameter("uploadPath");
-                                Files.delete(Paths.get(uploadPath + publication.getTitre()));
-                                publicationDAO.remove(publication);
-                                response.getWriter().write("pub" + idPub);
-                                pubs.remove(publication);
-                                request.getSession().setAttribute("pubs", pubs);
-                                System.out.println(operation + " : pub" + idPub);
-                            }
-                            break;
-                        case "signalerPub":
-                            idPub = request.getParameter("idPub");
-                            publication = publicationDAO.find(idPub);
-                            if (publication == null || compte.DejaSignaler(publication)) {
-                                return;
-                            }
-                            compte.SignalerPublication(publication);
-                            compteDAO.edit(compte);
-
-                            /*if(publication().size() == 3){
-                            Notification n = new Notification();
-                            n.setDestinataire(publication.getCompte());
-                            n.setPublication(publication);
-                            n.setTexte("Alerte : Attention, votre publication ");
-                            }*/
-                            System.out.println(operation + " : " + idPub);
-                            break;
-                        case "suivrePub":
-                            idPub = request.getParameter("idPub");
-                            publication = publicationDAO.find(idPub);
-                            if (publication == null || compte.DejaSuivi(publication)) {
-                                return;
-                            }
-                            compte.SuivrePublication(publication);
-                            compteDAO.edit(compte);
-                            break;
-                        case "commenter":
-                            idPub = request.getParameter("idPub");
-                            String text = request.getParameter("texte");
-                            publication = publicationDAO.find(idPub);
-                            if (publication == null || text == null) {
-                                return;
-                            }
-                            Commentaire commentaire = new Commentaire();
-                            commentaire.setCompte(compte);
-                            commentaire.setPublication(publication);
-                            commentaire.setTexte(text);
-                            commentaireDAO.create(commentaire);
-                            System.out.println(operation + " : " + idPub);
-                            break;
-                        case "modifierCatégorie":
-                            String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé",
-                                "Sécurité", "Sport", "Tourisme", "Transport"};
-                            String categorie = request.getParameter("catégorie");
-                            if (!Arrays.asList(Categories).contains(categorie)) {
-                                compte.setCategorie_interet("");
-                            } else {
-                                compte.setCategorie_interet(categorie);
-                            }
-                            compteDAO.edit(compte);
-                            response.sendRedirect("/");
-                            break;
-                        case "modifierGouvernorat":
-                            String[] Gouvernorats = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine",
-                                "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana",
-                                "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
-                            String gouvernorat = request.getParameter("Gouvernorat");
-                            if (!Arrays.asList(Gouvernorats).contains(gouvernorat)) {
-                                compte.setGouvernorat_interet("");
-                            } else {
-                                compte.setGouvernorat_interet(gouvernorat);
-                            }
-                            compteDAO.edit(compte);
-                            response.sendRedirect("/");
-                            break;
-                        case "getPublication":
-                            idPub = request.getParameter("idPub");
-                            publication = publicationDAO.find(idPub);
-                            publications.add(publication);
-                            request.getSession().setAttribute("publications", publications);
-                            return;
-                        case "deconnecter":
-                            request.logout();
-                            request.getSession().invalidate();
-                            request.getServletContext().log("User successfully logged out logged out " + compte);
-                            response.sendRedirect("/");
-                            return;
-                        case "supprimerMonCompte":
-                            request.logout();
-                            request.getSession().invalidate();
-                            compteDAO.remove(compte);
-                            response.sendRedirect("/");
-                            return;
-                        default:
-                            response.sendRedirect("/");
-                            return;
-                    }
+                    break;
             }
-        }
-        request.getSession().setAttribute("compte", compte);
-    }
+            switch (operation) {
+                case "ajouterPublications":
+                    String titre = request.getParameter("titre");
+                    idPub = request.getParameter("idPub");
+                    if (titre.equals("Page d'accueil")) {
+                        publications.addAll(publicationDAO.ajouterPublications(compte.getCategorie_interet(), compte.getGouvernorat_interet(), Integer.valueOf(idPub)));
+                    } else if (titre.equals("Profil")) {
+                        publications.addAll(publicationDAO.ajouterMesPublications(Integer.valueOf(idPub), compte));
+                    } else {
+                        Etablissement e = compte.getEtablissement();
+                        publications.addAll(publicationDAO.ajouterEtablissementPublications(e.getCategorie(), e.getVille(), Integer.valueOf(idPub)));
+                    }
 
+                    request.getSession().setAttribute("publications", publications);
+
+                    pubs.addAll(publications);
+                    request.getSession().setAttribute("pubs", pubs);
+                    break;
+                case "initialiserPageAccueil":
+                    publications.addAll(publicationDAO.initialiserPublications(compte.getCategorie_interet(), compte.getGouvernorat_interet()));
+                    request.getSession().setAttribute("publications", publications);
+                    request.getSession().setAttribute("pubs", publications);
+                    request.getSession().setAttribute("evenements", evenementDAO.findAll());
+                    break;
+                case "initialiserProfil":
+                    publications.addAll(publicationDAO.initialiserMesPublications(compte));
+                    request.getSession().setAttribute("publications", publications);
+                    request.getSession().setAttribute("pubs", publications);
+                    break;
+                case "raifraichirCommentaires":
+                    idPub = request.getParameter("idPub");
+                    int nbCom = Integer.valueOf(request.getParameter("nbCom"));
+                    publication = publicationDAO.find(idPub);
+                    if (publication != null && publication.getCommentaireList().size() != nbCom) {
+                        for (int i = 0; i < pubs.size(); i++) {
+                            if (Objects.equals(pubs.get(i).getIdPublication(), Integer.valueOf(idPub))) {
+                                pubs.set(i, publication);
+                                response.getWriter().write(i + "");
+                                break;
+                            }
+                        }
+                    } else {
+                        response.getWriter().write("-1");
+                    }
+                    break;
+                case "raifraichirNotifications":
+                    int nbNotif = compte.getNbreNotificationsNonVus();
+                    request.getSession().setAttribute("nbNotif", nbNotif);
+                    response.getWriter().write("" + nbNotif);
+                    break;
+                case "setNotificationsVus":
+                    compte.setNotificationsVus();
+                    compteDAO.edit(compte);
+                    request.getSession().setAttribute("nbNotif", 0);
+                    System.out.println("okokoko");
+                    break;
+                case "supprimerPub":
+                    System.out.println("pub");
+                    idPub = request.getParameter("idPub");
+                    publication = publicationDAO.find(idPub);
+                    if (publication == null) {
+                        System.out.println("pub" + idPub + " Not Found");
+                        response.getWriter().write("pub" + idPub);
+                    } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
+                        String uploadPath = getServletContext().getInitParameter("uploadPath");
+                        Files.delete(Paths.get(uploadPath + publication.getTitre()));
+                        publicationDAO.remove(publication);
+                        response.getWriter().write("pub" + idPub);
+                        pubs.remove(publication);
+                        request.getSession().setAttribute("pubs", pubs);
+                        System.out.println(operation + " : pub" + idPub);
+                    }
+                    break;
+                case "signalerPub":
+                    idPub = request.getParameter("idPub");
+                    publication = publicationDAO.find(idPub);
+                    if (publication == null || compte.DejaSignaler(publication)) {
+                        return;
+                    }
+                    compte.SignalerPublication(publication);
+                    compteDAO.edit(compte);
+                    final String id = idPub;
+                    System.out.println(publicationDAO.nombreDeSignalisations(publication));
+                    if (publicationDAO.nombreDeSignalisations(publication) == 2) {
+                        List<Compte> comptesAdmin = compteDAO.findByType("Administrateur");
+                        Notification n = new Notification();
+                        comptesAdmin.forEach(compteAdmin -> {
+                            n.setDestinataire(compteAdmin);
+                            n.setTexte("La publication <a href='Publication?idPub=" + id + "' target='_blank'>Publication?idPub="
+                                    + id + "</a> a été signalé plus que 10 fois");
+                            notificationDAO.create(n);
+                        });
+                    }
+                    System.out.println(operation + " : " + idPub);
+                    break;
+                case "suivrePub":
+                    idPub = request.getParameter("idPub");
+                    publication = publicationDAO.find(idPub);
+                    if (publication == null || compte.DejaSuivi(publication)) {
+                        return;
+                    }
+                    compte.SuivrePublication(publication);
+                    compteDAO.edit(compte);
+                    break;
+                case "commenter":
+                    idPub = request.getParameter("idPub");
+                    String text = request.getParameter("texte");
+                    publication = publicationDAO.find(idPub);
+                    if (publication == null || text == null) {
+                        return;
+                    }
+                    Commentaire commentaire = new Commentaire();
+                    commentaire.setCompte(compte);
+                    commentaire.setPublication(publication);
+                    commentaire.setTexte(text);
+                    commentaireDAO.create(commentaire);
+                    System.out.println(operation + " : " + idPub);
+                    break;
+                case "modifierCatégorie":
+                    String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé",
+                        "Sécurité", "Sport", "Tourisme", "Transport"};
+                    String categorie = request.getParameter("catégorie");
+                    if (!Arrays.asList(Categories).contains(categorie)) {
+                        compte.setCategorie_interet("");
+                    } else {
+                        compte.setCategorie_interet(categorie);
+                    }
+                    compteDAO.edit(compte);
+                    response.sendRedirect("/");
+                    break;
+                case "modifierGouvernorat":
+                    String[] Gouvernorats = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine",
+                        "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana",
+                        "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
+                    String gouvernorat = request.getParameter("Gouvernorat");
+                    if (!Arrays.asList(Gouvernorats).contains(gouvernorat)) {
+                        compte.setGouvernorat_interet("");
+                    } else {
+                        compte.setGouvernorat_interet(gouvernorat);
+                    }
+                    compteDAO.edit(compte);
+                    response.sendRedirect("/");
+                    break;
+                case "getPublication":
+                    idPub = request.getParameter("idPub");
+                    publication = publicationDAO.find(idPub);
+                    publications.add(publication);
+                    request.getSession().setAttribute("publications", publications);
+                    return;
+                case "deconnecter":
+                    request.logout();
+                    request.getSession().invalidate();
+                    request.getServletContext().log("User successfully logged out logged out " + compte);
+                    response.sendRedirect("/");
+                    return;
+                case "supprimerMonCompte":
+                    request.logout();
+                    request.getSession().invalidate();
+                    compteDAO.remove(compte);
+                    response.sendRedirect("/");
+                    return;
+                default:
+                    response.sendRedirect("/");
+                    return;
+            }
+            request.getSession().setAttribute("compte", compte);
+        }
+    }
 }

@@ -109,9 +109,9 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <fieldset class="modal-body">
-                                <!-- Exprimer -->
+                                <!-- Description -->
                                 <div class="form-group">                 
-                                    <textarea class="form-control" id="Exprimer" name="Exprimer" placeholder="Exprimez-vous"></textarea>
+                                    <textarea class="form-control" id="Description" name="Description" placeholder="Exprimez-vous"></textarea>
                                 </div>
 
                                 <!-- anonyme -->

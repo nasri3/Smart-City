@@ -94,7 +94,12 @@
                                                 <a class="dropdown-item nav-item">Publication Suivi</a>
                                             </c:otherwise>
                                         </c:choose>
-                                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fpcdjee.hopto.org%2FPublication%3FidPub%3D${idPub}&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
+
+                                        <a class="dropdown-item nav-item" 
+                                           <c:if test='${compte.getType()=="Sous administrateur"}'>
+                                               data-toggle="modal" data-target="#etatModal"</c:if> >${publication.getEtat()}</a>
+
+                                           <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fpcdjee.hopto.org%2FPublication%3FidPub%3D${idPub}&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
                                                 width="102" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" 
                                                 allowTransparency="true" allow="encrypted-media">
                                         </iframe>
@@ -102,6 +107,23 @@
                                             <a onclick="supprimer(${idPub})" class="dropdown-item nav-item">supprimer</a>
                                         </c:if>
                                     </div>
+                                    <c:if test='${compte.getType()=="Sous administrateur"}'>
+                                        <div class="modal fade text-left" id="etatModal">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Indiquer l'état :</h5>
+                                                        <button class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <button class="btn btn-primary btn-block" data-dismiss="modal" onclick="changerEtat('${idPub}', 'non résolu')">non résolu</button>
+                                                        <button class="btn btn-primary btn-block" data-dismiss="modal" onclick="changerEtat('${idPub}', 'en cours de résolution')">en cours de résolution</button>
+                                                        <button class="btn btn-primary btn-block" data-dismiss="modal" onclick="changerEtat('${idPub}', 'résolu')">résolu</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +143,7 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="figure-caption">
-                            <p style="white-space: pre-line;">${publication.getExprimer()}</p>
+                            <p style="white-space: pre-line;">${publication.getDescription()}</p>
                         </div>
                     </div>
                     <hr>
