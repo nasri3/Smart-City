@@ -5,16 +5,16 @@ body{
     background-color: #f1f1f0;
 }
 
-p{ word-break: break-all; }      
+p{ word-break: normal; }      
 #menug {
-    padding-top: 60px;
+    padding-top: 65px;
     height: 100vh;
     position: fixed;
     overflow-y: auto;
 }
 
 #menud {
-    padding-top: 15vh;
+    padding-top: 70px;
     padding-bottom: 10vh;
     height: 100vh;
     position: fixed;

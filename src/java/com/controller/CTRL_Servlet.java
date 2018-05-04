@@ -266,11 +266,11 @@ public class CTRL_Servlet extends HttpServlet {
                             idCompte = request.getParameter("idCompte");
                             Compte compte2 = compteDAO.find(idCompte);
                             if (compte2 == null) {
-                                response.getWriter().write("<div class='form-control bg-danger'>Compte inexistant</div>");
+                                response.getWriter().write("<div class='form-control border border-danger'>Compte inexistant</div>");
                             } else if (!compte2.getType().equals("Utilisateur")) {
-                                response.getWriter().write("<div class='form-control bg-danger'>Compte pas de type utilisateur</div>");
+                                response.getWriter().write("<div class='border border-danger'>Compte pas de type utilisateur</div>");
                             } else {
-                                response.getWriter().write("<div class='form-control bg-success'>Compte trouvé : <big>" + compte2.getPrenom() + " " + compte2.getNom() + "</big></div>");
+                                response.getWriter().write("<div class='border border-success'>Compte trouvé : <big>" + compte2.getPrenom() + " " + compte2.getNom() + "</big></div>");
                             }
                             return;
                         case "changerRoleEnSousAdministrateur":
@@ -349,7 +349,8 @@ public class CTRL_Servlet extends HttpServlet {
                         response.getWriter().write("pub" + idPub);
                     } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
                         String uploadPath = getServletContext().getInitParameter("uploadPath");
-                        Files.delete(Paths.get(uploadPath + publication.getTitre()));
+                        if(Files.exists(Paths.get(uploadPath + publication.getTitre()))) 
+                            Files.delete(Paths.get(uploadPath + publication.getTitre()));
                         publicationDAO.remove(publication);
                         response.getWriter().write("pub" + idPub);
                         pubs.remove(publication);
@@ -403,8 +404,7 @@ public class CTRL_Servlet extends HttpServlet {
                     System.out.println(operation + " : " + idPub);
                     break;
                 case "modifierCatégorie":
-                    String[] Categories = {"Agriculture", "Education", "Environnement", "Financière", "Infrastructure", "Santé",
-                        "Sécurité", "Sport", "Tourisme", "Transport"};
+                    String[] Categories = (String[]) request.getSession().getAttribute("Catégories");
                     String categorie = request.getParameter("catégorie");
                     if (!Arrays.asList(Categories).contains(categorie)) {
                         compte.setCategorie_interet("");
@@ -415,9 +415,7 @@ public class CTRL_Servlet extends HttpServlet {
                     response.sendRedirect("/");
                     break;
                 case "modifierGouvernorat":
-                    String[] Gouvernorats = {"Ariana", "Bèja", "Ben Arous", "Bizerte", "Gabès", "Gafsa", "Jendouba", "Kairouan", "Kasserine",
-                        "Kébili", "Kef", "Mahdia", "Manouba", "Médenine", "Monastir", "Nabeul", "Sfax", "Sidi Bouzid", "Siliana",
-                        "Sousse", "Tataouine", "Tozeur", "Tunis", "Zaghouan"};
+                    String[] Gouvernorats = (String[]) request.getSession().getAttribute("Gouvernorats");
                     String gouvernorat = request.getParameter("Gouvernorat");
                     if (!Arrays.asList(Gouvernorats).contains(gouvernorat)) {
                         compte.setGouvernorat_interet("");

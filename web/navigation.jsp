@@ -69,9 +69,8 @@
                         <img src="files/${Cmpt.getPhotoDeProfil()}" class="rounded-circle mt-2" height="45" width="45" alt="Avatar">
                         <div class="media-body ml-2" style="font-family: calibri;">
                             <div class="media">
-                                <div style="font-size: 15px;" class="col-10"> <big><g>${Cmpt.getPrenom()} ${Cmpt.getNom()}</g></big><br>
-                                    <i class="fas fa-calendar-alt"></i>${publication.getDatedecreation()}<br>
-                                    <i class="fas fa-map-marker-alt"></i> ${publication.getGouvernorat()} 
+                                <div style="font-size: 15px;" class="col-10"> <big><g>${Cmpt.getPrenom()} ${Cmpt.getNom()}</g></big><br> 
+                                    <i class="fas fa-map-marker-alt"></i> ${publication.getGouvernorat()}, ${publication.getVille()} <br>
                                     <i class="fas fa-th"></i> ${publication.getCategorie()}
                                     <br>
                                 </div>
@@ -128,7 +127,6 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
                     <div class="text-center">
                         <c:choose>
                             <c:when test='${publication.getType().contains("video")}'>
@@ -143,10 +141,10 @@
                             </c:otherwise>
                         </c:choose>
                         <div class="figure-caption">
-                            <p style="white-space: pre-line;">${publication.getDescription()}</p>
+                            <i class="bg bg-white">${publication.getDatedecreation()}</i><br>
+                            <p style="white-space: pre-line; font-size: large;">${publication.getDescription()}</p>
                         </div>
                     </div>
-                    <hr>
 
                     <div class="container-fluid">
                         <div id="monCommentaire${idPub}">

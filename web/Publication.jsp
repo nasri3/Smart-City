@@ -13,7 +13,8 @@
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/myapp-functions.js" type="text/javascript"></script>
-        <title>COCO</title>
+        
+        <title>Stop Corruption</title>
 
         <link rel="stylesheet" type="text/css" href="css/style.css">
 

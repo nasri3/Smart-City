@@ -29,15 +29,15 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     }
 
     public List<Publication> initialiserPublications(String categorie, String gouvernorat) {
-        if (categorie.isEmpty()) {
-            if (gouvernorat.isEmpty()) {
+        if (categorie.equals("Tous")) {
+            if (gouvernorat.equals("Tous")) {
                 return getEntityManager().createNamedQuery("Publication.findAll").setMaxResults(5).getResultList();
             }
             return getEntityManager().createNamedQuery("Publication.findbyGouvernorat")
                     .setParameter("gouvernorat", gouvernorat)
                     .setMaxResults(5).getResultList();
         }
-        if (gouvernorat.isEmpty()) {
+        if (gouvernorat.equals("Tous")) {
             return getEntityManager().createNamedQuery("Publication.findbyCategorie")
                     .setParameter("categorie", categorie)
                     .setMaxResults(5).getResultList();
@@ -55,8 +55,8 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     }
 
     public List<Publication> ajouterPublications(String categorie, String gouvernorat, int idDerniere) {
-        if (categorie.isEmpty()) {
-            if (gouvernorat.isEmpty()) {
+        if (categorie.equals("Tous")) {
+            if (gouvernorat.equals("Tous")) {
                 return getEntityManager().createNamedQuery("Publication.findAllAfterId")
                         .setParameter("idDerniere", idDerniere)
                         .setMaxResults(3).getResultList();
@@ -66,7 +66,7 @@ public class PublicationDAO extends AbstractDAO<Publication> {
                     .setParameter("idDerniere", idDerniere)
                     .setMaxResults(3).getResultList();
         }
-        if (gouvernorat.isEmpty()) {
+        if (gouvernorat.equals("Tous")) {
             return getEntityManager().createNamedQuery("Publication.findbyCategorieAfterId")
                     .setParameter("categorie", categorie)
                     .setParameter("idDerniere", idDerniere)
@@ -86,15 +86,15 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     }
 
     public List<Publication> initialiserEtablissementPublications(String categorie, String ville) {
-        if (categorie.isEmpty()) {
-            if (ville.isEmpty()) {
+        if (categorie.equals("Tous")) {
+            if (ville.equals("Tous")) {
                 return getEntityManager().createNamedQuery("Publication.findAll").setMaxResults(5).getResultList();
             }
             return getEntityManager().createNamedQuery("Publication.findbyVille")
                     .setParameter("ville", ville)
                     .setMaxResults(5).getResultList();
         }
-        if (ville.isEmpty()) {
+        if (ville.equals("Tous")) {
             return getEntityManager().createNamedQuery("Publication.findbyCategorie")
                     .setParameter("categorie", categorie)
                     .setMaxResults(5).getResultList();
@@ -106,8 +106,8 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     }
 
     public List<Publication> ajouterEtablissementPublications(String categorie, String ville, int idDerniere) {
-            if (categorie.isEmpty()) {
-            if (ville.isEmpty()) {
+            if (categorie.equals("Tous")) {
+            if (ville.equals("Tous")) {
                 return getEntityManager().createNamedQuery("Publication.findAllAfterId")
                         .setParameter("idDerniere", idDerniere)
                         .setMaxResults(3).getResultList();
@@ -117,7 +117,7 @@ public class PublicationDAO extends AbstractDAO<Publication> {
                     .setParameter("idDerniere", idDerniere)
                     .setMaxResults(3).getResultList();
         }
-        if (ville.isEmpty()) {
+        if (ville.equals("Tous")) {
             return getEntityManager().createNamedQuery("Publication.findbyCategorieAfterId")
                     .setParameter("categorie", categorie)
                     .setParameter("idDerniere", idDerniere)

@@ -22,7 +22,7 @@
     <body>
         <!-- debut menu haut de la page ***************************** -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
-            <a class="navbar-brand text-white">COCO</a>
+            <a class="navbar-brand text-white"><img src="files/SC.png" alt="SC" height="40"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -64,6 +64,7 @@
                         <button class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
+                        <label for="CIN">Donner le CIN d'un utilisateur</label>
                         <input class="form-control" id="CIN" name="idCompte" pattern="[0-9]{8}" maxlength="8" type="text" placeholder="CIN" required>
                         <label class="mt-1 mb-2 mx-3" id="resultat" name="resultat">Veuillez respecter le format requis.</label>
                         <button class="btn btn-primary btn-block m-1" disabled="" id="op" data-dismiss="" onclick="">Changer en un sous administrateur</button>

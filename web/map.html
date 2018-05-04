@@ -87,7 +87,7 @@
                                         done2 = true; 
                                         ville = a[j].long_name;
                                         for (var g = 0; g < Gouvernorats.length; g++) 
-                                            if(ville.includes(Gouvernorats[g]) || ville.includes(Gouvernorats[g].replace("[éè]", e))){
+                                            if(ville.includes(Gouvernorats[g]) || ville.replace(/[éè]/g, "e").includes(Gouvernorats[g].replace(/[éè]/g, "e"))) {
                                                 gouvernorat = ville = Gouvernorats[g];
                                                 done1 = true;
                                                 break;
@@ -95,8 +95,8 @@
                                     }
                                     if(!done1 && a[j].types[0] === "administrative_area_level_1") {
                                         gouvernorat = a[j].long_name;
-                                        for (var g = 0; g < Gouvernorats.length; g++) 
-                                            if(gouvernorat.includes(Gouvernorats[g])){
+                                        for (var g = 0; g < Gouvernorats.length; g++)
+                                            if(gouvernorat.includes(Gouvernorats[g]) || gouvernorat.replace(/[éè]/g, "e").includes(Gouvernorats[g].replace(/[éè]/g, "e"))){
                                                 gouvernorat = Gouvernorats[g];
                                                 done1 = true;
                                                 break;
@@ -106,8 +106,10 @@
                                 }
                             }
                             if(gouvernorat === "") gouvernorat = "Tunis";
-                            if(ville === "") ville = gouvernorat;
-                            alert(ville + " " + gouvernorat);
+                            if(ville == "") ville = gouvernorat;
+
+                            alert(ville + " " + gouvernorat + " "+ results[0].formatted_address);
+                            
                             map.setZoom(15);
                             marker = new google.maps.Marker({
                                 position: latlng,

@@ -23,7 +23,7 @@
 
         <!-- debut menu haut de la page ***************************** -->
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
-            <a class="navbar-brand text-white">COCO</a>
+            <a class="navbar-brand text-white"><img src="files/SC.png" alt="SC" height="40"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -57,50 +57,42 @@
 
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row">  
-            <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
-                <div class="text-center my-1 py-3" style="background-color: #b0bdc5; color:blue;">
-                    <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle" width="45" height="45">
+            <div id="menug" class="text-center col-md-3 mx-1 my-1 pb-2">
+                <div style="background-color: #b0bdc5; color:blue;" class="card card-header my-1 py-3">
+                    <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle mx-auto" width="55" height="55">
                     <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
                 </div>
+                <div class="card bg-light">
+                    <button data-toggle="modal" data-target="#uploadForm" class="mx-2 my-2 btn btn-info">Nouvelle Publication</button>
 
-                <div class="row">
-                    <label class="col-12">Catégorie</label>
-                    <c:choose>
-                        <c:when test='${compte.getCategorie_interet().equals("")}'>
-                            <a class="col btn btn-success">Tous</a>
-                        </c:when>
-                        <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie">Tous</a></c:otherwise>
-                    </c:choose>
-                    <c:forEach items="${Catégories}" var="catégorie">
-                        <c:choose>
-                            <c:when test='${compte.getCategorie_interet().equals(catégorie)}'>
-                                <a class="col btn btn-success">${catégorie}</a>
-                            </c:when>
-                            <c:otherwise><a class="col btn btn-outline-success" href="ctrl?operation=modifierCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                    <label class="col-12">Gouvernorat</label>
-                    <c:choose>
-                        <c:when test='${compte.getGouvernorat_interet().equals("")}'>
-                            <a class="col btn btn-danger">Tous</a>
-                        </c:when>
-                        <c:otherwise><a class="col btn btn-outline-danger"  href="ctrl?operation=modifierGouvernorat">Tous</a></c:otherwise>
-                    </c:choose>
-                    <c:forEach items="${Gouvernorats}" var="gouvernorat">
-                        <c:choose>
-                            <c:when test='${compte.getGouvernorat_interet().equals(gouvernorat)}'>
-                                <a class="col btn btn-danger">${gouvernorat}</a>
-                            </c:when>
-                            <c:otherwise><a class="col btn btn-outline-danger" href="ctrl?operation=modifierGouvernorat&Gouvernorat=${gouvernorat}">${gouvernorat}</a></c:otherwise>
-                        </c:choose>
-                    </c:forEach>
+                    <button data-toggle="collapse" data-target="#categories" class="mx-2 my-2 btn btn-info collapsed">Catégorie : ${compte.getCategorie_interet()}</button>
+                    <div id="categories" class="collapse">
+                        <c:forEach items="${Catégories}" var="catégorie">
+                            <c:choose>
+                                <c:when test='${compte.getCategorie_interet().equals(catégorie)}'>
+                                    <a class="col">${catégorie}</a>
+                                </c:when>
+                                <c:otherwise><a class="col" href="ctrl?operation=modifierCatégorie&catégorie=${catégorie}">${catégorie}</a></c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </div>
+                    <button data-toggle="collapse" data-target="#gouvernorats" class="mx-2 my-2 btn btn-info collapsed">Gouvernorat : ${compte.getGouvernorat_interet()}</button>
+                    <div id="gouvernorats" class="collapse">
+                        <c:forEach items="${Gouvernorats}" var="gouvernorat">
+                            <c:choose>
+                                <c:when test='${compte.getGouvernorat_interet().equals(gouvernorat)}'>
+                                    <a class="col">${gouvernorat}</a>
+                                </c:when>
+                                <c:otherwise><a class="col" href="ctrl?operation=modifierGouvernorat&Gouvernorat=${gouvernorat}">${gouvernorat}</a></c:otherwise>
+                            </c:choose>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
 
 
             <!-- debut corps (milieu) de la page ***************************** -->
             <div class="offset-md-3 col-md-6" id="corps"> 
-                <label class="btn btn-block btn-outline-primary" data-toggle="modal" data-target="#uploadForm">Nouvelle Publication</label>
                 <form class="modal fade align-content-center" id="uploadForm" action="upload" method="post" enctype="multipart/form-data">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -126,7 +118,7 @@
                                     <label for="Catégorie">Catégorie</label>
                                     <select id="Catégorie" name="Catégorie" class="form-control">
                                         <c:forEach items="${Catégories}" var="catégorie">
-                                            <option>${catégorie}</option>
+                                            <c:if test='${!catégorie.equals("Tous")}'><option>${catégorie}</option></c:if>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -146,7 +138,7 @@
                                     <label for="Gouvernorat">Gouvernorat</label>
                                     <select id="Gouvernorat" name="Gouvernorat" class="form-control">
                                         <c:forEach items="${Gouvernorats}" var="gouvernorat">
-                                            <option>${gouvernorat}</option>
+                                            <c:if test='${!gouvernorat.equals("Tous")}'><option>${gouvernorat}</option></c:if>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -201,7 +193,7 @@
                                 <c:if test="${i.index != 0}"><div class="carousel-item"></c:if>
                                     <img src="files/${e.getImage()}" alt="image">
                                     <div>
-                                        <h3>${e.getTitre()}</h3>
+                                        <h5>${e.getTitre()}</h5>
                                         <g>${e.getDate()}</g>
                                         <p>${e.getTexte()}</p>
                                     </div>   
@@ -217,13 +209,14 @@
                     </div> 
                 </div>
             </div>
-            <script>
-                if (!!window.performance && window.performance.navigation.type === 2)
-                {
-                    window.location.reload();
-                }
-                initialiser();
-            </script>
+        </div>
+        <script>
+            if (!!window.performance && window.performance.navigation.type === 2)
+            {
+                window.location.reload();
+            }
+            initialiser();
+        </script>
 
     </body>
 </html>

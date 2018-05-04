@@ -18,7 +18,7 @@
     <body>
         
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
-            <a class="navbar-brand text-white">COCO</a>
+            <a class="navbar-brand text-white"><img src="files/SC.png" alt="SC" height="40"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
                 <span class="navbar-toggler-icon"></span>
             </button>

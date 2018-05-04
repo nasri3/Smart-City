@@ -89,12 +89,12 @@ public class Compte implements Serializable {
     @NotNull
     @Size(min = 0, max = 50)
     @Column(name = "Gouvernorat-interet")
-    private String gouvernorat_interet = "";
+    private String gouvernorat_interet = "Tous";
     @Basic(optional = false)
     @NotNull
     @Size(min = 0, max = 50)
     @Column(name = "Catégorie-interet")
-    private String categorie_interet = "";
+    private String categorie_interet = "Tous";
     
     @JoinColumn(name = "Etablissement", referencedColumnName = "idEtablissement")
     @ManyToOne
