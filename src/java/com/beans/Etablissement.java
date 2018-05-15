@@ -50,12 +50,12 @@ public class Etablissement implements Serializable {
     private String nom;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 55)
     @Column(name = "Ville")
     private String ville;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 100)
     @Column(name = "Catégorie")
     private String categorie;
     @OneToMany(mappedBy = "etablissement")

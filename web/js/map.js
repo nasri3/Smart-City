@@ -40,6 +40,7 @@ function initMap() {
     }
     // Create the search box and link it to the UI element.
     var input = document.getElementById('pac-input');
+    input.value = "";
     var searchBox = new google.maps.places.SearchBox(input);
     
     searchBox.addListener('places_changed', function () {
@@ -65,7 +66,7 @@ function fixContainerPos() {
 }
 
 function isComplexName(ville) {
-    return ville.includes("Délégation") || ville.includes("Gouvernorat") || ville.includes("La") || ville.includes("Le");
+    return ville.includes("Gouvernorat") || ville.includes("de") || ville.includes("du") || ville.includes("La") || ville.includes("Le");
 }
 
 function reverse(lat, lng) {
@@ -115,6 +116,7 @@ function codeLatLng(latlng) {
                 if(!Gouvernorats.includes(gouvernorat)){
                     alert('hors de Tunisie'); 
                     document.getElementById('pac-input').value ='';
+                    return;
                 }
 
                 marker.setPosition(latlng);
@@ -124,8 +126,10 @@ function codeLatLng(latlng) {
                 document.getElementById('ville').value = ville;
                 document.getElementById('gouvernorat').value = gouvernorat;
                 adresse = results[0].formatted_address.replace("Tunisie", gouvernorat).replace("Unnamed Road", "Route Sans Nom");
-                document.getElementById('pac-input').value = document.getElementById('pac-input').value.replace("Tunisie", gouvernorat);
-                infowindow.setContent(adresse);
+                var pac_input = document.getElementById('pac-input');
+                if(pac_input.value === "") pac_input.value = adresse;
+                pac_input.value = pac_input.value.replace("Tunisie", gouvernorat);
+                infowindow.setContent(pac_input.value);
                 infowindow.open(map, marker);
             } else {
                 alert('No results found');

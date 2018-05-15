@@ -66,9 +66,9 @@
                     <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
                 </div>
                 <div class="card bg-light">
-                    <button data-toggle="modal" data-target="#uploadForm" onclick="initMap()" class="mx-2 my-2 btn btn-info">Nouvelle Publication</button>
+                    <button data-toggle="modal" data-target="#uploadForm" onclick="initMap()" class="m-2 btn btn-info">Nouvelle Publication</button>
 
-                    <button data-toggle="collapse" data-target="#categories" class="mx-2 my-2 btn btn-info collapsed">Catégorie : ${compte.getCategorie_interet()}</button>
+                    <button data-toggle="collapse" data-target="#categories" class="m-2 btn btn-info collapsed">Catégorie : ${compte.getCategorie_interet()}</button>
                     <div id="categories" class="collapse">
                         <c:forEach items="${Catégories}" var="catégorie">
                             <c:choose>
@@ -79,7 +79,7 @@
                             </c:choose>
                         </c:forEach>
                     </div>
-                    <button data-toggle="collapse" data-target="#gouvernorats" class="mx-2 my-2 btn btn-info collapsed">Gouvernorat : ${compte.getGouvernorat_interet()}</button>
+                    <button data-toggle="collapse" data-target="#gouvernorats" class="m-2 btn btn-info collapsed">Gouvernorat : ${compte.getGouvernorat_interet()}</button>
                     <div id="gouvernorats" class="collapse">
                         <c:forEach items="${Gouvernorats}" var="gouvernorat">
                             <c:choose>
@@ -157,7 +157,7 @@
                                         <span id="upload-file-info">Choisir un fichier</span>
                                         <label class="badge badge-danger">${erreurUpload}</label>
                                     </label>
-                                    <button class="btn btn-info offset-md-1 col-md-3" onclick="publier()">Publier</button>
+                                    <label class="btn btn-info offset-md-1 col-md-3" onclick="publier()">Publier</label>
                                 </div>
                             </fieldset>
                         </div>

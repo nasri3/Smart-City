@@ -29,7 +29,7 @@ p{ word-break: normal; }
 }
 
 #map-canvas {
-    height: 50vh;
+    height: 40vh;
     margin: 2em;
 }
 
@@ -84,7 +84,7 @@ p{ word-break: normal; }
 .selected { background-color: gray; }
 
 .carousel-inner img {
-    height: 40vh;
+    height: 253px;
     width: inherit;
 }
 .carousel-indicators {bottom: auto; top: 10px;}

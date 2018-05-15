@@ -44,12 +44,13 @@ function supprimer(idPub) {
 
 function signaler(idPub) {
     $.get("ctrl?operation=signalerPub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().eq(0).replaceWith('<button class="dropdown-item">Publication Signalé</button>');
+        $("#dropdown" + idPub).children().eq(0).replaceWith(
+                '<button class="dropdown-item nav-item" style="color:skyblue;" disabled>publication signalé</button>');
     });
 }
 function suivre(idPub) {
-    $.get("ctrl?operation=suivrePub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().eq(1).replaceWith('<button class="dropdown-item">Publication Suivi</button>');
+    $.get("ctrl?operation=suivrePub&idPub=" + idPub, function (text) {
+        $("#dropdown" + idPub).children().eq(1).html(text);
     });
 }
 
@@ -81,7 +82,7 @@ function ChangerPhotoDeProfil() {
 function afficherPlus(idPub) {
     var d = document.createElement("div");
     $("#afficherPlus").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
-    $.get("ctrl?operation=ajouterPublications&idPub=" + idPub + "&titre=" + document.title, function () {
+    $.get("ctrl?operation=ajouterPublications&idPub=" + idPub, function () {
         $(d).load("navigation.jsp #publications", function () {
             $("#afficherPlus").fadeOut(300, function () {
                 document.getElementById("afficherPlus").outerHTML = "";

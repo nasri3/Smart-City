@@ -82,7 +82,7 @@
                                                 <a onclick="signaler(${idPub})" class="dropdown-item nav-item">signaler</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <a class="dropdown-item nav-item">Publication Signalé</a>
+                                                <button class="dropdown-item" style="color:skyblue;" disabled>publication signalé</button>
                                             </c:otherwise>
                                         </c:choose>
                                         <c:choose>
@@ -90,15 +90,12 @@
                                                 <a onclick="suivre(${idPub})" class="dropdown-item nav-item">suivre</a>
                                             </c:when>
                                             <c:otherwise>
-                                                <a class="dropdown-item nav-item">Publication Suivi</a>
+                                                <a onclick="suivre(${idPub})" class="dropdown-item nav-item">ne plus suivre</a>
                                             </c:otherwise>
                                         </c:choose>
 
-                                        <a class="dropdown-item nav-item" 
-                                           <c:if test='${compte.getType()=="Sous administrateur"}'>
-                                               data-toggle="modal" data-target="#etatModal"</c:if> >${publication.getEtat()}</a>
-
-                                           <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fpcdjee.hopto.org%2FPublication%3FidPub%3D${idPub}&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
+                                        <a class="dropdown-item nav-item etat" data-target="#etatModal${idPub}">${publication.getEtat()}</a>
+                                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fpcdjee.hopto.org%2FPublication%3FidPub%3D${idPub}&layout=button_count&size=large&mobile_iframe=true&width=102&height=28&appId" 
                                                 width="102" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" 
                                                 allowTransparency="true" allow="encrypted-media">
                                         </iframe>
@@ -107,7 +104,7 @@
                                         </c:if>
                                     </div>
                                     <c:if test='${compte.getType()=="Sous administrateur"}'>
-                                        <div class="modal fade text-left" id="etatModal">
+                                        <div class="modal fade text-left" id="etatModal${idPub}">
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -174,7 +171,11 @@
                     <label class="btn btn-link" onclick="afficherPlus(${idPub})">afficher plus..</label>
                 </div>
             </c:if>
+            <script>
+                $('.dropdown-menu').click(function (e) {
+                    e.stopPropagation();
+                });
+            </script>
         </div>
-
     </body>
 </html>

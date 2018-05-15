@@ -92,7 +92,7 @@ public class UP_Servlet extends HttpServlet {
                         return;
                     }
                 } else {
-                    String s = itemFile.getString("UTF-8");
+                    String s = itemFile.getString("UTF-8").replaceAll("\\p{C}", "");;
                     System.out.println("::::::::" + itemFile.getFieldName() + "::::" + s);
                     switch (itemFile.getFieldName()) {
                         case "Description":
@@ -102,7 +102,7 @@ public class UP_Servlet extends HttpServlet {
                             publication.setCategorie(s);
                             break;
                         case "Ville":
-                            publication.setVille(s);
+                            publication.setVille(s);System.out.println(s + ",," + s.length());
                             break;
                         case "Anonyme":
                             publication.setAnonyme(true);

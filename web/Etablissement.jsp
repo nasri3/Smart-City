@@ -47,29 +47,37 @@
 
             </div>
         </nav>
-        <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
-            <div class="col btn btn-primary" data-toggle="modal" data-target="#CSAModal">
-                Changer un utilisateur en un sous administrateur de cet établissement</div>
-        </div>
+        <div class="row">       
+            <div class="col-md-3 mx-1 my-1 pb-2 text-center" id="menug">
+                <div style="background-color: #b0bdc5; color:blue;" class="card card-header my-1 py-3">
+                    <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle mx-auto" width="55" height="55">
+                    <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
+                </div>
+                <div class="card bg-light">
+                    <button class="m-2 btn btn-info" style="white-space: normal" data-toggle="modal" data-target="#CSAModal">
+                        Changer un utilisateur en un sous administrateur de cet établissement</button>
+                    <button class="m-2 btn btn-info" data-toggle="modal" data-target="#evModal">Nouvel évenement</button>
+                </div>
+            </div>
 
-        <div  class="offset-md-3 col-md-6" id="corps">
+            <div  class="offset-md-3 col-md-6" id="corps">
+            </div>
 
-        </div>
-
-        <div class="modal fade text-left" id="CSAModal">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Changer un utilisateur en un sous administrateur de cet établissement</h5>
-                        <button class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <label for="CIN">Donner le CIN d'un utilisateur</label>
-                        <input class="form-control" id="CIN" name="idCompte" pattern="[0-9]{8}" maxlength="8" type="text" placeholder="CIN" required>
-                        <label class="mt-1 mb-2 mx-3" id="resultat" name="resultat">Veuillez respecter le format requis.</label>
-                        <button class="btn btn-primary btn-block m-1" disabled="" id="op" data-dismiss="" onclick="">Changer en un sous administrateur</button>
-                    </div>
-                </div>  
+            <div class="modal fade text-left" id="CSAModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Changer un utilisateur en un sous administrateur de cet établissement</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="CIN">Donner le CIN d'un utilisateur</label>
+                            <input class="form-control" id="CIN" name="idCompte" pattern="[0-9]{8}" maxlength="8" type="text" placeholder="CIN" required>
+                            <label class="mt-1 mb-2 mx-3" id="resultat" name="resultat">Veuillez respecter le format requis.</label>
+                            <button class="btn btn-primary btn-block m-1" disabled="" id="op" data-dismiss="" onclick="">Changer en un sous administrateur</button>
+                        </div>
+                    </div>  
+                </div>
             </div>
         </div>
 
@@ -79,10 +87,14 @@
                 window.location.reload();
             }
             $.get("ctrl?operation=initialiserEtablissementPublications", function () {
-                var d1 = document.createElement('div');
+                var d1 = document.createElement('div'), d2 = document.createElement('div');
                 $(d1).load("navigation.jsp #publications", function () {
                     setCommentaireTextAreaFct(d1);
                     $("#corps").append($(d1).children());
+                    $(".etat").attr("data-toggle", "modal");
+                });
+                $(d2).load("home.jsp #menud", function () {
+                    $("#corps").after($(d2).children());
                 });
             });
 
