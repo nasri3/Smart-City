@@ -14,11 +14,14 @@
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/myapp-functions.js" type="text/javascript"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script src="js/map.js" type="text/javascript"></script>
+
         <title>Page d'accueil</title>
 
         <link rel="stylesheet" type="text/css" href="css/style.css">
-
     </head>
+
     <body>
 
         <!-- debut menu haut de la page ***************************** -->
@@ -63,7 +66,7 @@
                     <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
                 </div>
                 <div class="card bg-light">
-                    <button data-toggle="modal" data-target="#uploadForm" class="mx-2 my-2 btn btn-info">Nouvelle Publication</button>
+                    <button data-toggle="modal" data-target="#uploadForm" onclick="initMap()" class="mx-2 my-2 btn btn-info">Nouvelle Publication</button>
 
                     <button data-toggle="collapse" data-target="#categories" class="mx-2 my-2 btn btn-info collapsed">Catégorie : ${compte.getCategorie_interet()}</button>
                     <div id="categories" class="collapse">
@@ -92,29 +95,27 @@
 
 
             <!-- debut corps (milieu) de la page ***************************** -->
-            <div class="offset-md-3 col-md-6" id="corps"> 
-                <form class="modal fade align-content-center" id="uploadForm" action="upload" method="post" enctype="multipart/form-data">
-                    <div class="modal-dialog modal-dialog-centered">
+            <div class="offset-md-3 col-md-6" id="corps">
+                <form class="modal fade align-content-center" data-backdrop="static" onkeypress="return event.keyCode!==13"
+                      id="uploadForm" action="upload" method="post" enctype="multipart/form-data">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title">Nouvelle Publication</h4>
-                                <button class="close" data-dismiss="modal">&times;</button>
+                                <a class="close" data-dismiss="modal">&times;</a>
                             </div>
-                            <fieldset class="modal-body">
+                            <fieldset class="modal-body row">
                                 <!-- Description -->
-                                <div class="form-group">                 
+                                <div class="col-md-6">                 
                                     <textarea class="form-control" id="Description" name="Description" placeholder="Exprimez-vous"></textarea>
+                                    <label class="col-md-12 border">Anonyme
+                                        <input type="checkbox" name="Anonyme">
+                                    </label><br>
                                 </div>
 
                                 <!-- anonyme -->
-                                <div class="form-group">
-                                    <label class="container form-control">Anonyme
-                                        <input type="checkbox" name="Anonyme">
-                                    </label>
-                                </div>
-
                                 <!-- Catégorie -->
-                                <div class="form-group">
+                                <div class="col-md-6">
                                     <label for="Catégorie">Catégorie</label>
                                     <select id="Catégorie" name="Catégorie" class="form-control">
                                         <c:forEach items="${Catégories}" var="catégorie">
@@ -122,46 +123,41 @@
                                         </c:forEach>
                                     </select>
                                 </div>
-
-                                <!-- Lat -->
-                                <div class="form-group">                 
-                                    <input class="form-control" type="text" re id="Lat" name="Lat" placeholder="Lat">
-                                </div>
-
-                                <!-- Lng -->
-                                <div class="form-group">                 
-                                    <input class="form-control" type="text" re id="Lng" name="Lng" placeholder="Lng">
-                                </div>
-
                                 <!-- Gouvernorat -->
-                                <div class="form-group">
-                                    <label for="Gouvernorat">Gouvernorat</label>
-                                    <select id="Gouvernorat" name="Gouvernorat" class="form-control">
-                                        <c:forEach items="${Gouvernorats}" var="gouvernorat">
-                                            <c:if test='${!gouvernorat.equals("Tous")}'><option>${gouvernorat}</option></c:if>
-                                        </c:forEach>
-                                    </select>
+                                <div class="col-md-6">
+                                    <label for="gouvernorat">Gouvernorat</label>
+                                    <input class="form-control" type="text" onmousedown='return false;' 
+                                           onselectstart='return false;' readonly required id="gouvernorat" name="Gouvernorat" placeholder="Gouvernorat">
                                 </div>
 
                                 <!-- Ville -->
-                                <div class="form-group">                 
-                                    <input class="form-control" type="text" required="" id="Ville" name="Ville" placeholder="Ville">
+                                <div class="col-md-6">        
+                                    <label for="ville">Ville</label>         
+                                    <input class="form-control" type="text" onmousedown='return false;' 
+                                           onselectstart='return false;' readonly required id="ville" name="Ville" placeholder="Ville">
                                 </div>
 
                                 <!-- Addresse -->
-                                <div class="form-group">                 
-                                    <input class="form-control" type="text" required="" id="Addresse" name="Addresse" placeholder="Addresse">
+                                <div class="col-md-12"> 
+                                    <label for="pac-input">Adresse</label>                
+                                    <input id="pac-input" class="form-control" type="text" required id="Addresse" name="Addresse" placeholder="Addresse" oninput="fixContainerPos()">
                                 </div>
+                                <div class="col-md-11" id="map-canvas"></div>
+                                <!-- Lat -->                
+                                <input type="hidden" required id="Lat" name="Lat">
 
-                                <!-- Fichier -->
-                                <div class="form-group">
-                                    <input id="UpFile" type="file" required name="fichier" accept="image/*,video/*">
-                                    <label class="badge badge-danger">${erreurUpload}</label>
-                                </div>
-
+                                <!-- Lng -->               
+                                <input type="hidden" required id="Lng" name="Lng">
+                                
                                 <!-- Publier -->
-                                <div class="form-group">
-                                    <label class="btn btn-outline-primary" onclick="publier()">Publier</label>
+                                <div class="col-md-12">
+                                    <label class="btn btn-info col-md-7 text-center" for="UpFile">
+                                        <input id="UpFile" type="file" required hidden name="fichier" accept="image/*,video/*"
+                                               onchange="$('#upload-file-info').html('Choisir un fichier');$('#upload-file-info').html(this.files[0].name);">
+                                        <span id="upload-file-info">Choisir un fichier</span>
+                                        <label class="badge badge-danger">${erreurUpload}</label>
+                                    </label>
+                                    <button class="btn btn-info offset-md-1 col-md-3" onclick="publier()">Publier</button>
                                 </div>
                             </fieldset>
                         </div>
@@ -215,7 +211,7 @@
             {
                 window.location.reload();
             }
-            initialiser();
+            init();
         </script>
 
     </body>

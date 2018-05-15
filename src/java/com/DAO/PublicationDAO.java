@@ -59,30 +59,30 @@ public class PublicationDAO extends AbstractDAO<Publication> {
             if (gouvernorat.equals("Tous")) {
                 return getEntityManager().createNamedQuery("Publication.findAllAfterId")
                         .setParameter("idDerniere", idDerniere)
-                        .setMaxResults(3).getResultList();
+                        .setMaxResults(5).getResultList();
             }
             return getEntityManager().createNamedQuery("Publication.findbyGouvernoratAfterId")
                     .setParameter("gouvernorat", gouvernorat)
                     .setParameter("idDerniere", idDerniere)
-                    .setMaxResults(3).getResultList();
+                    .setMaxResults(5).getResultList();
         }
         if (gouvernorat.equals("Tous")) {
             return getEntityManager().createNamedQuery("Publication.findbyCategorieAfterId")
                     .setParameter("categorie", categorie)
                     .setParameter("idDerniere", idDerniere)
-                    .setMaxResults(3).getResultList();
+                    .setMaxResults(5).getResultList();
         }
         return getEntityManager().createNamedQuery("Publication.findbyCategorieGouvernoratAfterId")
                 .setParameter("categorie", categorie)
                 .setParameter("gouvernorat", gouvernorat)
                 .setParameter("idDerniere", idDerniere)
-                .setMaxResults(3).getResultList();
+                .setMaxResults(5).getResultList();
     }
 
     public List<Publication> ajouterMesPublications(int idDerniere, Compte compte) {
         return getEntityManager().createNamedQuery("Publication.findbyCompteAfterId")
                 .setParameter("compte", compte)
-                .setParameter("idDerniere", idDerniere).setMaxResults(3).getResultList();
+                .setParameter("idDerniere", idDerniere).setMaxResults(5).getResultList();
     }
 
     public List<Publication> initialiserEtablissementPublications(String categorie, String ville) {
@@ -110,24 +110,24 @@ public class PublicationDAO extends AbstractDAO<Publication> {
             if (ville.equals("Tous")) {
                 return getEntityManager().createNamedQuery("Publication.findAllAfterId")
                         .setParameter("idDerniere", idDerniere)
-                        .setMaxResults(3).getResultList();
+                        .setMaxResults(5).getResultList();
             }
             return getEntityManager().createNamedQuery("Publication.findbyVilleAfterId")
                     .setParameter("ville", ville)
                     .setParameter("idDerniere", idDerniere)
-                    .setMaxResults(3).getResultList();
+                    .setMaxResults(5).getResultList();
         }
         if (ville.equals("Tous")) {
             return getEntityManager().createNamedQuery("Publication.findbyCategorieAfterId")
                     .setParameter("categorie", categorie)
                     .setParameter("idDerniere", idDerniere)
-                    .setMaxResults(3).getResultList();
+                    .setMaxResults(5).getResultList();
         }
         return getEntityManager().createNamedQuery("Publication.findbyCategorieVilleAfterId")
                 .setParameter("categorie", categorie)
                 .setParameter("ville", ville)
                 .setParameter("idDerniere", idDerniere)
-                .setMaxResults(3).getResultList();    
+                .setMaxResults(5).getResultList();    
     }
     
     public long nombreDeSignalisations(Publication publication){

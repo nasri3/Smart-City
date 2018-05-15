@@ -70,7 +70,7 @@
                         <div class="media-body ml-2" style="font-family: calibri;">
                             <div class="media">
                                 <div style="font-size: 15px;" class="col-10"> <big><g>${Cmpt.getPrenom()} ${Cmpt.getNom()}</g></big><br> 
-                                    <i class="fas fa-map-marker-alt"></i> ${publication.getGouvernorat()}, ${publication.getVille()} <br>
+                                    <i class="fas fa-map-marker-alt"></i> ${publication.getAddresse()} <br>
                                     <i class="fas fa-th"></i> ${publication.getCategorie()}
                                     <br>
                                 </div>

@@ -137,8 +137,8 @@
                                 <label class="btn btn-primary col-7 m-2 p-2 text-center" for="fichier">
                                     <input type="hidden" name="operation" value="modifierPhotoDeProfil">
                                     <input id="fichier" type="file" required hidden name="fichier" accept="image/*"
-                                           onchange="$('#upload-file-info').html('Parcourir');$('#upload-file-info').html(this.files[0].name);">
-                                    <span id="upload-file-info">Parcourir</span>
+                                           onchange="$('#upload-file-info').html('Choisir un fichier');$('#upload-file-info').html(this.files[0].name);">
+                                    <span id="upload-file-info">Choisir un fichier</span>
                                 </label>
                                 <label class="btn btn-primary col-3 m-2 p-2" onclick="ChangerPhotoDeProfil()">Accepter</label>
                             </form>

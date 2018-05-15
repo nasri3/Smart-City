@@ -137,8 +137,8 @@
                 </div>
             </div>
             <script>
-                initialiser();
-                function initialiser() {
+                initialiserComptes();
+                function initialiserComptes() {
                     $.get("ctrl?operation=initialiserComptes", function () {
                         var d = document.createElement('div');
                         $(d).load("Administration #corps", function () {
@@ -154,26 +154,26 @@
 
                 function modifierType(type) {
                     $.get("ctrl?operation=modifierType&idCompte=" + idCompte + "&type=" + type, function () {
-                        initialiser();
+                        initialiserComptes();
                     });
                 }
 
                 function modifierSousAdministrateur(etablissement) {
                     $.get("ctrl?operation=modifierSousAdministrateur&idCompte=" + idCompte + "&etablissement=" + etablissement, function () {
-                        initialiser();
+                        initialiserComptes();
                     });
                 }
 
                 function supprimerCompte() {
                     $.get("ctrl?operation=supprimerCompte&idCompte=" + idCompte, function (responseText) {
-                        initialiser();
+                        initialiserComptes();
                     });
                 }
 
                 function envoyerAlerte() {
                     $.get("ctrl?operation=envoyerAlerte&idCompte=" + idCompte, function () {
                         alert("Alerte envoy\351");
-                        initialiser();
+                        initialiserComptes();
                     });
                 }
             </script>
