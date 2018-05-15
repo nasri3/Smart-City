@@ -238,6 +238,7 @@ public class CTRL_Servlet extends HttpServlet {
                         case "initialiserEtablissementPublications":
                             Etablissement e = compte.getEtablissement();
                             publications.addAll(publicationDAO.initialiserEtablissementPublications(e.getCategorie(), e.getVille()));
+                            System.out.println(publications + e.getCategorie() + e.getVille());
                             request.getSession().setAttribute("publications", publications);
                             request.getSession().setAttribute("pubs", publications);
                             break;
@@ -349,8 +350,9 @@ public class CTRL_Servlet extends HttpServlet {
                         response.getWriter().write("pub" + idPub);
                     } else if (compte.getIdCompte().equals(publication.getCompte().getIdCompte())) {
                         String uploadPath = getServletContext().getInitParameter("uploadPath");
-                        if(Files.exists(Paths.get(uploadPath + publication.getTitre()))) 
+                        if (Files.exists(Paths.get(uploadPath + publication.getTitre()))) {
                             Files.delete(Paths.get(uploadPath + publication.getTitre()));
+                        }
                         publicationDAO.remove(publication);
                         response.getWriter().write("pub" + idPub);
                         pubs.remove(publication);
@@ -367,8 +369,7 @@ public class CTRL_Servlet extends HttpServlet {
                     compte.SignalerPublication(publication);
                     compteDAO.edit(compte);
                     final String id = idPub;
-                    System.out.println(publicationDAO.nombreDeSignalisations(publication));
-                    if (publicationDAO.nombreDeSignalisations(publication) == 2) {
+                    if (publicationDAO.nombreDeSignalisations(publication) == 11) {
                         List<Compte> comptesAdmin = compteDAO.findByType("Administrateur");
                         Notification n = new Notification();
                         comptesAdmin.forEach(compteAdmin -> {
@@ -383,8 +384,13 @@ public class CTRL_Servlet extends HttpServlet {
                 case "suivrePub":
                     idPub = request.getParameter("idPub");
                     publication = publicationDAO.find(idPub);
-                    if (publication == null || compte.DejaSuivi(publication)) {
+                    if (publication == null) {
                         return;
+                    }
+                    if (compte.DejaSuivi(publication)) {
+                        response.getWriter().write("suivre");
+                    } else {
+                        response.getWriter().write("ne plus suivre");
                     }
                     compte.SuivrePublication(publication);
                     compteDAO.edit(compte);

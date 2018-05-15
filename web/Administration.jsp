@@ -47,10 +47,9 @@
             </div>
         </nav>
 
-        <div id="corps">
-            <div id="comptes">
-                <c:forEach items="${comptes}" var="c">
-                    <c:if test="${compte != c}">
+        <div id="comptes" class="mt-5 pt-5">
+            <c:forEach items="${comptes}" var="c">
+                <c:if test="${compte != c}">
                     <div id="compte${c.getIdCompte()}" class="media-body commentaire row">
                         <div class="col">${c.getIdCompte()}</div>
                         <div class="col">${c.getNom()}</div>
@@ -70,112 +69,111 @@
                              onclick="setIdCompte('${c.getIdCompte()}')">Supprimer son Compte</div>
                         <div class="col btn btn-primary" data-toggle="modal" data-target="#envoyerAlerteModal" 
                              onclick="setIdCompte('${c.getIdCompte()}')">Lui envoyer une alerte</div>
-                        <a class="col btn btn-link" href="/Administration/${c.getIdCompte()}">Voir ces publications</a>
                     </div>
-                    </c:if>
-                </c:forEach>
+                </c:if>
+            </c:forEach>
 
-                <div class="modal fade text-left" id="modifierSousAdministrateurModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Modifier le type de ce compte en un sous administrateur de :</h5>
-                                <button class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body row" id="choixDeType">
+            <div class="modal fade text-left" id="modifierSousAdministrateurModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le type de ce compte en un sous administrateur de :</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row" id="choixDeType">
                             <c:forEach items="${Etablissements}" var="etablissement">
                                 <div class="btn btn-primary col" data-dismiss="modal"
-                                        onclick = "modifierSousAdministrateur('${etablissement.getNom()}')">${etablissement.getNom()}</div>
+                                     onclick = "modifierSousAdministrateur('${etablissement.getNom()}')">${etablissement.getNom()}</div>
                             </c:forEach>
-                            </div>
-                        </div>  
-                    </div>
-                </div>
-                <div class="modal fade text-left" id="modifierTypeDeCompteModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Modifier le type de ce compte en :</h5>
-                                <button class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body row" id="choixDeType">
-                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
-                                        onclick = "modifierType('Administrateur')">Administrateur</button>
-                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
-                                        onclick = "modifierType('Utilisateur')">Utilisateur</button>
-                            </div>
-                        </div>  
-                    </div>
-                </div>
-                <div class="modal fade text-left" id="supprimerCompteModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement ce compte?</h5>
-                                <button class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body row">
-                                <button class="btn btn-primary p-2 m-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
-                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
-                            </div>
-                        </div>  
-                    </div>
-                </div>
-                <div class="modal fade text-left" id="envoyerAlerteModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Envoyer une alerte à ce compte?</h5>
-                                <button class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body row">
-                                <button class="btn btn-primary p-2 m-2 col-5" onclick="envoyerAlerte()" data-dismiss="modal">oui</button>
-                                <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
-                            </div>
-                        </div>  
-                    </div>
+                        </div>
+                    </div>  
                 </div>
             </div>
-            <script>
-                initialiser();
-                function initialiser() {
-                    $.get("ctrl?operation=initialiserComptes", function () {
-                        var d = document.createElement('div');
-                        $(d).load("Administration #corps", function () {
-                            $("#corps").html($(d).children().children());
-                        });
+            <div class="modal fade text-left" id="modifierTypeDeCompteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le type de ce compte en :</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row" id="choixDeType">
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
+                                    onclick = "modifierType('Administrateur')">Administrateur</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
+                                    onclick = "modifierType('Utilisateur')">Utilisateur</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal fade text-left" id="supprimerCompteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement ce compte?</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row">
+                            <button class="btn btn-primary p-2 m-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal fade text-left" id="envoyerAlerteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Envoyer une alerte à ce compte?</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row">
+                            <button class="btn btn-primary p-2 m-2 col-5" onclick="envoyerAlerte()" data-dismiss="modal">oui</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+        <script>
+            initialiserComptes();
+            function initialiserComptes() {
+                $.get("ctrl?operation=initialiserComptes", function () {
+                    var d = document.createElement('div');
+                    $(d).load("Administration #comptes", function () {
+                        $("#comptes").html($(d).children().children());
                     });
-                }
+                });
+            }
 
-                var idCompte;
-                function setIdCompte(id) {
-                    idCompte = id;
-                }
+            var idCompte;
+            function setIdCompte(id) {
+                idCompte = id;
+            }
 
-                function modifierType(type) {
-                    $.get("ctrl?operation=modifierType&idCompte=" + idCompte + "&type=" + type, function () {
-                        initialiser();
-                    });
-                }
+            function modifierType(type) {
+                $.get("ctrl?operation=modifierType&idCompte=" + idCompte + "&type=" + type, function () {
+                    initialiserComptes();
+                });
+            }
 
-                function modifierSousAdministrateur(etablissement) {
-                    $.get("ctrl?operation=modifierSousAdministrateur&idCompte=" + idCompte + "&etablissement=" + etablissement, function () {
-                        initialiser();
-                    });
-                }
+            function modifierSousAdministrateur(etablissement) {
+                $.get("ctrl?operation=modifierSousAdministrateur&idCompte=" + idCompte + "&etablissement=" + etablissement, function () {
+                    initialiserComptes();
+                });
+            }
 
-                function supprimerCompte() {
-                    $.get("ctrl?operation=supprimerCompte&idCompte=" + idCompte, function (responseText) {
-                        initialiser();
-                    });
-                }
+            function supprimerCompte() {
+                $.get("ctrl?operation=supprimerCompte&idCompte=" + idCompte, function (responseText) {
+                    initialiserComptes();
+                });
+            }
 
-                function envoyerAlerte() {
-                    $.get("ctrl?operation=envoyerAlerte&idCompte=" + idCompte, function () {
-                        alert("Alerte envoy\351");
-                        initialiser();
-                    });
-                }
-            </script>
+            function envoyerAlerte() {
+                $.get("ctrl?operation=envoyerAlerte&idCompte=" + idCompte, function () {
+                    alert("Alerte envoy\351");
+                    initialiserComptes();
+                });
+            }
+        </script>
     </body>
 </html>

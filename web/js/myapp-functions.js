@@ -44,12 +44,13 @@ function supprimer(idPub) {
 
 function signaler(idPub) {
     $.get("ctrl?operation=signalerPub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().eq(0).replaceWith('<button class="dropdown-item">Publication Signalé</button>');
+        $("#dropdown" + idPub).children().eq(0).replaceWith(
+                '<button class="dropdown-item nav-item" style="color:skyblue;" disabled>publication signalé</button>');
     });
 }
 function suivre(idPub) {
-    $.get("ctrl?operation=suivrePub&idPub=" + idPub, function () {
-        $("#dropdown" + idPub).children().eq(1).replaceWith('<button class="dropdown-item">Publication Suivi</button>');
+    $.get("ctrl?operation=suivrePub&idPub=" + idPub, function (text) {
+        $("#dropdown" + idPub).children().eq(1).html(text);
     });
 }
 
@@ -81,7 +82,7 @@ function ChangerPhotoDeProfil() {
 function afficherPlus(idPub) {
     var d = document.createElement("div");
     $("#afficherPlus").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
-    $.get("ctrl?operation=ajouterPublications&idPub=" + idPub + "&titre=" + document.title, function () {
+    $.get("ctrl?operation=ajouterPublications&idPub=" + idPub, function () {
         $(d).load("navigation.jsp #publications", function () {
             $("#afficherPlus").fadeOut(300, function () {
                 document.getElementById("afficherPlus").outerHTML = "";
@@ -103,7 +104,7 @@ function setCommentaireTextAreaFct(d) {
     });
 }
 
-function initialiser() {
+function init() {
     $.get("ctrl?operation=raifraichirNotifications", function (responseText) {
         $("#nbNotif").html(responseText);
     });
@@ -111,12 +112,12 @@ function initialiser() {
     $.get("ctrl?operation=initialiserPageAccueil", function () {
         var d1 = document.createElement('div');
         $(d1).load("home.jsp #menud", function () {
-            $("#menud").html($(d1).children().eq(0).html());
+            $("#menud").replaceWith($(d1).children().eq(0));
         });
         var d = document.createElement('div');
         $(d).load("navigation.jsp #publications", function () {
             setCommentaireTextAreaFct(d);
-            $("#publications").html($(d).html());
+            $("#publications").html($(d.firstChild).children());
         });
     });
 }
@@ -126,7 +127,7 @@ function modifierCatégorie(arg) {
             $(arg).attr("class", "col btn btn-success");
         else
             $(arg).attr("class", "col btn btn-outline-success");
-        initialiser();
+        init();
     });
 }
 
@@ -136,6 +137,6 @@ function modifierGouvernorat(arg) {
             $(arg).attr("class", "col btn btn-danger");
         else
             $(arg).attr("class", "col btn btn-outline-danger");
-        initialiser();
+        init();
     });
 }

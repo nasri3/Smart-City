@@ -290,9 +290,12 @@ public class Compte implements Serializable {
     }
 
     public void SuivrePublication(Publication publication) {
-        this.publicationsSuivis.add(publication);
+        if(DejaSuivi(publication))
+            publicationsSuivis.remove(publication);
+        else 
+           publicationsSuivis.add(publication);
     }
-
+        
     public boolean DejaSuivi(Publication publication) {
         return publicationsSuivis.contains(publication);
     }
