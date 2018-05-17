@@ -171,11 +171,6 @@
                     <label class="btn btn-link" onclick="afficherPlus(${idPub})">afficher plus..</label>
                 </div>
             </c:if>
-            <script>
-                $('.dropdown-menu').click(function (e) {
-                    e.stopPropagation();
-                });
-            </script>
         </div>
     </body>
 </html>

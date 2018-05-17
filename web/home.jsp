@@ -60,7 +60,7 @@
 
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row">  
-            <div id="menug" class="text-center col-md-3 mx-1 my-1 pb-2">
+            <div id="menug" class="text-center col-md-3 m-1 pb-2">
                 <div style="background-color: #b0bdc5; color:blue;" class="card card-header my-1 py-3">
                     <img src="files/${compte.getPhotoDeProfil()}" alt="Avatar" class="rounded-circle mx-auto" width="55" height="55">
                     <br><big>${compte.getPrenom()} ${compte.getNom()}</big>

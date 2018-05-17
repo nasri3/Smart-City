@@ -5,25 +5,29 @@ body{
     background-color: #f1f1f0;
 }
 
-p{ word-break: normal; }      
+p{ word-break: normal; } 
+
 #menug {
-    padding-top: 65px;
+    padding-top: 75px;
     height: 100vh;
     position: fixed;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 #menud {
-    padding-top: 70px;
+    padding-top: 80px;
     padding-bottom: 10vh;
     height: 100vh;
     position: fixed;
     right: 0;
+    overflow: hidden;
 }
-
+#menud:hover {
+    overflow-y: auto;
+}
 #corps
 {
-    padding-top : 80px;
+    padding-top : 90px;
     padding-right: 1%;
     padding-left: 1%;
 }
@@ -31,6 +35,10 @@ p{ word-break: normal; }
 #map-canvas {
     height: 40vh;
     margin: 2em;
+}
+
+#map{
+    height: 75vh;
 }
 
 #pac-input:focus {
@@ -66,7 +74,7 @@ p{ word-break: normal; }
 
 .card { margin-bottom: 20px; }
 
-.btn { font-size: small;}
+.btn { font-size: small; white-space: normal;}
 
 .col.btn { font-size: xx-small;}
 
@@ -87,6 +95,8 @@ p{ word-break: normal; }
     height: 253px;
     width: inherit;
 }
+.carousel-control-next {height: 253px; width: 20px;}
+.carousel-control-prev {height: 253px; width: 20px;}
 .carousel-indicators {bottom: auto; top: 10px;}
 
 .fas {color: gray; padding-right: 4px;padding-left: 1px;}
@@ -95,13 +105,23 @@ p{ word-break: normal; }
 
 .col {margin: 2px;}
 
+.modal-open {
+    padding-right: 0px !important;
+}
+.navbar{
+    padding-right: 0px !important;
+}
+
 @media screen and (max-width: 767px) {
 
     #menug {
         position: initial;
         width: 100%;
         height: auto;
+        padding-right: 0em;
+        padding-left: 0em;
     }
+    
     #menud {
         padding-top: 5vh;
         position: initial;

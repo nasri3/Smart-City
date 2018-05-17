@@ -13,10 +13,12 @@
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/myapp-functions.js" type="text/javascript"></script>
+        
+        <style>#menug:hover{overflow-y: auto; padding-right: 0em;}</style>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
 
         <title>Profil</title>
 
-        <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
         <!-- debut menu haut de la page ***************************** -->
@@ -55,7 +57,7 @@
 
         <!-- debut menu gauche (milieu) de la page ***************************** -->  
         <div class="row" id="page">  
-            <div class="col-md-3 mx-1 my-1 pb-2" id="menug">
+            <div class="col-md-3 m-1 pb-2" id="menug">
                 <div class="card card-body bg-white ml-2 text-center">
                     <div class="form-group">
                         <img src="files/${compte.getPhotoDeProfil()}" class="rounded-circle" height="50" width="50" alt="Avatar">
@@ -131,16 +133,16 @@
                                 <button class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <form class="modal-header"  action="ctrl" method="post">
-                                <input class="btn btn-block btn-primary" type="submit" name="SupprimerPP" value="Supprimer la photo de profil">
+                                <input class="btn btn-secondary offset-md-2 col-md-8" type="submit" name="SupprimerPP" value="Supprimer la photo de profil">
                             </form>
-                            <form id="PhotoDeProfilForm" class="modal-body row"  action="ctrl" method="post" enctype="multipart/form-data">
-                                <label class="btn btn-primary col-7 m-2 p-2 text-center" for="fichier">
+                            <form id="PhotoDeProfilForm" class="modal-body"  action="ctrl" method="post" enctype="multipart/form-data">
+                                <label class="btn btn-info offset-md-1 col-md-6 text-center" for="fichier">
                                     <input type="hidden" name="operation" value="modifierPhotoDeProfil">
                                     <input id="fichier" type="file" required hidden name="fichier" accept="image/*"
                                            onchange="$('#upload-file-info').html('Choisir un fichier');$('#upload-file-info').html(this.files[0].name);">
                                     <span id="upload-file-info">Choisir un fichier</span>
                                 </label>
-                                <label class="btn btn-primary col-3 m-2 p-2" onclick="ChangerPhotoDeProfil()">Accepter</label>
+                                <label class="btn btn-info offset-md-1 col-md-3" onclick="submitFormWithImage('#PhotoDeProfilForm')">Accepter</label>
                             </form>
                         </div>
                     </div>

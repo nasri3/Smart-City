@@ -69,12 +69,12 @@ function commenter(idPub) {
     }
 }
 
-function ChangerPhotoDeProfil() {
+function submitFormWithImage(formId) {
     var fileSize = document.getElementById('fichier').files[0].size;
     var fileType = document.getElementById('fichier').files[0].type;
     var allowedTypes = ["image/jpeg", "image/gif", "image/png", "image/bmp", "image/svg+xml"];
     if (fileSize < 10485760 && allowedTypes.includes(fileType)) {
-        $("#PhotoDeProfilForm").submit();
+        $(formId).submit();
     } else
         alert("Le fichier doit \352tre de type image et la taille de fichier doit \352tre inf\350rieur \340 10MO");
 }
@@ -82,7 +82,7 @@ function ChangerPhotoDeProfil() {
 function afficherPlus(idPub) {
     var d = document.createElement("div");
     $("#afficherPlus").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
-    $.get("ctrl?operation=ajouterPublications&idPub=" + idPub, function () {
+    $.get("ctrl?operation=ajouterPublications&idPub=" + idPub + "&titre=" + document.title, function () {
         $(d).load("navigation.jsp #publications", function () {
             $("#afficherPlus").fadeOut(300, function () {
                 document.getElementById("afficherPlus").outerHTML = "";

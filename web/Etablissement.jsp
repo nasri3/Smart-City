@@ -54,9 +54,12 @@
                     <br><big>${compte.getPrenom()} ${compte.getNom()}</big>
                 </div>
                 <div class="card bg-light">
-                    <button class="m-2 btn btn-info" style="white-space: normal" data-toggle="modal" data-target="#CSAModal">
+                    <button class="m-2 btn btn-info" data-toggle="modal" data-target="#CSAModal">
                         Changer un utilisateur en un sous administrateur de cet établissement</button>
-                    <button class="m-2 btn btn-info" data-toggle="modal" data-target="#evModal">Nouvel évenement</button>
+                    <button class="m-2 btn btn-info" data-toggle="modal" data-target="#evModal">
+                        Nouvel évènement</button>
+                    <button class="m-2 btn btn-info" data-toggle="modal" data-target="#mapModal" onclick="initMapEtablissement()">
+                        Diffusion des cas de corruption</button>
                 </div>
             </div>
 
@@ -79,7 +82,63 @@
                     </div>  
                 </div>
             </div>
+            <div class="modal fade text-left" id="evModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nouvel évènement</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <form id="evForm" class="modal-body" action="ctrl" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="operation" value="nouvelEvenement">
+                            <div class="form-group">
+                                <label for="Titre">Titre</label>
+                                <input id="Titre" name="Titre" type="text" placeholder="Titre" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="Texte">Description</label>
+                                <textarea id="Texte" name="Texte" placeholder="Description" class="form-control" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="Date">Date</label>
+                                <input id="Date" name="Date" type="date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="Temps">Temps</label>
+                                <input id="Temps" name="Temps" type="time" class="form-control" required>
+                            </div>
+                            <label class="btn btn-info col-md-7 text-center" for="fichier">
+                                <input id="fichier" type="file" required hidden name="fichier" accept="image/*"
+                                       onchange="$('#upload-file-info').html('Choisir une image');$('#upload-file-info').html(this.files[0].name);">
+                                <span id="upload-file-info">Choisir une image</span>
+                            </label>
+                            <label class="btn btn-info offset-md-1 col-md-3" onclick="submitFormWithImage('#evForm')">Accepter</label>
+                        </form>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal fade text-left" id="mapModal">
+                <div class="modal-dialog modal-dialog-centered  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Diffusion des cas de corruption sur ${etablissement.getVille()}</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="map"></div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <div id="maap" style="display: hidden;">
+                <c:forEach items="${allPub}" var="publ">
+                    <div type="hidden"> ${publ.getTitre()}</div>
+                    <div type="hidden"> ${publ.getLat()}</div>
+                    <div type="hidden"> ${publ.getLng()}</div>
+                </c:forEach>
+            </div>
         </div>
+
 
         <script>
             if (!!window.performance && window.performance.navigation.type === 2)
@@ -100,7 +159,6 @@
 
             function changerRoleEnSousAdministrateur(idCompte) {
                 $.get("ctrl?operation=changerRoleEnSousAdministrateur&idCompte=" + idCompte, function (responseText) {
-                    alert("ok");
                     alert(responseText + " est maintenant un sous administrateur de cet \351tablissement");
                 });
             }
@@ -112,7 +170,7 @@
                     CIN.style = "color:green";
                     $.get("ctrl?operation=verifierExistenceCompteUtilisateur&idCompte=" + CIN.value, function (responseText) {
                         $("#resultat").html(responseText);
-                        if (responseText.includes("bg-success")) {
+                        if (responseText.includes("border-success")) {
                             op.disabled = false;
                             $(op).attr("data-dismiss", "modal");
                             $(op).attr("onclick", "changerRoleEnSousAdministrateur('" + CIN.value + "')");
@@ -132,5 +190,42 @@
                 }
             };
         </script>
+        <script>
+            var markers = [];
+            function addMarker(titre, lat, lng) {
+                alert("markers");
+                markers.push([titre, lat, lng]);
+            }
+
+            function initMapEtablissement() {
+                $.get("ctrl?operation=getAllPubPlaces", function () {
+                    var d = document.createElement('div');
+                    $(d).load("Etablissement #maap", function () {
+                        $(d).children().each(function () {
+                            markers.push([$(this).children().eq(0).html(),
+                                $(this).children().eq(1).html(), $(this).children().eq(2).html()]);
+                        });
+                        var position = new google.maps.LatLng(markers[0][1], markers[0][2]);
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 12,
+                            center: position
+                        });
+                        for (i = 0; i < markers.length; i++) {
+                            alert("0: " + markers[i][0] + " 1: " + markers[i][1] + " 2: " + markers[i][2]);
+                            position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+                            marker = new google.maps.Marker({
+                                position: position,
+                                map: map,
+                                title: markers[i][0]
+                            });
+                        }
+                    });
+                });
+            }
+        </script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1HDRMB-tDCVaIJGpmU_0JC2HCo2YEfUs">
+        </script>
+
     </body>
 </html>

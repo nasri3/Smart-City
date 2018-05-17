@@ -87,8 +87,37 @@ public class PublicationDAO extends AbstractDAO<Publication> {
                 .setParameter("idDerniere", idDerniere).setMaxResults(5).getResultList();
     }
 
+    public List<Publication> EtablissementPublications(String categorie, String ville) {
+        if (ville.contains("Governorat")) {
+            List categories = Arrays.asList(categorie.split(","));
+            String gouvernorat = ville.replace("Gouvernorat ", "");
+            if (categorie.equals("Tous")) {
+                if (gouvernorat.equals("Tous")) {
+                    return getEntityManager().createNamedQuery("Publication.findAll").getResultList();
+                }
+                return getEntityManager().createNamedQuery("Publication.findbyGouvernorat")
+                        .setParameter("gouvernorat", gouvernorat)
+                        .getResultList();
+            }
+            if (gouvernorat.equals("Tous")) {
+                return getEntityManager().createNamedQuery("Publication.findbyCategorie")
+                        .setParameter("categories", categories)
+                        .getResultList();
+            }
+            return getEntityManager().createNamedQuery("Publication.findbyCategorieGouvernorat")
+                    .setParameter("categories", categories)
+                    .setParameter("gouvernorat", gouvernorat)
+                    .getResultList();
+        }
+        List categories = Arrays.asList(categorie.split(","));
+        return getEntityManager().createNamedQuery("Publication.findbyCategorieVille")
+                .setParameter("categories", categories)
+                .setParameter("ville", ville)
+                .getResultList();
+    }
+
     public List<Publication> initialiserEtablissementPublications(String categorie, String ville) {
-        if(ville.contains("Governorat")){
+        if (ville.contains("Governorat")) {
             return this.initialiserPublications(categorie, ville.replace("Gouvernorat ", ""));
         }
         List categories = Arrays.asList(categorie.split(","));
@@ -99,18 +128,19 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     }
 
     public List<Publication> ajouterEtablissementPublications(String categorie, String ville, int idDerniere) {
-        if(ville.contains("Governorat")){
+        if (ville.contains("Governorat")) {
             return this.ajouterPublications(categorie, ville.replace("Gouvernorat ", ""), idDerniere);
-        }List categories = Arrays.asList(categorie.split(","));
+        }
+        List categories = Arrays.asList(categorie.split(","));
         return getEntityManager().createNamedQuery("Publication.findbyCategorieVilleAfterId")
                 .setParameter("categories", categories)
                 .setParameter("ville", ville)
                 .setParameter("idDerniere", idDerniere)
-                .setMaxResults(5).getResultList();    
+                .setMaxResults(5).getResultList();
     }
-    
-    public long nombreDeSignalisations(Publication publication){
-        return  (long) getEntityManager().createNamedQuery("Publication.nbreComptesSignales")
+
+    public long nombreDeSignalisations(Publication publication) {
+        return (long) getEntityManager().createNamedQuery("Publication.nbreComptesSignales")
                 .setParameter("publication", publication)
                 .getSingleResult();
     }

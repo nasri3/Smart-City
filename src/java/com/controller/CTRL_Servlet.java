@@ -85,6 +85,7 @@ public class CTRL_Servlet extends HttpServlet {
                     String s = itemFile.getString("UTF-8");
                     if (!s.equals("modifierPhotoDeProfil")) {
                         Evenement evenement = new Evenement();
+                        String datetemps = "";
                         while (iter.hasNext()) {
                             itemFile = (FileItem) iter.next();
                             FileType = itemFile.getContentType();
@@ -110,18 +111,24 @@ public class CTRL_Servlet extends HttpServlet {
                                         evenement.setTexte(s);
                                         break;
                                     case "Date":
-                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                                        datetemps = s;
+                                        break;
+                                    case "Temps":
+                                        datetemps += " " + s;
+                                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                         Date date = null;
                                         try {
-                                            date = new Date(formatter.parse(s).getTime());
+                                            date = new Date(formatter.parse(datetemps).getTime());
                                         } catch (ParseException ex1) {
                                             Logger.getLogger(CTRL_Servlet.class.getName()).log(Level.SEVERE, null, ex1);
                                         }
                                         evenement.setDate(date);
+                                        System.out.print(evenement.getTitre() + evenement.getTexte() + evenement.getDate());
                                         break;
                                 }
                             }
                         }
+                        request.getSession().setAttribute("evenements", evenementDAO.findAll());
                         response.sendRedirect("/Etablissement");
                         return;
                     }
@@ -208,7 +215,7 @@ public class CTRL_Servlet extends HttpServlet {
                             Notification notif = new Notification();
                             notif.setDestinataire(compte2);
                             notif.setExpediteur(compte);
-                            notif.setTexte("Alerte");
+                            notif.setTexte("Alerte, votre publications a été supprimé, fait attention au futur");
                             notificationDAO.create(notif);
                             break;
                         case "supprimerPub":
@@ -267,7 +274,7 @@ public class CTRL_Servlet extends HttpServlet {
                             idCompte = request.getParameter("idCompte");
                             Compte compte2 = compteDAO.find(idCompte);
                             if (compte2 == null) {
-                                response.getWriter().write("<div class='form-control border border-danger'>Compte inexistant</div>");
+                                response.getWriter().write("<div class='border border-danger'>Compte inexistant</div>");
                             } else if (!compte2.getType().equals("Utilisateur")) {
                                 response.getWriter().write("<div class='border border-danger'>Compte pas de type utilisateur</div>");
                             } else {
@@ -280,8 +287,15 @@ public class CTRL_Servlet extends HttpServlet {
                             compte2.setType("Sous administrateur");
                             compte2.setEtablissement(compte.getEtablissement());
                             compteDAO.edit(compte2);
-                            response.getWriter().write(compte2.getPrenom() + " " + compte2.getNom());
-                            break;
+                            response.getWriter().write("' " + compte2.getPrenom() + " " + compte2.getNom() + " '");
+                            return;
+                        case "getAllPubPlaces":
+                            e = compte.getEtablissement();
+                            System.out.println("ff");
+                            System.out.println(publicationDAO.EtablissementPublications(e.getCategorie(), e.getVille()));
+                            request.getSession().setAttribute("allPub",
+                                    publicationDAO.EtablissementPublications(e.getCategorie(), e.getVille()));
+                            return;
                     }
                     break;
             }

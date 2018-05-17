@@ -35,7 +35,7 @@
                             <span id="nbNotif" class="badge badge-danger">0</span> Notifications</a>
                     </li>
                     <c:if test='${compte.getType() == "Sous administrateur"}'>
-                        <li class="nav-item mx-2"><a class="nav-link" href="Etablissement"> <i class="fa fa-building fa-2x"></i> Etablissement</a>
+                        <li class="nav-item mx-2"><a class="nav-link" href="Etablissement"> <i class="fa fa-building fa-2x"></i> ${compte.getEtablissement().getNom()}</a>
                         </li>
                     </c:if>
                     <c:if test='${compte.getType() == "Administrateur"}'>
