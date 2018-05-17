@@ -54,7 +54,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Publication.findbyCategorieGouvernoratAfterId", query = "SELECT p FROM Publication p where p.categorie in :categories and p.gouvernorat = :gouvernorat and p.idPublication<:idDerniere order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompte", query = "SELECT p FROM Publication p where p.compte=:compte order by p.idPublication desc"),
     @NamedQuery(name = "Publication.findbyCompteAfterId", query = "SELECT p FROM Publication p where p.compte=:compte and p.idPublication<:idDerniere order by p.idPublication desc"),
-    @NamedQuery(name = "Publication.nbreComptesSignales", query = "SELECT count(c) FROM Compte c where :publication member of c.publicationsSignales")})
+    @NamedQuery(name = "Publication.nbreComptesSignales", query = "SELECT count(c) FROM Compte c where :publication member of c.publicationsSignales"),
+    @NamedQuery(name = "Publication.nbreParGouvernorat", query = "SELECT count(p) FROM Publication p where p.gouvernorat = :gouvernorat"),
+    @NamedQuery(name = "Publication.nbrePubParEtat", query = "SELECT count(p) FROM Publication p where p.etat=:etat")})
+
 
 public class Publication implements Serializable {
 

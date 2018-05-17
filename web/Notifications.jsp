@@ -53,7 +53,7 @@
             <div id="notifications">
                 <c:forEach items="${compte.getNotificationList()}" var="notification">
                     <c:set var="ce" value="${notification.getExpediteur()}"/>
-                    <div class="media-body commentaire" <c:if test='${!notification.getVu()}'> style="color: skyblue;" </c:if>> 
+                    <div class="media-body commentaire <c:if test='${!notification.getVu()}'>bg-white</c:if>"> 
                         <i class="fas fa-user"></i><big><g>${ce.getPrenom()} ${ce.getNom()} (${ce.getType()})</g></big><br>
                         <i class="fas fa-calendar-alt"></i>${notification.getDatedecreation()}<br>
                         <p class="mb-0" style="white-space: pre-line;">${notification.getTexte()}</p>

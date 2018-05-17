@@ -140,9 +140,29 @@ public class PublicationDAO extends AbstractDAO<Publication> {
     }
 
     public long nombreDeSignalisations(Publication publication) {
-        return (long) getEntityManager().createNamedQuery("Publication.nbreComptesSignales")
+        Object n = getEntityManager().createNamedQuery("Publication.nbreComptesSignales")
                 .setParameter("publication", publication)
                 .getSingleResult();
+        if(n == null)
+            return 0;
+        else return (long)n;
     }
-
+    
+    public long nombreParGouvernorat(String gouvernorat) {
+        Object n = getEntityManager().createNamedQuery("Publication.nbreParGouvernorat")
+                .setParameter("gouvernorat", gouvernorat)
+                .getSingleResult();
+        if(n == null)
+            return 0;
+        else return (long)n;
+    }
+    
+    public long nombrePubParEtat(String etat) {
+        Object n = getEntityManager().createNamedQuery("Publication.nbrePubParEtat")
+                .setParameter("etat", etat)
+                .getSingleResult();
+        if(n == null)
+            return 0;
+        else return (long)n;
+    }
 }

@@ -71,72 +71,112 @@
                                 <td>${c.getDateDeNaissance()}</td>
                                 <td>${c.getVille()}</td>
                                 <td><button class="btn btn-link" data-toggle="modal" data-target="#modifierSousAdministrateurModal" 
-                                    onclick="setIdCompte('${c.getIdCompte()}')">
-                                    <c:choose>
-                                        <c:when test='${c.getType()=="Sous administrateur"}'>${c.getEtablissement().getNom()}</c:when>
-                                        <c:otherwise>Pas d'etablissement</c:otherwise>
-                                    </c:choose>
+                                            onclick="setIdCompte('${c.getIdCompte()}')">
+                                        <c:choose>
+                                            <c:when test='${c.getType()=="Sous administrateur"}'>${c.getEtablissement().getNom()}</c:when>
+                                            <c:otherwise>Pas d'etablissement</c:otherwise>
+                                        </c:choose>
                                     </button>
                                 </td>
                                 <td> <button class="btn btn-link" data-toggle="modal" data-target="#modifierTypeDeCompteModal" 
-                                          onclick="setIdCompte('${c.getIdCompte()}')" >${c.getType()}</button></td>
+                                             onclick="setIdCompte('${c.getIdCompte()}')" >${c.getType()}</button></td>
                                 <td> <button class="btn btn-link" data-toggle="modal" data-target="#supprimerCompteModal"
-                                          onclick="setIdCompte('${c.getIdCompte()}')" >Supprimer son Compte </button></td>
+                                             onclick="setIdCompte('${c.getIdCompte()}')" >Supprimer son Compte </button></td>
                             </tr>
                         </c:if>
                     </c:forEach>
                 </tbody>
             </table>
-        </div>
 
-        <div class="modal fade text-left" id="modifierSousAdministrateurModal">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modifier le type de ce compte en un sous administrateur de :</h5>
-                        <button class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body row" id="choixDeType">
-                        <c:forEach items="${Etablissements}" var="etablissement">
-                            <div class="btn btn-primary col" data-dismiss="modal"
-                                 onclick = "modifierSousAdministrateur('${etablissement.getNom()}')">${etablissement.getNom()}</div>
-                        </c:forEach>
-                    </div>
-                </div>  
+            <div class="modal fade text-left" id="modifierSousAdministrateurModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le type de ce compte en un sous administrateur de :</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body text-center" id="choixDeType">
+                            <select>
+                                <c:forEach items="${Etablissements}" var="etablissement">
+                                    <option class="form-control" data-dismiss="modal"
+                                            onclick = "modifierSousAdministrateur('${etablissement.getNom()}')">${etablissement.getNom()}</option>
+                                </c:forEach>
+                                <option class="form-control" data-toggle="modal" data-target="#nouvelEtablModel">Nouvel établissement...</option>
+                            </select>
+                        </div>
+                    </div>  
+                </div>
             </div>
-        </div>
-        <div class="modal fade text-left" id="modifierTypeDeCompteModal">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modifier le type de ce compte en :</h5>
-                        <button class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body row" id="choixDeType">
-                        <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
-                                onclick = "modifierType('Administrateur')">Administrateur</button>
-                        <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal"
-                                onclick = "modifierType('Utilisateur')">Utilisateur</button>
-                    </div>
-                </div>  
+            <div class="modal fade text-left" id="modifierSousAdministrateurModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Modifier le type de ce compte en un sous administrateur de :</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body text-center" id="choixDeType">
+                            <select>
+                                <c:forEach items="${Etablissements}" var="etablissement">
+                                    <option class="form-control" data-dismiss="modal"
+                                            onclick = "modifierSousAdministrateur('${etablissement.getNom()}')">${etablissement.getNom()}</option>
+                                </c:forEach>
+                                <option class="form-control" data-toggle="modal" data-target="#nouvelEtablModel">Nouvel établissement...</option>
+                            </select>
+                        </div>
+                    </div>  
+                </div>
             </div>
-        </div>
-        <div class="modal fade text-left" id="supprimerCompteModal">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement ce compte?</h5>
-                        <button class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body row">
-                        <button class="btn btn-primary p-2 m-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
-                        <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+            <div class="modal fade text-left" id="nouvelEtablModel">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nouvel établissement</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <form class="modal-body" action="ctrl">
+                            <input type="hidden" name="operation" value="nouvelEtablissement">
+                            <!-- nom -->
+                            <div class="form-group">
+                                <label for="nom">nom</label>
+                                <input id="nom" name="nom" type="text" placeholder="nom" class="form-control" required>
+                            </div>
+
+                            <!-- ville -->
+                            <div class="form-group">
+                                <label for="ville">ville</label>
+                                <input id="ville" name="ville" type="text" placeholder="ville" class="form-control" required>
+                            </div>
+                            <!-- Catégorie -->
+                            <div class="form-group">
+                                <label for="Catégorie">Catégorie</label>
+                                <select id="Catégorie" name="categorie" class="form-control" multiple="multiple" required>
+                                    <c:forEach begin="1" items="${Catégories}" var="catégorie">
+                                        <option>${catégorie}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-block">Créer une établissement</button>
+                        </form>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal fade text-left" id="supprimerCompteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer définitivement ce compte?</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row">
+                            <button class="btn btn-primary p-2 m-2 col-5" onclick="supprimerCompte()" data-dismiss="modal">oui</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-                    
+
+
         <script>
             initialiserComptes();
             function initialiserComptes() {

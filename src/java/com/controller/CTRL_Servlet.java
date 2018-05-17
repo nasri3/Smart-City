@@ -2,6 +2,7 @@ package com.controller;
 
 import com.DAO.*;
 import com.beans.*;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,8 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -202,6 +205,23 @@ public class CTRL_Servlet extends HttpServlet {
                             compte2.setEtablissement(e);
                             compte2.setType("Sous administrateur");
                             compteDAO.edit(compte2);
+                            return;
+                        case "nouvelEtablissement":
+                            String nom = request.getParameter("nom");
+                            String ville = request.getParameter("ville");
+                            String[] categories = request.getParameterValues("categorie");
+                            String categorie = "";
+                            for(String c:categories){
+                                categorie += c + ",";
+                            }
+                            categorie = categorie.substring(0, categorie.length()-1);
+                            System.out.println(categorie);
+                            e = new Etablissement();
+                            e.setNom(nom);
+                            e.setVille(ville);
+                            e.setCategorie(categorie);
+                            etablissementDAO.create(e);
+                            response.sendRedirect("/Administration");
                             return;
                         case "supprimerPubAdmin":
                             idPub = request.getParameter("idPub");
@@ -451,6 +471,44 @@ public class CTRL_Servlet extends HttpServlet {
                     publications.add(publication);
                     request.getSession().setAttribute("publications", publications);
                     return;
+                case "getStatics":
+                    Gson gsonObj1 = new Gson();
+                    Map<Object, Object> map1;
+                    List<Map<Object, Object>> list1 = new ArrayList<>();
+                    Gouvernorats = (String[]) request.getSession().getAttribute("Gouvernorats");
+                    for (int i = 1; i < Gouvernorats.length; i++) {
+                        map1 = new HashMap();
+                        map1.put("x", i);
+                        map1.put("y", publicationDAO.nombreParGouvernorat(Gouvernorats[i]));
+                        map1.put("label", Gouvernorats[i]);
+                        list1.add(map1);
+                    }
+                    String dataPoints1 = gsonObj1.toJson(list1);
+
+                    Gson gsonObj2 = new Gson();
+                    Map<Object, Object> map2;
+                    List<Map<Object, Object>> list2 = new ArrayList();
+                    long y1 =  publicationDAO.nombrePubParEtat("Résolu");
+                    long y2 =  publicationDAO.nombrePubParEtat("En cours de résolution");
+                    long y3 =  publicationDAO.nombrePubParEtat("Non Résolu");
+                    long s = y1 + y2 + y3;
+                    map2 = new HashMap();
+                    map2.put("label", "Résolu");
+                    map2.put("y", (y1*100)/s);
+                    list2.add(map2);
+                    map2 = new HashMap();
+                    map2.put("label", "En cours de résolution");
+                    map2.put("y", (y2*100)/s);
+                    list2.add(map2);
+                    map2 = new HashMap();
+                    map2.put("label", "Non Résolu");
+                    map2.put("y", (y3*100)/s);
+                    list2.add(map2);
+                    String dataPoints2 = gsonObj2.toJson(list2);
+                    request.getSession().setAttribute("dataPoints1", dataPoints1);                    
+                    request.getSession().setAttribute("dataPoints2", dataPoints2);
+                    
+                    break;
                 case "deconnecter":
                     request.logout();
                     request.getSession().invalidate();
