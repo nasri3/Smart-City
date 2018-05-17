@@ -50,8 +50,6 @@ function initMap() {
             return;
         }
 
-        // For each place, get the icon, name and location.
-        //var bounds = new google.maps.LatLngBounds();
         var place = places[0];
         if (!place.geometry) {
             console.log("Returned place contains no geometry");

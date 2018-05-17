@@ -16,7 +16,7 @@
         <title>Notifications</title>
     </head>
     <body>
-        
+
         <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #4d636f;">
             <a class="navbar-brand text-white"><img src="files/SC.png" alt="SC" height="40"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navb" aria-expanded="false">
@@ -62,6 +62,22 @@
                 </c:forEach>
             </div>
         </div>
+        <c:if test='${compte.getType()=="Administrateur"}'>
+            <div class="modal fade text-left" id="envoyerAlerteModal">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Envoyer une alerte à ce compte?</h5>
+                            <button class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body row">
+                            <button class="btn btn-primary p-2 m-2 col-5" onclick="envoyerAlerte()" data-dismiss="modal">oui</button>
+                            <button class="btn btn-primary p-2 m-2 col-5" data-dismiss="modal">non</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </c:if>
         <script>$.get("ctrl?operation=setNotificationsVus");</script>
     </body>
 </html>

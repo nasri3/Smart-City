@@ -59,7 +59,7 @@
                     <button class="m-2 btn btn-info" data-toggle="modal" data-target="#evModal">
                         Nouvel évènement</button>
                     <button class="m-2 btn btn-info" data-toggle="modal" data-target="#mapModal" onclick="initMapEtablissement()">
-                        Diffusion des cas de corruption</button>
+                        Répartition des cas de corruption</button>
                 </div>
             </div>
 
@@ -121,7 +121,7 @@
                 <div class="modal-dialog modal-dialog-centered  modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Diffusion des cas de corruption sur ${etablissement.getVille()}</h5>
+                            <h5 class="modal-title">Répartition des cas de corruption sur ${etablissement.getVille()}</h5>
                             <button class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
@@ -130,11 +130,13 @@
                     </div>  
                 </div>
             </div>
-            <div id="maap" style="display: hidden;">
+            <div id="maap" style="display: none;">
                 <c:forEach items="${allPub}" var="publ">
-                    <div type="hidden"> ${publ.getTitre()}</div>
-                    <div type="hidden"> ${publ.getLat()}</div>
-                    <div type="hidden"> ${publ.getLng()}</div>
+                    <div>
+                        <div> ${publ.getIdPublication()}</div>
+                        <div> ${publ.getLat()}</div>
+                        <div> ${publ.getLng()}</div>
+                    </div>
                 </c:forEach>
             </div>
         </div>
@@ -191,33 +193,29 @@
             };
         </script>
         <script>
-            var markers = [];
-            function addMarker(titre, lat, lng) {
-                alert("markers");
-                markers.push([titre, lat, lng]);
-            }
-
             function initMapEtablissement() {
+                var markers = [];
                 $.get("ctrl?operation=getAllPubPlaces", function () {
                     var d = document.createElement('div');
                     $(d).load("Etablissement #maap", function () {
-                        $(d).children().each(function () {
+                        $(d.firstChild).children().each(function () {
                             markers.push([$(this).children().eq(0).html(),
                                 $(this).children().eq(1).html(), $(this).children().eq(2).html()]);
                         });
                         var position = new google.maps.LatLng(markers[0][1], markers[0][2]);
                         var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 12,
+                            zoom: 14,
                             center: position
                         });
                         for (i = 0; i < markers.length; i++) {
-                            alert("0: " + markers[i][0] + " 1: " + markers[i][1] + " 2: " + markers[i][2]);
                             position = new google.maps.LatLng(markers[i][1], markers[i][2]);
-                            marker = new google.maps.Marker({
+                            var marker = new google.maps.Marker({
                                 position: position,
-                                map: map,
-                                title: markers[i][0]
+                                map: map
                             });
+                            var infowindow = new google.maps.InfoWindow();
+                            infowindow.setContent("<a href='Publication?idPub="+markers[i][0]+"'  target='_blank'>afficher publication</a>");
+                            infowindow.open(map, marker);
                         }
                     });
                 });

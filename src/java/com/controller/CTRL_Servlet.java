@@ -203,23 +203,9 @@ public class CTRL_Servlet extends HttpServlet {
                             compte2.setType("Sous administrateur");
                             compteDAO.edit(compte2);
                             return;
-                        case "envoyerAlerte":
-                            idCompte = request.getParameter("idCompte");
-                            compte2 = compteDAO.find(idCompte);
-                            if (compte2 == null) {
-                                System.out.println("compte : " + idCompte + " non trouvé");
-                                return;
-                            } else {
-                                System.out.println("compte : " + idCompte + " trouvé");
-                            }
-                            Notification notif = new Notification();
-                            notif.setDestinataire(compte2);
-                            notif.setExpediteur(compte);
-                            notif.setTexte("Alerte, votre publications a été supprimé, fait attention au futur");
-                            notificationDAO.create(notif);
-                            break;
-                        case "supprimerPub":
+                        case "supprimerPubAdmin":
                             idPub = request.getParameter("idPub");
+                            //supprimer publication
                             publication = publicationDAO.find(idPub);
                             if (publication == null) {
                                 System.out.println("pub" + idPub + " Not Found");
@@ -228,7 +214,15 @@ public class CTRL_Servlet extends HttpServlet {
                             }
                             publicationDAO.remove(publication);
                             String uploadPath = getServletContext().getInitParameter("uploadPath");
-                            Files.delete(Paths.get(uploadPath + publication.getTitre()));
+                            if (Files.exists(Paths.get(uploadPath + publication.getTitre()))) {
+                                Files.delete(Paths.get(uploadPath + publication.getTitre()));
+                            }
+                            //envoyer une alerte
+                            Notification notif = new Notification();
+                            notif.setDestinataire(publication.getCompte());
+                            notif.setExpediteur(compte);
+                            notif.setTexte("Alerte, votre publications a été supprimé, fait attention au futur");
+                            notificationDAO.create(notif);
                             response.getWriter().write("pub" + idPub);
                             pubs.remove(publication);
                             request.getSession().setAttribute("pubs", pubs);
@@ -383,13 +377,19 @@ public class CTRL_Servlet extends HttpServlet {
                     compte.SignalerPublication(publication);
                     compteDAO.edit(compte);
                     final String id = idPub;
-                    if (publicationDAO.nombreDeSignalisations(publication) == 11) {
+                    if (publicationDAO.nombreDeSignalisations(publication) == 3) {
                         List<Compte> comptesAdmin = compteDAO.findByType("Administrateur");
                         Notification n = new Notification();
+                        n.setExpediteur(publication.getCompte());
                         comptesAdmin.forEach(compteAdmin -> {
                             n.setDestinataire(compteAdmin);
-                            n.setTexte("La publication <a href='Publication?idPub=" + id + "' target='_blank'>Publication?idPub="
-                                    + id + "</a> a été signalé plus que 10 fois");
+                            n.setTexte("La publication <a href='Publication?idPub=" + id + "' target='_blank'>Publication "
+                                    + id + "</a> a été signalé plus que 10 fois<br>"
+                                    + "<a href=''"
+                                    + "onclick='$.get(\"ctrl?operation=supprimerPubAdmin&idPub=" + id + "\", function () {"
+                                    + "alert(\"Publication supprimé et Alerte envoy\\351\");"
+                                    + "});'>Supprimer La publication et lui envoyer une alerte</a>");
+
                             notificationDAO.create(n);
                         });
                     }

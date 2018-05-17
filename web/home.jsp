@@ -14,7 +14,7 @@
         <script src="js/popper.min.js" type="text/javascript"></script>
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
         <script src="js/myapp-functions.js" type="text/javascript"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1HDRMB-tDCVaIJGpmU_0JC2HCo2YEfUs&libraries=places"></script>
         <script src="js/map.js" type="text/javascript"></script>
 
         <title>Page d'accueil</title>

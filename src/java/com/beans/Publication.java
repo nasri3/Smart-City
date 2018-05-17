@@ -130,6 +130,9 @@ public class Publication implements Serializable {
     @ManyToMany(mappedBy = "publicationsSuivis", fetch = FetchType.EAGER)
     private List<Compte> compteSuiviList;
     
+    @ManyToMany(mappedBy = "publicationsSignales", fetch = FetchType.LAZY)
+    private List<Compte> CompteSignaleList;
+    
     public Publication() {
     }
 

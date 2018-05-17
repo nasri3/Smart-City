@@ -5,9 +5,7 @@
  */
 package com.DAO;
 
-import com.beans.Compte;
 import com.beans.Etablissement;
-import com.beans.Publication;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
